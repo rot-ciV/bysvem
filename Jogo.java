@@ -4,10 +4,8 @@ public class Jogo extends Bysvem{
     private String genero;
     private String desenvolvedora;
     private double preco;
-    private double horasJogadas; // Coloca aqui ou em usuário?
-    private int copiasVendidas;
-
-
+    // private double horasJogadas; // Coloca aqui ou em usuário? -- Eu(Bernardin) também fiquei em dúvida man, porque dentro de usuário, como eu iria declarar isso? Tipo, um usúario tem x horas em vários jogos, mas pensando por esse lado, um jogo também foi jogado por x usuários
+    //mexe nessa horasJogadas por enquanto não, tmj
     public Jogo(){
 
         super();
