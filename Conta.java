@@ -12,6 +12,6 @@ public abstract class Conta extends Bysvem{
         this.nome = nome;
         this.senha = senha;
         this.jogosAdquiridos[0] = Nenhum;
-        this.horasJogadas = 
+        this.horasJogadas = 0.0
     }       
 }
