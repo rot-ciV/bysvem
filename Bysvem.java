@@ -11,7 +11,10 @@ public abstract class Bysvem{
         this.id = id;
     }
 
-    public abstract void salvar(); // Faz sentido?
+    public void salvar(){
+
+        this.foiSalvo = true;
+    }
 
     public void setId(int id){ this.id = id; }
     public int getId() { return this.id; }
