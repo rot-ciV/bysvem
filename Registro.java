@@ -1,7 +1,7 @@
 public class Registro extends Bysvem{
 
     private Jogo jogo;
-    private Conta conta; // Ainda não sei se todo tipo de conta vai ter essa relação usuário/jogo
+    private Conta conta; // Ainda não sei se todo tipo de conta vai ter essa relação usuário/jogo - acho que sim victin, usuario tem acesso aos jogos que ele comprar, dev tem acesso aos jogos que ele criar, e operador tem acesso a todos os jogos
     private double horasJogadas;
 
     public Registro(int id, Jogo jogo, Conta conta){
