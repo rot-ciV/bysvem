@@ -7,6 +7,10 @@ public class Desenvolvedor extends Conta{
     protected ArrayList<Jogo> jogosPublicados;
     // (Victor) Diferenciei jogos que estão disponíveis para serem comprados e que ainda estão em desenvolvimento.
 
+
+    public void setDesenvolvedora(String desenvolvedora) { this.desenvolvedora = desenvolvedora; }
+    public String getDesenvolvedora() { return desenvolvedora; }
+
     public Desenvolvedor(int id, String nome, int senha, String desenvolvedora){
         
         super(id,nome,senha);

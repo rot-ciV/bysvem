@@ -1,4 +1,7 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,12 +16,14 @@ public abstract class Gerenciador extends Bysvem{
     // private para que ninguém consiga criar um objeto Gerenciador
     private Gerenciador() {}
 
-    public static void salvarJogo(ArrayList<Jogo> listaDeJogos){
+    public static void salvarJogos(ArrayList<Jogo> listaDeJogos){
 
         try {
-            FileWriter arquivo = new FileWriter(CAMINHO_JOGOS);
-            BufferedWriter escritor = new BufferedWriter(arquivo);
 
+            FileWriter arquivo = new FileWriter(CAMINHO_JOGOS);
+            //prepara o arquivo txt para ser escrito
+            BufferedWriter escritor = new BufferedWriter(arquivo);
+            // vai salvando os caracteres em uma memória temporária, ao ser fechada escreve todas no arquivo.
 
             for(int i = 0; i < listaDeJogos.size(); i++){
 
@@ -38,7 +43,165 @@ public abstract class Gerenciador extends Bysvem{
         }
     }
 
+    public static ArrayList<Jogo> carregaJogos(){
 
+        ArrayList<Jogo> jogosCarregados = new ArrayList<>();
 
+        try {
+            
+            FileReader arquivo = new FileReader(CAMINHO_JOGOS);
+            BufferedReader leitor = new BufferedReader(arquivo);
+            
+            String linhaAtual = leitor.readLine();
+
+            while(linhaAtual != null){
+                
+                String[] dados = linhaAtual.split(";");
+                Jogo jogoAtual = new Jogo(Integer.parseInt(dados[0]), dados[1], dados[2], dados[3], Double.parseDouble(dados[4]));
+                jogosCarregados.add(jogoAtual);
+                
+                linhaAtual = leitor.readLine();
+            }
+
+            leitor.close();
+
+        } catch (Exception e) {
+
+            System.out.println("Erro de leitura no arquivo jogos.txt");
+            // se cair nesse caso ainda há o return?
+        }
+        
+        return jogosCarregados;
+    }
+    
+    public static void salvarContas(ArrayList<Conta> listaContas){
+
+        try {
+            
+            FileWriter arquivo = new FileWriter(CAMINHO_CONTAS);
+            BufferedWriter escritor = new BufferedWriter(arquivo);
+
+            for(int i = 0; i < listaContas.size(); i++){
+
+                Conta conta_atual = listaContas.get(i);
+
+                if(conta_atual instanceof Usuario){
+
+                    String linha = "USR;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + ((Usuario) conta_atual).getSaldo();
+                    escritor.write(linha);
+                    escritor.newLine();
+                    
+                }else if( conta_atual instanceof Desenvolvedor){
+
+                    String linha = "DEV;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + ((Desenvolvedor) conta_atual).getDesenvolvedora();
+                    escritor.write(linha);
+                    escritor.newLine();
+
+                }else{
+
+                    String linha = "OP;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha();
+                    escritor.write(linha);
+                    escritor.newLine();
+                }
+            }
+
+            escritor.close();
+
+        } catch (Exception e) {
+
+            System.err.println("Erro de escrita do arquivo contas.txt");
+        }
+    }
+
+    public static ArrayList<Conta> carregaContas(){
+
+        ArrayList contasCarregadas = new ArrayList<>();
+
+        try {
+
+            FileReader arquivo = new FileReader(CAMINHO_CONTAS);
+            BufferedReader leitor = new BufferedReader(arquivo);
+
+            String linhaAtual = leitor.readLine();
+
+            while(linhaAtual != null){
+
+                String[] dados = linhaAtual.split(";");
+
+                if(dados[0].equals("USR")){
+
+                    Usuario contaUsuario = new Usuario(Integer.parseInt(dados[1]), dados[2], Integer.parseInt(dados[3]), Double.parseDouble(dados[4]));
+                    contasCarregadas.add(contaUsuario);
+                }
+
+                else if(dados[0].equals("DEV")){
+
+                    Desenvolvedor contaDev = new Desenvolvedor(Integer.parseInt(dados[1]), dados[2], Integer.parseInt(dados[3]), dados[4]);
+                    contasCarregadas.add(contaDev);
+                }
+
+                else if(dados[0].equals("OP")){
+
+                    Operador contaOp = new Operador(Integer.parseInt(dados[1]), dados[2], Integer.parseInt(dados[3]));
+                    contasCarregadas.add(contaOp);
+                }
+
+                linhaAtual = leitor.readLine();
+            }
+
+            leitor.close();
+
+        } catch (Exception e) {
+
+            System.err.println("Erro de leitura do arquivo contas.txt");
+        }
+        
+        return contasCarregadas;
+    }
+
+    public static void salvarRegistro(ArrayList<Registro> listaRegistros){
+        
+        try {
+            
+            FileWriter arquivo = new FileWriter(CAMINHO_REGISTROS);
+            BufferedWriter escritor = new BufferedWriter(arquivo);
+
+            for(int i = 0; i < listaRegistros.size(); i++){
+
+                Registro registroAtual = listaRegistros.get(i);
+
+                String linha = registroAtual.getId() + ";" + registroAtual.getJogo().getId() + ";" + registroAtual.getConta().getId() + ";" + registroAtual.getHorasJogadas();
+                escritor.write(linha);
+                escritor.newLine();
+            }
+
+            escritor.close();
+
+        } catch (Exception e) {
+
+            System.out.println("Erro de escrita do arquivo registro.txt");
+        }
+    }
+
+    public static ArrayList<Registro> CarregaRegistros(){
+
+        try {
+            
+            FileReader arquivo = new FileReader(CAMINHO_REGISTROS);
+            BufferedReader leitor = new BufferedReader(arquivo);
+
+            String linhaAtual = leitor.readLine();
+
+            while(linhaAtual != null){
+
+                
+                String[] dados = linhaAtual.split(";");
+                Registro registroAtual = new Registro(Integer.parseInt(dados[0]), )
+
+            }
+
+        } catch (Exception e) {
+        }
+    }
 
 }
