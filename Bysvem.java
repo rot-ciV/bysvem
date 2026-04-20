@@ -19,7 +19,7 @@ public abstract class Bysvem{
     public void setId(int id){ this.id = id; }
     public int getId() { return this.id; }
 
-    private boolean verificador
+    private boolean verificador;
 
     public static void main(String[] args){
         Scanner leitor = new Scanner(System.in);
