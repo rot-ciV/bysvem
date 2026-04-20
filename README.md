@@ -8,7 +8,7 @@ Este projeto tem como objetivo desenvolver um sistema de venda, na qual aplicamo
 ## 👨‍💻 Desenvolvedores
 
 - Bernardo Resende Brasil — `Bernardoresende2006`
-- João Vitor Sant'Anna Santos — `---`
+- João Vitor Sant'Anna Santos — `Osant-anna`
 - Mateus dos Santos Coelho — `OMateusCoelho`
 - Victor Nunes Fagundes — `rot-ciV`
 
