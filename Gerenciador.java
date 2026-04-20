@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -115,7 +114,7 @@ public abstract class Gerenciador extends Bysvem{
 
     public static ArrayList<Conta> carregaContas(){
 
-        ArrayList contasCarregadas = new ArrayList<>();
+        ArrayList<Conta> contasCarregadas = new ArrayList<>();
 
         try {
 
@@ -183,7 +182,9 @@ public abstract class Gerenciador extends Bysvem{
         }
     }
 
-    public static ArrayList<Registro> CarregaRegistros(){
+    public static ArrayList<Registro> CarregaRegistros(ArrayList<Jogo> listaJogos, ArrayList<Conta> listaContas){
+
+        ArrayList<Registro> registrosCarregados = new ArrayList<>();
 
         try {
             
@@ -194,14 +195,56 @@ public abstract class Gerenciador extends Bysvem{
 
             while(linhaAtual != null){
 
-                
                 String[] dados = linhaAtual.split(";");
-                Registro registroAtual = new Registro(Integer.parseInt(dados[0]), )
+                Jogo jogoRegistro = null;
+                Conta contaRegistro = null;
+                
+                for(int i = 0; i < listaJogos.size(); i++){
 
+                    Jogo achaJogo = listaJogos.get(i);
+
+                    if(achaJogo.getId() == Integer.parseInt(dados[1])){
+
+                        jogoRegistro = achaJogo;
+                        break;
+                    }
+                }
+
+                if (jogoRegistro == null){
+
+                    linhaAtual = leitor.readLine();
+                    continue;
+                }
+
+                for(int i = 0; i < listaContas.size(); i++){
+
+                    Conta achaConta = listaContas.get(i);
+
+                    if(achaConta.getId() ==  Integer.parseInt(dados[2])){
+
+                        contaRegistro = achaConta;
+                        break;
+                    }
+                }
+
+                if (contaRegistro == null){
+
+                    linhaAtual = leitor.readLine();
+                    continue;
+                } 
+
+                Registro registroAtual = new Registro(Integer.parseInt(dados[0]), jogoRegistro, contaRegistro,Double.parseDouble(dados[3]));
+                registrosCarregados.add(registroAtual);
+                linhaAtual = leitor.readLine();
             }
 
-        } catch (Exception e) {
-        }
-    }
+            leitor.close();
 
+        } catch (Exception e) {
+
+            System.err.println("Erro de leitura do arquivo registros.txt ");
+        }
+
+        return registrosCarregados;
+    }
 }

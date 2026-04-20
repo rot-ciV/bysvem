@@ -8,12 +8,12 @@ public class Registro extends Bysvem{
     */
     private double horasJogadas;
 
-    public Registro(int id, Jogo jogo, Conta conta){
+    public Registro(int id, Jogo jogo, Conta conta, double horasJogadas){
         
         super(id);
         this.jogo = jogo;
         this.conta = conta;
-        this.horasJogadas = 0.0; 
+        this.horasJogadas = horasJogadas; 
     }
 
     public void setJogo(Jogo jogo) { this.jogo = jogo; }
