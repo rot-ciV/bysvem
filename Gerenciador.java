@@ -28,7 +28,7 @@ public abstract class Gerenciador extends Bysvem{
 
                 Jogo jogoAtual = listaDeJogos.get(i);
 
-                String linha = jogoAtual.getId() + ";" + jogoAtual.getNome() + ";" + jogoAtual.getGenero() + ";" + jogoAtual.getDesenvolvedora() + ";" + jogoAtual.getPreco();
+                String linha = jogoAtual.getId() + ";" + jogoAtual.getNome() + ";" + jogoAtual.getGenero() + ";" + jogoAtual.getDesenvolvedora() + ";" + jogoAtual.getPreco() + ";" + jogoAtual.getDesc();
                 escritor.write(linha);
                 escritor.newLine();
 
@@ -56,7 +56,7 @@ public abstract class Gerenciador extends Bysvem{
             while(linhaAtual != null){
                 
                 String[] dados = linhaAtual.split(";");
-                Jogo jogoAtual = new Jogo(Integer.parseInt(dados[0]), dados[1], dados[2], dados[3], Double.parseDouble(dados[4]));
+                Jogo jogoAtual = new Jogo(Integer.parseInt(dados[0]), dados[1], dados[2], dados[3], Double.parseDouble(dados[4]), dados[5]);
                 jogosCarregados.add(jogoAtual);
                 
                 linhaAtual = leitor.readLine();
@@ -233,7 +233,7 @@ public abstract class Gerenciador extends Bysvem{
                     continue;
                 } 
 
-                Registro registroAtual = new Registro(Integer.parseInt(dados[0]), jogoRegistro, contaRegistro,Double.parseDouble(dados[3]));
+                Registro registroAtual = new Registro(Integer.parseInt(dados[0]), jogoRegistro, contaRegistro, Double.parseDouble(dados[3]));
                 registrosCarregados.add(registroAtual);
                 linhaAtual = leitor.readLine();
             }
