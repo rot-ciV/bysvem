@@ -9,7 +9,11 @@ public class Loja extends Bysvem{
     protected ArrayList<Registro> registros;
 
     public Loja(int id){
+
         super(id);
+        this.jogos = new ArrayList<>();
+        this.contas = new ArrayList<>();
+        this.registros = new ArrayList<>();
     }
 
     public void lojaMenu(Conta conta){
@@ -55,9 +59,9 @@ public class Loja extends Bysvem{
                                         String resposta = scn.next();
                                         if(resposta.equals('y')){
                                             Usuario u = (Usuario) conta;
-                                            if(u.getSaldo() > escolhido.getPreco()){
-                                                u.setSaldo(u.getSaldo() - escolhido.getPreco());
-                                                u.addJogo(escolhido);
+                                            if(compraJogo(escolhido, u)){
+                                                
+                                                System.out.println("Jogo adquirido com sucesso!");
                                             }else{
                                                 System.out.println("Saldo insuficiente!");
                                                 break;
@@ -75,7 +79,8 @@ public class Loja extends Bysvem{
                             }
 
                     case 2:
-                        for(Jogo jogo : conta.jogosadquiridos){
+                        Usuario usuario = (Usuario) conta;
+                        for(Jogo jogo : biblioteca(usuario)){
                             System.out.println(contador + "-" + jogo.getNome());
                             System.out.println(jogo.getDesc());
                             System.out.println("-------------------");
@@ -155,9 +160,39 @@ public class Loja extends Bysvem{
         }
         scn.close();
     }
+
+
+    //Preciso de uma forma de criar id's
+    public boolean compraJogo(Jogo jogoComprado, Usuario usuario){
+
+        if (usuario.getSaldo() >= jogoComprado.getPreco()){
+
+            double novoSaldo = usuario.getSaldo() - jogoComprado.getPreco();
+            usuario.setSaldo(novoSaldo); 
+
+            Registro novoRegistro = new Registro(10, jogoComprado, usuario, 0.0);
+            this.registros.add(novoRegistro);
+            Gerenciador.salvarRegistro(registros);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public ArrayList<Jogo> biblioteca(Usuario usuario){
+
+        ArrayList biblioteca = new ArrayList<>();
+
+        for(int i = 0; i < this.registros.size(); i++){
+
+            if (usuario.getId() == this.registros.get(i).getConta().getId()){
+
+                biblioteca.add(this.registros.get(i).getJogo());
+            }
+        }
+
+        return biblioteca;
+    }
 }
 
-public void compraJogo(Jogo jogoComprado, Usuario usuario){
-
-    
-}
