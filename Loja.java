@@ -156,3 +156,8 @@ public class Loja extends Bysvem{
         scn.close();
     }
 }
+
+public void compraJogo(Jogo jogoComprado, Usuario usuario){
+
+    
+}
