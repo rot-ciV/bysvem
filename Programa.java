@@ -22,21 +22,36 @@ public abstract class Programa{
             System.out.println("1)Entrar na loja        2)Sair");
             int menu_option = leitor.nextInt();
             if(menu_option == 1){
-                System.out.println("Para entrar na plataforma você precisa digitar o seu id:");
-                
+                System.out.println("Para entrar na plataforma você precisa digitar o seu id, ou digite 0 se quer criar uma conta nova.");
                 int user_id = leitor.nextInt();
-                Conta conta_verificadora = buscarConta(user_id);
-                Loja loja = new Loja(1);
-                if(conta_verificadora != null){
-                    Loja.lojaMenu(conta_verificadora);
-                //     if(conta_verificadora instanceof Desenvolvedor){
-                //         Loja.lojaMenu(conta_verificadora);
-                //     } else if(conta_verificadora instanceof Operador){
-                //         //roda com a conta de um operador 
-                //     } else{
-                //         //roda com a conta de um usuário
-                //     }
+                if(user_id != 0){
+                    Conta conta_verificadora = buscarConta(user_id);
+                    Loja loja = new Loja(1);
+                    if(conta_verificadora != null){
+                        boolean flag = true;
+                        for(int tent = 3; tent>0; tent--){
+                            System.out.println("Digite sua senha: ");
+                            int password = leitor.nextInt();
+                            if (password == conta_verificadora.getSenha()){
+                                loja.lojaMenu(conta_verificadora);
+                                flag = false;
+                                break;
+                            } else if(tent>1){
+                                System.out.println("Senha incorreta, tente novamente.\n");
+                            }
+                        }
+                        if(flag){
+                            System.out.println("O limite de tentativas foi excedido, tente novamente mais tarde");
+                        }
+                    } else{
+                        System.out.println("Não foi encontrada uma conta com esse id, tente novamente.");
+                        }
+                }else {
+                    ArrayList<Conta> contas = Gerenciador.salvarContas();
+
+
                 }
+                
             } else if(menu_option == 2){ 
                 break;
                 } else System.out.println("Infelizmente não temos essa opção.");

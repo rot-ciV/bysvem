@@ -157,7 +157,7 @@ public class Loja extends Bysvem{
     }
 }
 
-public void compraJogo(Jogo jogoComprado, Usuario usuario){
+// public void compraJogo(Jogo jogoComprado, Usuario usuario){
 
     
-}
+// }
