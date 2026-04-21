@@ -72,7 +72,7 @@ public abstract class Gerenciador extends Bysvem{
         
         return jogosCarregados;
     }
-    
+  
     public static void salvarContas(ArrayList<Conta> listaContas){
 
         try {
