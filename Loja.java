@@ -13,11 +13,10 @@ public class Loja extends Bysvem{
     }
 
     public void lojaMenu(Conta conta){
-
+        Scanner scn = new Scanner(System.in);
+        
         if(conta instanceof Usuario){
             while (true){
-
-                Scanner scn = new Scanner(System.in);
 
                 System.out.print("\n1 - Jogos Disponíveis\n2 - Biblioteca\n3 - Config\n4 - Sair");
                 int contador = 1;
@@ -90,8 +89,6 @@ public class Loja extends Bysvem{
         }else if(conta instanceof Operador){
             while (true){
 
-                Scanner scn = new Scanner(System.in);
-
                 System.out.print("\n1 - Jogos Disponíveis\n2 - Biblioteca\n3 - Config\n4 - Sair");
                 int contador = 1;
                 int op = scn.nextInt();
@@ -125,7 +122,6 @@ public class Loja extends Bysvem{
         }else if(conta instanceof Desenvolvedor){
             while (true){
 
-                Scanner scn = new Scanner(System.in);
 
                 System.out.print("\n1 - Jogos Disponíveis\n2 - Biblioteca\n3 - Config\n4 - Sair");
                 int contador = 1;
@@ -157,20 +153,6 @@ public class Loja extends Bysvem{
                 }
             }
         }
-        
-
-
-    // public Loja(Usuario user){
-    //     //rodar a loja com as informações do usuário sobre o que ele tem (jogos e saldo)
-    // }
-
-    // public Loja(Desenvolvedor dev){
-    //     //rodar a loja com as informações de dev, dando a ele manuseio e acesso apenas sobre os jogos de sua autoria
-    // }
-
-    // public Loja(Operador operator){
-    //     //rodar a Loja com as informações de operador, dando a ele manuseio da loja livremente e acesso à todos os jogos
-    // }
-    
+        scn.close();
     }
 }

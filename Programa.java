@@ -2,17 +2,16 @@ import java.util.Scanner;
 import java.util.ArrayList;
 public abstract class Programa{
     
-    private static boolean verificador(int idProcurado){
+    private static Conta buscarConta(int idProcurado){
         ArrayList<Conta> contas = Gerenciador.carregaContas();
-        boolean existência = false;
+
         for (int i = 0; i < contas.size(); i++) {
             Conta c = contas.get(i);
             if (c.getId() == idProcurado) {
-                existência = true;
-                break;
+                return c;
             }
         }
-        return existência;
+        return null;
     }
 
     public static void main(String[] args){
@@ -26,17 +25,17 @@ public abstract class Programa{
                 System.out.println("Para entrar na plataforma você precisa digitar o seu id:");
                 
                 int user_id = leitor.nextInt();
-                ArrayList<Conta> contas = Gerenciador.carregaContas();
-
-                if(verificador(user_id)){
-                    // if(id é de dev){
-                    //     //nao sei como vai ser a análise disso, provavvelmente id específicos
-                    // } else if(user_id == 17 || user_id == 24 || user_id == 67 || user_id == 69){
-                    //     //roda com a conta de um operador 
-                    // } else{
-                    //     //roda com a conta de um usuário
-                    // }
-                    System.out.println("Legal.");
+                Conta conta_verificadora = buscarConta(user_id);
+                Loja loja = new Loja(1);
+                if(conta_verificadora != null){
+                    Loja.lojaMenu(conta_verificadora);
+                //     if(conta_verificadora instanceof Desenvolvedor){
+                //         Loja.lojaMenu(conta_verificadora);
+                //     } else if(conta_verificadora instanceof Operador){
+                //         //roda com a conta de um operador 
+                //     } else{
+                //         //roda com a conta de um usuário
+                //     }
                 }
             } else if(menu_option == 2){ 
                 break;
