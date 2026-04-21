@@ -247,38 +247,39 @@ public abstract class Gerenciador extends Bysvem{
 
         return registrosCarregados;
     }
+
+    public static boolean existeId(int id, ArrayList<Conta> contas, ArrayList<Jogo> jogos, ArrayList<Registro> registros) {
+        for (Conta c : contas) {
+            if (c.getId() == id) return true;
+        }
+        for (Jogo j : jogos) {
+            if (j.getId() == id) return true;
+        }
+        for (Registro r : registros) {
+            if (r.getId() == id) return true;
+        }
+        return false;
 }
 
-public static boolean existeId(int id, ArrayList<Conta> contas, ArrayList<Jogo> jogos, ArrayList<Registro> registros) {
-    for (Conta c : contas) {
-        if (c.getId() == id) return true;
+    public static boolean existeId_contas(int id, ArrayList<Conta> contas) {
+        for (Conta c : contas) {
+            if (c.getId() == id) return true;
+        }
+        return false;
     }
-    for (Jogo j : jogos) {
-        if (j.getId() == id) return true;
-    }
-    for (Registro r : registros) {
-        if (r.getId() == id) return true;
-    }
+
+    public static boolean existeId_jogos(int id, ArrayList<Jogo> jogos) {
+        for (Jogo j : jogos) {
+            if (j.getId() == id) return true;
+        }
     return false;
 }
 
-public static boolean existeId_contas(int id, ArrayList<Conta> contas) {
-    for (Conta c : contas) {
-        if (c.getId() == id) return true;
-    }
+    public static boolean existeId_registros(int id, ArrayList<Registro> registros) {
+        for (Registro r : registros) {
+            if (r.getId() == id) return true;
+        }
     return false;
+    }
 }
 
-public static boolean existeId_jogos(int id, ArrayList<Jogo> jogos) {
-    for (Jogo j : jogos) {
-        if (j.getId() == id) return true;
-    }
-return false;
-}
-
-public static boolean existeId_registros(int id, ArrayList<Registro> registros) {
-    for (Registro r : registros) {
-        if (r.getId() == id) return true;
-    }
-    return false;
-}

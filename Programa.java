@@ -1,5 +1,5 @@
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
 public abstract class Programa{
     
     private static Conta buscarConta(int idProcurado){
@@ -15,6 +15,10 @@ public abstract class Programa{
     }
 
     public static void main(String[] args){
+        Loja loja = new Loja(1);
+        loja.jogos = Gerenciador.carregaJogos();
+        loja.contas = Gerenciador.carregaContas();
+        loja.registros = Gerenciador.CarregaRegistros(loja.jogos, loja.contas);
         Scanner leitor = new Scanner(System.in);
         System.out.println("=============== Olá, seja muito bem vindo ao Bysvem! ===============\n");
         while(true){
@@ -25,8 +29,9 @@ public abstract class Programa{
                 System.out.println("Para entrar na plataforma você precisa digitar o seu id, ou digite 0 se quer criar uma conta nova.");
                 int user_id = leitor.nextInt();
                 if(user_id != 0){
+
                     Conta conta_verificadora = buscarConta(user_id);
-                    Loja loja = new Loja(1);
+                    
                     if(conta_verificadora != null){
                         boolean flag = true;
                         for(int tent = 3; tent>0; tent--){
@@ -47,9 +52,14 @@ public abstract class Programa{
                         System.out.println("Não foi encontrada uma conta com esse id, tente novamente.");
                         }
                 }else {
-                    ArrayList<Conta> contas = Gerenciador.salvarContas();
+                    leitor.nextLine();
+                    System.out.println("Digite o nome do usuário: ");
+                    String nome = leitor.nextLine();
+                    System.out.println("Crie uma senha (apenas digitos): ");
+                    int senha = leitor.nextInt();
 
-
+                    loja.criaUsuario(nome, senha); 
+                    System.out.println("Conta criada com sucesso!");
                 }
                 
             } else if(menu_option == 2){ 

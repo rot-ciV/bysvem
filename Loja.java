@@ -161,16 +161,46 @@ public class Loja extends Bysvem{
         scn.close();
     }
 
+    public int criaId(){
 
+        int id = 2;
+
+        for(int i = 0; i < this.contas.size(); i++){
+
+            if(id <= this.contas.get(i).getId()){
+
+                id = this.contas.get(i).getId() + 1;
+            }
+        }
+
+        for(int i = 0; i < this.jogos.size(); i++){
+
+            if(id <= this.jogos.get(i).getId()){
+
+                id = this.jogos.get(i).getId() + 1;
+            }
+        }
+
+        for(int i = 0; i < this.registros.size(); i++){
+
+            if(id <= this.registros.get(i).getId()){
+
+                id = this.registros.get(i).getId() + 1;
+            }
+        }
+
+        return id;
+    }
     //Preciso de uma forma de criar id's
     public boolean compraJogo(Jogo jogoComprado, Usuario usuario){
 
         if (usuario.getSaldo() >= jogoComprado.getPreco()){
 
+            int id = criaId();
             double novoSaldo = usuario.getSaldo() - jogoComprado.getPreco();
             usuario.setSaldo(novoSaldo); 
 
-            Registro novoRegistro = new Registro(10, jogoComprado, usuario, 0.0);
+            Registro novoRegistro = new Registro(id, jogoComprado, usuario, 0.0);
             this.registros.add(novoRegistro);
             Gerenciador.salvarRegistro(registros);
 
@@ -182,7 +212,7 @@ public class Loja extends Bysvem{
 
     public ArrayList<Jogo> biblioteca(Usuario usuario){
 
-        ArrayList biblioteca = new ArrayList<>();
+        ArrayList<Jogo> biblioteca = new ArrayList<>();
 
         for(int i = 0; i < this.registros.size(); i++){
 
@@ -194,9 +224,27 @@ public class Loja extends Bysvem{
 
         return biblioteca;
     }
+
+    public Usuario criaUsuario(String nome, int senha){
+
+        int id = criaId();
+        Usuario novoUsuario = new Usuario(id, nome, senha, 0.0);
+        this.contas.add(novoUsuario);
+        Gerenciador.salvarContas(contas);
+
+        return novoUsuario;
+    }
+
+    public Desenvolvedor criaDesenvolvedor(String nome, int senha, String desenvolvedora){
+
+        int id = criaId();
+        Desenvolvedor novoDesenvolvedor = new Desenvolvedor(id, nome, senha, desenvolvedora);
+        this.contas.add(novoDesenvolvedor);
+        Gerenciador.salvarContas(contas);
+
+        return novoDesenvolvedor;
+    }
+
+    //public void criOperador(){}
 }
 
-// public void compraJogo(Jogo jogoComprado, Usuario usuario){
-
-    
-// }
