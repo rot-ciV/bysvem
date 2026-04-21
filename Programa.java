@@ -1,6 +1,16 @@
 public abstract class Programa{
     
-    private boolean verificador;
+    private boolean verificador(int idProcurado){
+        ArrayList<Conta> contas = Gerenciador.carregaContas();
+        boolean existência = false;
+        for (int i = 0; i < contas.size(); i++) {
+            Conta c = contas.get(i);
+            if (c.getId() == idProcurado) {
+                existência = true;
+                break;
+            }
+        }
+    }
 
     public static void main(String[] args){
         Scanner leitor = new Scanner(System.in);
@@ -13,7 +23,8 @@ public abstract class Programa{
                 System.out.println("Para entrar na plataforma você precisa digitar o seu id:");
                 
                 int user_id = nexInt();
-                //verificar se o id existe
+                ArrayList<Conta> contas = Gerenciador.carregaContas();
+
                 if(id existe){
                     if(id é de dev){
                         //nao sei como vai ser a análise disso, provavvelmente id específicos
