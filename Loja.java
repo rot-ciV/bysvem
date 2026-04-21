@@ -196,10 +196,7 @@ public class Loja extends Bysvem{
     }
 }
 
-<<<<<<< HEAD
 // public void compraJogo(Jogo jogoComprado, Usuario usuario){
 
     
 // }
-=======
->>>>>>> 06e7af53263984987e7a257e759128118c8c2326
