@@ -20,9 +20,9 @@ public class Desenvolvedor extends Conta{
     }
 
     // (Victor) Essa função apenas cria o jogo, mas ele ainda não está disponível na loja
-    public void criaJogo(int id, String nome, String genero, double preco){
+    public void criaJogo(int id, String nome, String genero, double preco, String disc){
 
-        Jogo novoJogo = new Jogo(id, nome, genero, this.desenvolvedora, preco);
+        Jogo novoJogo = new Jogo(id, nome, genero, this.desenvolvedora, preco, disc);
         jogosEmDesenvolvimento.add(novoJogo);
     }
 
