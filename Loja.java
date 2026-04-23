@@ -88,7 +88,41 @@ public class Loja extends Bysvem{
                         }    
 
                     case 3:
-                        //ainda não sei oq vai ser            
+                        System.out.println("Selecione uma opção:\n1 - Alterar nome\n2 - Alterar senha");
+                        int escolha = scn.nextInt();
+                        
+                        if(escolha == 1){
+                            System.out.println("Digite o novo nome: ");
+                            String nome = scn.next();
+                            System.out.println("Nome anterior: " + conta.getNome() + "\nNovo nome: " + nome + "\nDESEJA SALVAR:\n" + 
+                            "1 - Salvar\n0 - Cancelar");
+                            int salvar = scn.nextInt();
+                            if(salvar == 1){
+                                for(Conta j : contas){
+                                    if(j.getNome() == nome){
+                                        System.out.println("Esse nome de usuário já esta em uso.");
+                                        foiSalvo = false;
+                                    }else{
+                                        conta.setNome(nome);
+                                        Gerenciador.salvarContas(contas);
+                                        foiSalvo = true;
+                                    }
+                                }
+                            }else{
+                                foiSalvo = false;
+                            }
+                        }else if(escolha == 2){
+                            System.out.println("Digite a nova senha: ");
+                            int senha = scn.nextInt();
+                            System.out.println("Nova senha: " + senha + "\nDeseja salvar: 1 - Salvar\n2 - Cancelar");
+                            int salvar = scn.nextInt();
+                            if(salvar == 1){
+                                conta.setSenha(senha);
+                                foiSalvo = true;
+                            }else{
+                                foiSalvo = false;
+                            }
+                        }       
                 }
             }
         }else if(conta instanceof Operador){
