@@ -6,9 +6,9 @@ public class Desenvolvedor extends Conta{
     public void setDesenvolvedora(String desenvolvedora) { this.desenvolvedora = desenvolvedora; }
     public String getDesenvolvedora() { return desenvolvedora; }
 
-    public Desenvolvedor(int id, String nome, int senha, String desenvolvedora){
+    public Desenvolvedor(int id, String nome, int senha, String email, String desenvolvedora){
         
-        super(id,nome,senha);
+        super(id,nome,senha,email);
         this.desenvolvedora = desenvolvedora;
     }
 
