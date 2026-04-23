@@ -2,12 +2,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 public abstract class Programa{
     
-    private static Conta buscarConta(int idProcurado){
+    private static Conta buscarConta(String emailProcurado){
         ArrayList<Conta> contas = Gerenciador.carregaContas();
 
         for (int i = 0; i < contas.size(); i++) {
             Conta c = contas.get(i);
-            if (c.getId() == idProcurado) {
+            if (c.getEmail().equals(emailProcurado) ) {
                 return c;
             }
         }
@@ -26,11 +26,12 @@ public abstract class Programa{
             System.out.println("1)Entrar na loja        2)Sair");
             int menu_option = leitor.nextInt();
             if(menu_option == 1){
-                System.out.println("Para entrar na plataforma você precisa digitar o seu id, ou digite 0 se quer criar uma conta nova.");
-                int user_id = leitor.nextInt();
-                if(user_id != 0){
+                System.out.println("Para entrar na plataforma você precisa digitar o seu email, ou digite 0 se quer criar uma conta nova.");    
+                String email = leitor.nextLine();
+                String regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
+                if(email.matches(regex)){
 
-                    Conta conta_verificadora = buscarConta(user_id);
+                    Conta conta_verificadora = buscarConta(regex);
                     
                     if(conta_verificadora != null){
                         boolean flag = true;
@@ -49,16 +50,18 @@ public abstract class Programa{
                             System.out.println("O limite de tentativas foi excedido, tente novamente mais tarde");
                         }
                     } else{
-                        System.out.println("Não foi encontrada uma conta com esse id, tente novamente.");
+                        System.out.println("Não foi encontrada uma conta com esse email, tente novamente.");
                         }
                 }else {
                     leitor.nextLine();
+                    System.out.println("Digite seu email: ");
+                    String email_novo = leitor.nextLine();
                     System.out.println("Digite o nome do usuário: ");
                     String nome = leitor.nextLine();
                     System.out.println("Crie uma senha (apenas digitos): ");
                     int senha = leitor.nextInt();
 
-                    loja.criaUsuario(nome, senha); 
+                    loja.criaUsuario(email, nome, senha); 
                     System.out.println("Conta criada com sucesso!");
                 }
                 
