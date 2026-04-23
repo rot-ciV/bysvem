@@ -259,7 +259,7 @@ public class Loja extends Bysvem{
         return biblioteca;
     }
 
-    public Usuario criaUsuario(String nome, int senha){
+    public Usuario criaUsuario(String nome, int senha, String email){
 
         int id = criaId();
         Usuario novoUsuario = new Usuario(id, nome, senha, 0.0);

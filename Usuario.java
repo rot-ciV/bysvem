@@ -2,10 +2,10 @@ public class Usuario extends Conta{
     
     private double saldo;
 
-    public Usuario(int id, String nome, int senha, String email){
+    public Usuario(int id, String nome, int senha, String email, double saldo){
         
         super(id,nome,senha, email);
-        this.saldo = 0.0;
+        this.saldo = saldo;
     }
 
     public void setSaldo(double saldo) { this.saldo = saldo; }
