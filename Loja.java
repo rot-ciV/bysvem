@@ -1,6 +1,6 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Loja extends Bysvem{
 
@@ -307,7 +307,7 @@ public class Loja extends Bysvem{
         Random sorteador = new Random();
         int id = 0;
         if(verificação == 0){
-            //id de usuário
+            //id de contas
             do{
                 id = sorteador.nextInt(9000)+1000;
             }while(Gerenciador.existeId_contas(id, contas));
@@ -329,7 +329,7 @@ public class Loja extends Bysvem{
         }
         return id;
     }
-    //Preciso de uma forma de criar id's
+    
     public boolean compraJogo(Jogo jogoComprado, Usuario usuario){
 
         if (usuario.getSaldo() >= jogoComprado.getPreco()){
@@ -369,20 +369,21 @@ public class Loja extends Bysvem{
         Usuario novoUsuario = new Usuario(id, nome, senha, email, 0.0);
         this.contas.add(novoUsuario);
         Gerenciador.salvarContas(contas);
+        novoUsuario.foiSalvo = true;
 
         return novoUsuario;
     }
 
-    // public Desenvolvedor criaDesenvolvedor(String nome, int senha, String email, String desenvolvedora){
+    public Desenvolvedor criaDesenvolvedor(String nome, int senha, String email, String empresa){
 
-    //     int id = criaId(0);
-    //     Desenvolvedor novoDesenvolvedor = new Desenvolvedor(id, nome, senha, email desenvolvedora);
-    //     this.contas.add(novoDesenvolvedor);
-    //     Gerenciador.salvarContas(contas);
+        int id = criaId(0);
+        Desenvolvedor novoDesenvolvedor = new Desenvolvedor(id, nome, senha, email, empresa);
+        this.contas.add(novoDesenvolvedor);
+        Gerenciador.salvarContas(contas);
+        novoDesenvolvedor.foiSalvo = true;
 
-    //     return novoDesenvolvedor;
-    // }
+        return novoDesenvolvedor;
+    }
 
-    //public void criOperador(){}
 }
 

@@ -1,21 +1,22 @@
 
 public class Desenvolvedor extends Conta{
 
-    protected String desenvolvedora;
+    protected String empresa;
 
-    public void setDesenvolvedora(String desenvolvedora) { this.desenvolvedora = desenvolvedora; }
-    public String getDesenvolvedora() { return desenvolvedora; }
+    public void seteEpresa(String empresa) { this.empresa = empresa; }
+    public String getEmpresa() { return empresa; }
 
-    public Desenvolvedor(int id, String nome, int senha, String email, String desenvolvedora){
+    public Desenvolvedor(int id, String nome, int senha, String email, String empresa){
         
         super(id,nome,senha,email);
-        this.desenvolvedora = desenvolvedora;
+        this.empresa = empresa;
     }
 
-    public void criaJogo(int id, String nome, String genero, double preco, String disc){
+    public Jogo criaJogo(int id, String nome, String genero, double preco, String disc){
 
-        Jogo novoJogo = new Jogo(id, nome, genero, this.desenvolvedora, preco, disc);
-
+        Jogo novoJogo = new Jogo(id, nome, genero, this.empresa, preco, disc);
+        
+        return novoJogo; 
     }
 
 }

@@ -92,7 +92,7 @@ public abstract class Gerenciador extends Bysvem{
                     
                 }else if( conta_atual instanceof Desenvolvedor){
 
-                    String linha = "DEV;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + conta_atual.getEmail() + ";" + ((Desenvolvedor) conta_atual).getDesenvolvedora();
+                    String linha = "DEV;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + conta_atual.getEmail() + ";" + ((Desenvolvedor) conta_atual).getEmpresa();
                     escritor.write(linha);
                     escritor.newLine();
 
