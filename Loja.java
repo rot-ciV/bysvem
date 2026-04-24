@@ -23,61 +23,60 @@ public class Loja extends Bysvem{
         if(conta instanceof Usuario){
             while (true){
 
-                System.out.print("\n1 - Jogos Disponíveis\n2 - Biblioteca\n3 - Config\n4 - Sair");
+                System.out.println("\n1 - Jogos Disponíveis\n2 - Biblioteca\n3 - Config\n4 - Sair");
                 int contador = 1;
                 int op = scn.nextInt();
+                scn.nextLine();
                 switch (op){
-
-                    case 4:
-                        return;
 
                     case 1:
                         System.out.println("--- Jogos Disponíveis ---");
-                            for (Jogo jogo : jogos) {
-                                System.out.println(contador + "-" + jogo.getNome());
-                                System.out.println(jogo.getDesc());
-                                System.out.println("-------------------");
-                                contador++;
-                            }
-                            while (true){
-                                System.out.println("Selecione o jogo que deseja saber mais | (Digite 0 para voltar ao menu): ");
-                                int escolha = scn.nextInt();
-                                if(escolha >= 1 && escolha <= jogos.size()){
-                                    Jogo escolhido = jogos.get(escolha - 1);
-                                    if(conta.PossuiJogo(escolhido) == true){
-                                        System.out.println("Jogo selecionado: " + escolhido.getNome());
-                                        System.out.println("Descrição: " + escolhido.getDesc());
-                                        System.out.println("Gênero: " + escolhido.getGenero());
-                                        System.out.println("Desenvolvedora: " + escolhido.getDesenvolvedora());
-                                        System.out.println("[Jogo Adquirido]");
-                                    }else{
-                                        System.out.println("Jogo selecionado: " + escolhido.getNome());
-                                        System.out.println("Descrição: " + escolhido.getDesc());
-                                        System.out.println("Gênero: " + escolhido.getGenero());
-                                        System.out.println("Desenvolvedora: " + escolhido.getDesenvolvedora());
-                                        System.out.println("Preço: " + escolhido.getPreco());
-                                        System.out.println("Gostaria de adquirir o jogo? (y/n)");
-                                        String resposta = scn.next();
-                                        if(resposta.equals('y')){
-                                            Usuario u = (Usuario) conta;
-                                            if(compraJogo(escolhido, u)){
-                                                
-                                                System.out.println("Jogo adquirido com sucesso!");
-                                            }else{
-                                                System.out.println("Saldo insuficiente!");
-                                                break;
-                                            }
+                        for (Jogo jogo : jogos) {
+                            System.out.println(contador + "-" + jogo.getNome());
+                            System.out.println(jogo.getDesc());
+                            System.out.println("-------------------");
+                            contador++;
+                        }
+                        while (true){
+                            System.out.println("Selecione o jogo que deseja saber mais | (Digite 0 para voltar ao menu): ");
+                            int escolha = scn.nextInt();
+                            if(escolha >= 1 && escolha <= jogos.size()){
+                                Jogo escolhido = jogos.get(escolha - 1);
+                                if(conta.PossuiJogo(escolhido) == true){
+                                    System.out.println("Jogo selecionado: " + escolhido.getNome());
+                                    System.out.println("Descrição: " + escolhido.getDesc());
+                                    System.out.println("Gênero: " + escolhido.getGenero());
+                                    System.out.println("Desenvolvedora: " + escolhido.getDesenvolvedora());
+                                    System.out.println("[Jogo Adquirido]");
+                                }else{
+                                    System.out.println("Jogo selecionado: " + escolhido.getNome());
+                                    System.out.println("Descrição: " + escolhido.getDesc());
+                                    System.out.println("Gênero: " + escolhido.getGenero());
+                                    System.out.println("Desenvolvedora: " + escolhido.getDesenvolvedora());
+                                    System.out.println("Preço: " + escolhido.getPreco());
+                                    System.out.println("Gostaria de adquirir o jogo? (y/n)");
+                                    String resposta = scn.next();
+                                    if(resposta.equals('y')){
+                                        Usuario u = (Usuario) conta;
+                                        if(compraJogo(escolhido, u)){
+                                            
+                                            System.out.println("Jogo adquirido com sucesso!");
                                         }else{
+                                            System.out.println("Saldo insuficiente!");
                                             break;
                                         }
+                                    }else{
+                                        break;
                                     }
-
-                                }else if(escolha == 0){
-                                    return;
-                                }else{
-                                    System.out.println("Opção Inválida!");
                                 }
+
+                            }else if(escolha == 0){
+                                break;
+                            }else{
+                                System.out.println("Opção Inválida!");
                             }
+                        }
+                        break;
 
                     case 2:
                         Usuario usuario = (Usuario) conta;
@@ -86,7 +85,8 @@ public class Loja extends Bysvem{
                             System.out.println(jogo.getDesc());
                             System.out.println("-------------------");
                             contador++;
-                        }    
+                        }
+                        break;    
 
                     case 3:
                         System.out.println("Selecione uma opção:\n1 - Alterar nome\n2 - Alterar senha");
@@ -123,28 +123,30 @@ public class Loja extends Bysvem{
                             }else{
                                 foiSalvo = false;
                             }
-                        }       
+                        }
+                        break;
+                    case 4:
+                        return;       
                 }
             }
         }else if(conta instanceof Operador){
             while (true){
 
-                System.out.print("\n1 - Jogos Disponíveis\n2 - Biblioteca\n3 - Config\n4 - Sair");
+                System.out.println("\n1 - Jogos Disponíveis\n2 - Biblioteca\n3 - Config\n4 - Sair");
                 int contador = 1;
                 int op = scn.nextInt();
+                scn.nextLine();
                 switch (op){
-
-                    case 4:
-                        return;
 
                     case 1:
                         System.out.println("--- Jogos Disponíveis ---");
-                            for (Jogo jogo : jogos) {
-                                System.out.println(contador + "-" + jogo.getNome());
-                                System.out.println(jogo.getDesc());
-                                System.out.println("-------------------");
-                                contador++;
-                            }
+                        for (Jogo jogo : jogos) {
+                            System.out.println(contador + "-" + jogo.getNome());
+                            System.out.println(jogo.getDesc());
+                            System.out.println("-------------------");
+                            contador++;
+                        }
+                        break;
 
                     case 2:
                         for(Jogo jogo : conta.jogosadquiridos){
@@ -152,10 +154,15 @@ public class Loja extends Bysvem{
                             System.out.println(jogo.getDesc());
                             System.out.println("-------------------");
                             contador++;
-                        }    
+                        }
+                        break;    
 
                     case 3:
-                        //ainda não sei oq vai ser            
+                        //ainda não sei oq vai ser
+                        break;
+
+                    case 4:
+                        return;            
                 }
             }
         
@@ -163,13 +170,11 @@ public class Loja extends Bysvem{
             while (true){
 
 
-                System.out.print("\n1 - Jogos Disponíveis\n2 - Biblioteca\n3 - Config\n4 - Sair");
+                System.out.println("\n1 - Jogos Disponíveis\n2 - Biblioteca\n3 - Config\n4 - Sair");
                 int contador = 1;
                 int op = scn.nextInt();
+                scn.nextLine();
                 switch (op){
-
-                    case 4:
-                        return;
 
                     case 1:
                         System.out.println("--- Jogos Disponíveis ---");
@@ -179,6 +184,7 @@ public class Loja extends Bysvem{
                                 System.out.println("-------------------");
                                 contador++;
                             }
+                        break;
 
                     case 2:
                         for(Jogo jogo : conta.jogosadquiridos){
@@ -186,7 +192,8 @@ public class Loja extends Bysvem{
                             System.out.println(jogo.getDesc());
                             System.out.println("-------------------");
                             contador++;
-                        }    
+                        }
+                        break;    
 
                     case 3:
                         System.out.println("Selecione uma opção:\n1 - Alterar nome\n2 - Alterar senha\n3 - Alterar o email");
@@ -242,6 +249,7 @@ public class Loja extends Bysvem{
                                 }else{
                                     System.out.println("Opção inválida.");
                                 }
+                                break;
                             case 3:
                                 System.out.println("Digite seu novo email: ");
                                 String email_novo = scn.nextLine();
@@ -272,8 +280,12 @@ public class Loja extends Bysvem{
                                 }else{
                                     System.out.println("Opção inválida");
                                 }
-                                
+                                break;
                         }
+                        break;
+
+                    case 4:
+                        return;
 
                 }
             }
