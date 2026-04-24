@@ -189,7 +189,39 @@ public class Loja extends Bysvem{
                         }    
 
                     case 3:
-                        //ainda não sei oq vai ser            
+                        System.out.println("Selecione uma opção:\n1 - Alterar nome\n2 - Alterar senha");
+                        int escolha = scn.nextInt();
+                        if(escolha == 1){
+                            System.out.println("Digite o novo nome: ");
+                            String nome = scn.next();
+                            System.out.println("Nome anterior: " + conta.getNome() + "\nNovo nome: " + nome + "\nDESEJA SALVAR:\n" + 
+                            "1 - Salvar\n0 - Cancelar");
+                            int salvar = scn.nextInt();
+                            if(salvar == 1){
+                                for(Conta j : contas){
+                                    if(j.getNome() == nome){
+                                        System.out.println("Esse nome de usuário já esta em uso.");
+                                        foiSalvo = false;
+                                        break;
+                                    }
+                                }
+                                for(int i = 0; i < contas.size(); i++){
+                                    if(contas.get(i).getId() == conta.getId()){
+                                        contas.get(i).setNome(nome);
+                                    }
+                                }
+                                Gerenciador.salvarContas(contas);
+                                foiSalvo = true;
+                                break;
+                            }else if (salvar == 0){
+                                foiSalvo = false;
+                                System.out.println("Nome do usuário não foi alterado.");
+                                break;
+                            }else{
+                                System.out.println("Opção inválida.");
+                                break;
+                            }
+                        }      
                 }
             }
         }
