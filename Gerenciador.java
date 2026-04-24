@@ -86,19 +86,19 @@ public abstract class Gerenciador extends Bysvem{
 
                 if(conta_atual instanceof Usuario){
 
-                    String linha = "USR;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + ((Usuario) conta_atual).getSaldo();
+                    String linha = "USR;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + conta_atual.getEmail() + ";" + ((Usuario) conta_atual).getSaldo();
                     escritor.write(linha);
                     escritor.newLine();
                     
                 }else if( conta_atual instanceof Desenvolvedor){
 
-                    String linha = "DEV;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + ((Desenvolvedor) conta_atual).getDesenvolvedora();
+                    String linha = "DEV;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + conta_atual.getEmail() + ";" + ((Desenvolvedor) conta_atual).getDesenvolvedora();
                     escritor.write(linha);
                     escritor.newLine();
 
                 }else{
 
-                    String linha = "OP;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha();
+                    String linha = "OP;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + conta_atual.getEmail();
                     escritor.write(linha);
                     escritor.newLine();
                 }
@@ -129,19 +129,19 @@ public abstract class Gerenciador extends Bysvem{
 
                 if(dados[0].equals("USR")){
 
-                    Usuario contaUsuario = new Usuario(Integer.parseInt(dados[1]), dados[2], Integer.parseInt(dados[3]), Double.parseDouble(dados[4]));
+                    Usuario contaUsuario = new Usuario(Integer.parseInt(dados[1]), dados[2], Integer.parseInt(dados[3]), dados[4], Double.parseDouble(dados[5]));
                     contasCarregadas.add(contaUsuario);
                 }
 
                 else if(dados[0].equals("DEV")){
 
-                    Desenvolvedor contaDev = new Desenvolvedor(Integer.parseInt(dados[1]), dados[2], Integer.parseInt(dados[3]), dados[4]);
+                    Desenvolvedor contaDev = new Desenvolvedor(Integer.parseInt(dados[1]), dados[2], Integer.parseInt(dados[3]), dados[4], dados[5]);
                     contasCarregadas.add(contaDev);
                 }
 
                 else if(dados[0].equals("OP")){
 
-                    Operador contaOp = new Operador(Integer.parseInt(dados[1]), dados[2], Integer.parseInt(dados[3]));
+                    Operador contaOp = new Operador(Integer.parseInt(dados[1]), dados[2], Integer.parseInt(dados[3]), dados[4]);
                     contasCarregadas.add(contaOp);
                 }
 
