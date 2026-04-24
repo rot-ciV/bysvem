@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Random;
 
 public class Loja extends Bysvem{
 
@@ -88,7 +89,41 @@ public class Loja extends Bysvem{
                         }    
 
                     case 3:
-                        //ainda não sei oq vai ser            
+                        System.out.println("Selecione uma opção:\n1 - Alterar nome\n2 - Alterar senha");
+                        int escolha = scn.nextInt();
+                        
+                        if(escolha == 1){
+                            System.out.println("Digite o novo nome: ");
+                            String nome = scn.next();
+                            System.out.println("Nome anterior: " + conta.getNome() + "\nNovo nome: " + nome + "\nDESEJA SALVAR:\n" + 
+                            "1 - Salvar\n0 - Cancelar");
+                            int salvar = scn.nextInt();
+                            if(salvar == 1){
+                                for(Conta j : contas){
+                                    if(j.getNome() == nome){
+                                        System.out.println("Esse nome de usuário já esta em uso.");
+                                        foiSalvo = false;
+                                    }else{
+                                        conta.setNome(nome);
+                                        Gerenciador.salvarContas(contas);
+                                        foiSalvo = true;
+                                    }
+                                }
+                            }else{
+                                foiSalvo = false;
+                            }
+                        }else if(escolha == 2){
+                            System.out.println("Digite a nova senha: ");
+                            int senha = scn.nextInt();
+                            System.out.println("Nova senha: " + senha + "\nDeseja salvar: 1 - Salvar\n2 - Cancelar");
+                            int salvar = scn.nextInt();
+                            if(salvar == 1){
+                                conta.setSenha(senha);
+                                foiSalvo = true;
+                            }else{
+                                foiSalvo = false;
+                            }
+                        }       
                 }
             }
         }else if(conta instanceof Operador){
@@ -161,42 +196,38 @@ public class Loja extends Bysvem{
         scn.close();
     }
 
-    public int criaId(){
+    public int criaId(int verificação){
 
-        int id = 2;
-
-        for(int i = 0; i < this.contas.size(); i++){
-
-            if(id <= this.contas.get(i).getId()){
-
-                id = this.contas.get(i).getId() + 1;
-            }
+        Random sorteador = new Random();
+        int id;
+        if(verificação == 0){
+            //id de usuário
+            do{
+                id = sorteador.nexInt(9000)+1000;
+            }while(Gerenciador.existeId_contas(id, contas));
+            return id;
         }
-
-        for(int i = 0; i < this.jogos.size(); i++){
-
-            if(id <= this.jogos.get(i).getId()){
-
-                id = this.jogos.get(i).getId() + 1;
-            }
+        if(verificação == 1){
+            //id de registro
+            do{
+                id = sorteador.nexInt(900000)+100000;
+            }while(Gerenciador.existeId_registros(id, registros));
+            return id;
         }
-
-        for(int i = 0; i < this.registros.size(); i++){
-
-            if(id <= this.registros.get(i).getId()){
-
-                id = this.registros.get(i).getId() + 1;
-            }
+        if(verificação == 2){
+            //id de jogo
+            do{
+                id = sorteador.nexInt(90)+10;
+            }while(Gerenciador.existeId_registros(id, jogos));
+            return id;
         }
-
-        return id;
     }
     //Preciso de uma forma de criar id's
     public boolean compraJogo(Jogo jogoComprado, Usuario usuario){
 
         if (usuario.getSaldo() >= jogoComprado.getPreco()){
 
-            int id = criaId();
+            int id = criaId(1);
             double novoSaldo = usuario.getSaldo() - jogoComprado.getPreco();
             usuario.setSaldo(novoSaldo); 
 
@@ -225,20 +256,20 @@ public class Loja extends Bysvem{
         return biblioteca;
     }
 
-    public Usuario criaUsuario(String nome, int senha){
+    public Usuario criaUsuario(String nome, int senha, String email){
 
-        int id = criaId();
-        Usuario novoUsuario = new Usuario(id, nome, senha, 0.0);
+        int id = criaId(0);
+        Usuario novoUsuario = new Usuario(id, nome, senha, email);
         this.contas.add(novoUsuario);
         Gerenciador.salvarContas(contas);
 
         return novoUsuario;
     }
 
-    public Desenvolvedor criaDesenvolvedor(String nome, int senha, String desenvolvedora){
+    public Desenvolvedor criaDesenvolvedor(String nome, int senha, String email, String desenvolvedora){
 
-        int id = criaId();
-        Desenvolvedor novoDesenvolvedor = new Desenvolvedor(id, nome, senha, desenvolvedora);
+        int id = criaId(0);
+        Desenvolvedor novoDesenvolvedor = new Desenvolvedor(id, nome, senha, email desenvolvedora);
         this.contas.add(novoDesenvolvedor);
         Gerenciador.salvarContas(contas);
 
