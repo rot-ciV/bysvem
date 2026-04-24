@@ -53,7 +53,7 @@ public abstract class Programa{
                         System.out.println("Não foi encontrada uma conta com esse email, tente novamente.");
                         }
                 }else {
-                    leitor.nextLine();
+
                     System.out.println("Digite seu email: ");
                     String email_novo = leitor.nextLine();
                     System.out.println("Digite o nome do usuário: ");
