@@ -231,28 +231,29 @@ public class Loja extends Bysvem{
     public int criaId(int verificação){
 
         Random sorteador = new Random();
-        int id;
+        int id = 0;
         if(verificação == 0){
             //id de usuário
             do{
-                id = sorteador.nexInt(9000)+1000;
+                id = sorteador.nextInt(9000)+1000;
             }while(Gerenciador.existeId_contas(id, contas));
             return id;
         }
         if(verificação == 1){
             //id de registro
             do{
-                id = sorteador.nexInt(900000)+100000;
+                id = sorteador.nextInt(900000)+100000;
             }while(Gerenciador.existeId_registros(id, registros));
             return id;
         }
         if(verificação == 2){
             //id de jogo
             do{
-                id = sorteador.nexInt(90)+10;
-            }while(Gerenciador.existeId_registros(id, jogos));
+                id = sorteador.nextInt(90)+10;
+            }while(Gerenciador.existeId_jogos(id, jogos));
             return id;
         }
+        return id;
     }
     //Preciso de uma forma de criar id's
     public boolean compraJogo(Jogo jogoComprado, Usuario usuario){
@@ -291,22 +292,22 @@ public class Loja extends Bysvem{
     public Usuario criaUsuario(String nome, int senha, String email){
 
         int id = criaId(0);
-        Usuario novoUsuario = new Usuario(id, nome, senha, email);
+        Usuario novoUsuario = new Usuario(id, nome, senha, email, 0.0);
         this.contas.add(novoUsuario);
         Gerenciador.salvarContas(contas);
 
         return novoUsuario;
     }
 
-    public Desenvolvedor criaDesenvolvedor(String nome, int senha, String email, String desenvolvedora){
+    // public Desenvolvedor criaDesenvolvedor(String nome, int senha, String email, String desenvolvedora){
 
-        int id = criaId(0);
-        Desenvolvedor novoDesenvolvedor = new Desenvolvedor(id, nome, senha, email desenvolvedora);
-        this.contas.add(novoDesenvolvedor);
-        Gerenciador.salvarContas(contas);
+    //     int id = criaId(0);
+    //     Desenvolvedor novoDesenvolvedor = new Desenvolvedor(id, nome, senha, email desenvolvedora);
+    //     this.contas.add(novoDesenvolvedor);
+    //     Gerenciador.salvarContas(contas);
 
-        return novoDesenvolvedor;
-    }
+    //     return novoDesenvolvedor;
+    // }
 
     //public void criOperador(){}
 }

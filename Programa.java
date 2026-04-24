@@ -31,7 +31,7 @@ public abstract class Programa{
                 String regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
                 if(email.matches(regex)){
 
-                    Conta conta_verificadora = buscarConta(regex);
+                    Conta conta_verificadora = buscarConta(email);
                     
                     if(conta_verificadora != null){
                         boolean flag = true;
@@ -61,7 +61,7 @@ public abstract class Programa{
                     System.out.println("Crie uma senha (apenas digitos): ");
                     int senha = leitor.nextInt();
 
-                    loja.criaUsuario(email, nome, senha); 
+                    loja.criaUsuario(nome, senha, email_novo); 
                     System.out.println("Conta criada com sucesso!");
                 }
                 
