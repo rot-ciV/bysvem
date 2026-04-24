@@ -17,8 +17,9 @@ public class Loja extends Bysvem{
         this.registros = new ArrayList<>();
     }
 
+    Scanner scn = new Scanner(System.in);
+
     public void lojaMenu(Conta conta){
-        Scanner scn = new Scanner(System.in);
         
         if(conta instanceof Usuario){
             while (true){
@@ -30,7 +31,7 @@ public class Loja extends Bysvem{
                 switch (op){
 
                     case 1:
-                        System.out.println("--- Jogos Disponíveis ---");
+                        /*System.out.println("--- Jogos Disponíveis ---");
                         for (Jogo jogo : jogos) {
                             System.out.println(contador + "-" + jogo.getNome());
                             System.out.println(jogo.getDesc());
@@ -75,7 +76,8 @@ public class Loja extends Bysvem{
                             }else{
                                 System.out.println("Opção Inválida!");
                             }
-                        }
+                        }*/
+                        jogos_disponiveis(conta);
                         break;
 
                     case 2:
@@ -89,7 +91,7 @@ public class Loja extends Bysvem{
                         break;    
 
                     case 3:
-                        boolean save = altera_info(conta, scn);
+                        boolean save = altera_info(conta);
                         break;
                     case 4:
                         return;
@@ -126,7 +128,7 @@ public class Loja extends Bysvem{
                         break;    
 
                     case 3:
-                        boolean save = altera_info(conta, scn);
+                        boolean save = altera_info(conta);
                         //ainda não sei oq vai ser
                         break;
 
@@ -167,7 +169,7 @@ public class Loja extends Bysvem{
                         break;    
 
                     case 3:
-                        boolean save = altera_info(conta, scn);
+                        boolean save = altera_info(conta);
 
                     case 4:
                         return;
@@ -180,44 +182,45 @@ public class Loja extends Bysvem{
         scn.close();
     }
 
-    public boolean altera_info(Conta conta, Scanner scn){
+    public boolean altera_info(Conta conta){
         System.out.println("Selecione uma opção:\n1 - Alterar nome\n2 - Alterar senha\n3 - Alterar o email\n4 - Voltar");
         int escolha = scn.nextInt();
+        boolean salvar = false;
         switch(escolha){
                 case 1:
                     int flag = 1;
                     String nome = null;
                     while(flag == 1){
                         flag = 0;
-                        foiSalvo = true;
+                        salvar = true;
                         System.out.println("Caso quiser cancelar, digite 0\nDigite o novo nome: ");
                         nome = scn.next();
                         if(nome.equalsIgnoreCase("0")){
-                            foiSalvo = false;
+                            salvar = false;
                             break;
                         }
                         if(nome.equalsIgnoreCase(conta.getNome())){
                             System.out.println("O nome deve ser diferente do nome antigo.\n");
-                            foiSalvo = false;
+                            salvar = false;
                             flag = 1;
                             continue;
                         }
                     }
-                    if(foiSalvo){
+                    if(salvar){
                         System.out.println("Nome anterior: " + conta.getNome() + "\nNovo nome: " + nome + "\nDESEJA SALVAR:\n" + 
                         "1 - Salvar\n0 - Cancelar");
-                        int salvar = scn.nextInt();
-                        if(salvar == 1){
+                        int opcao = scn.nextInt();
+                        if(opcao == 1){
                             for(int i = 0; i < contas.size(); i++){
                                 if(contas.get(i).getId() == conta.getId()){
                                     contas.get(i).setNome(nome);
                                 }
                             }
                             Gerenciador.salvarContas(contas);
-                            foiSalvo = true;
+                            salvar = true;
                             break;
-                        }else if (salvar == 0){
-                            foiSalvo = false;
+                        }else if (opcao == 0){
+                            salvar = false;
                             System.out.println("Nome do usuário não foi alterado.");
                             break;
                         }else{
@@ -230,18 +233,18 @@ public class Loja extends Bysvem{
                     System.out.println("Digite a nova senha: ");
                     int senha = scn.nextInt();
                     System.out.println("Nova senha: " + senha + "\nDeseja salvar:\n1 - Salvar\n2 - Cancelar");
-                    int salvar = scn.nextInt();
-                    if(salvar == 1){
+                    int opcao = scn.nextInt();
+                    if(opcao == 1){
                         for(int i = 0; i < contas.size(); i++){
                             if(conta.getId() == contas.get(i).getId()){
                                 contas.get(i).setSenha(senha);
                             }
                         }
                         Gerenciador.salvarContas(contas);
-                        foiSalvo = true;
+                        salvar = true;
                         break;
-                    }else if(salvar == 0){
-                        foiSalvo = false;
+                    }else if(opcao == 0){
+                        salvar = false;
                         System.out.println("A senha não foi alterada.");
                         break;
                     }else{
@@ -253,12 +256,12 @@ public class Loja extends Bysvem{
                     scn.nextLine(); //Limpar o \n que sobra da resposta
                     while(flag == 1){
                         flag = 0;
-                        foiSalvo = true;    
+                        salvar = true;    
                         System.out.println("Para voltar, digite 0\nDigite seu novo email: ");
                         email_novo = scn.nextLine();
 
                         if(email_novo.equalsIgnoreCase("0")){
-                            foiSalvo = false;
+                            salvar = false;
                             break;
                         }
                         
@@ -271,31 +274,30 @@ public class Loja extends Bysvem{
                             }
 
                             alteraEmail(conta, email_novo);
-                            foiSalvo = true;
+                            salvar = true;
                             continue;
                         }
 
                         System.out.println("Por favor, digite um email válido.\n");
                         flag = 1;
                     }
-
-                    if(foiSalvo){
+//********************************************************************** */
+                    if(salvar){
                         System.out.println("Email anterior: " + conta.getEmail() + " | Novo email: " + email_novo);
                         System.out.println("Deseja salvar? \n1 - Salvar\n2 - Cancelar");
-                        salvar = scn.nextInt();
-                        if(salvar == 1){
+                        opcao = scn.nextInt();
+                        if(opcao == 1){
                             for(int i = 0; i < contas.size(); i++){
                                 if(conta.getId() == contas.get(i).getId()){
                                     conta.setEmail(email_novo);
                                     contas.get(i).setEmail(email_novo);
+                                    Gerenciador.salvarContas(contas);
+                                    contas.get(i).setFoisalvo(true);
+                                    break;
                                 }
                             }
-                            Gerenciador.salvarContas(contas);
-                            foiSalvo = true;
-                            break;
-                        }else if(salvar == 2){
+                        }else if(opcao == 2){
                             System.out.println("O email não foi alterado.");
-                            foiSalvo = false;
                             break;
                         }else{
                             System.out.println("Opção inválida");
@@ -307,7 +309,108 @@ public class Loja extends Bysvem{
                 default:
                     System.out.println("Opção inválida.");
         }
-        return foiSalvo;
+        return salvar;
+    }
+
+    /*System.out.println("--- Jogos Disponíveis ---");
+                        for (Jogo jogo : jogos) {
+                            System.out.println(contador + "-" + jogo.getNome());
+                            System.out.println(jogo.getDesc());
+                            System.out.println("-------------------");
+                            contador++;
+                        }
+                        while (true){
+                            System.out.println("Selecione o jogo que deseja saber mais | (Digite 0 para voltar ao menu): ");
+                            int escolha = scn.nextInt();
+                            if(escolha >= 1 && escolha <= jogos.size()){
+                                Jogo escolhido = jogos.get(escolha - 1);
+                                if(conta.PossuiJogo(escolhido) == true){
+                                    System.out.println("Jogo selecionado: " + escolhido.getNome());
+                                    System.out.println("Descrição: " + escolhido.getDesc());
+                                    System.out.println("Gênero: " + escolhido.getGenero());
+                                    System.out.println("Desenvolvedora: " + escolhido.getDesenvolvedora());
+                                    System.out.println("[Jogo Adquirido]");
+                                }else{
+                                    System.out.println("Jogo selecionado: " + escolhido.getNome());
+                                    System.out.println("Descrição: " + escolhido.getDesc());
+                                    System.out.println("Gênero: " + escolhido.getGenero());
+                                    System.out.println("Desenvolvedora: " + escolhido.getDesenvolvedora());
+                                    System.out.println("Preço: " + escolhido.getPreco());
+                                    System.out.println("Gostaria de adquirir o jogo? (y/n)");
+                                    String resposta = scn.next();
+                                    if(resposta.equals('y')){
+                                        Usuario u = (Usuario) conta;
+                                        if(compraJogo(escolhido, u)){
+                                            
+                                            System.out.println("Jogo adquirido com sucesso!");
+                                        }else{
+                                            System.out.println("Saldo insuficiente!");
+                                            break;
+                                        }
+                                    }else{
+                                        break;
+                                    }
+                                }
+
+                            }else if(escolha == 0){
+                                break;
+                            }else{
+                                System.out.println("Opção Inválida!");
+                            }
+                        }*/
+
+    public void jogos_disponiveis(Conta conta){
+        int contador = 1;
+        System.out.println("--- Jogos Disponíveis ---");
+        for (Jogo jogo : jogos) {
+            System.out.println(contador + "-" + jogo.getNome());
+            //System.out.println(jogo.getDesc());
+            System.out.println(jogo.getId());
+            System.out.println("-------------------");
+            contador++;
+        }
+        while(true){
+            System.out.println("Selecione o jogo que deseja saber mais | (Digite 0 para voltar ao menu): ");
+            int res = scn.nextInt();
+            if(res == 1){
+                System.out.println("Informe o ID do jogo que você deseja acessar: ");
+                int id_jogo = scn.nextInt();
+                for(int i = 0; i < jogos.size(); i++){
+                    if(jogos.get(i).getId() == id_jogo){
+                        System.out.println("Jogo: " + jogos.get(i).getNome());
+                        System.out.println("Genero: " + jogos.get(i).getGenero());
+                        System.out.println("Desenvolvedora: " + jogos.get(i).getDesenvolvedora());
+                        System.out.println("Preço: R$" + jogos.get(i).getPreco());
+                        System.out.println("Sinopse: " + jogos.get(i).getDesc());
+                        if(conta instanceof Usuario){
+                            System.out.println("Deseja comprar o jogo:\n1 - Comprar\n2 - Voltar");
+                            int op_compra = scn.nextInt();
+                            if(op_compra == 1){                         
+                                if(compraJogo(jogos.get(i), (Usuario)conta)){
+                                    System.out.println("Jogo adquirido com sucesso");
+                                }else{
+                                    System.out.println("Saldo insuficiente para a compra.");
+                                }                      
+                            }else if(res == 2){
+                                return; 
+                            }else{
+                                System.out.println("Opção inválida.");
+                                break;
+                            }
+                        }else{
+                            System.out.println("Para voltar, digite 0");
+                            if(scn.nextInt() == 0){
+                                break;
+                            }
+                        }
+                    }
+                }
+            }else if(res == 2){
+                return;
+            }else{
+                System.out.println("Opção inválida.");
+            }
+        }
     }
 
     public int criaId(int verificação){
@@ -399,6 +502,10 @@ public class Loja extends Bysvem{
             }
         }
         conta.setFoisalvo(false);
+    }
+
+    public void salvaEmail(Conta conta, String novoEmail){
+
     }
 
     public Usuario criaUsuario(String nome, int senha, String email){

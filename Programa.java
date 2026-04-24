@@ -28,10 +28,9 @@ public abstract class Programa{
             leitor.nextLine(); //limpar o buffer 
             if(menu_option == 1){
                 System.out.println("Para entrar na plataforma você precisa digitar o seu email, ou digite <nova> se quer criar uma conta nova.");    
-                String regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
                 while(true){
                     String email = leitor.nextLine();
-                    if(email.matches(regex)){
+                    if(loja.emailValido(email)){
 
                         Conta conta_verificadora = buscarConta(email);
                         
