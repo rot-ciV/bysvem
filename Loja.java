@@ -262,14 +262,14 @@ public class Loja extends Bysvem{
                             foiSalvo = false;
                             break;
                         }
-                        for(int i = 0; i < contas.size(); i++){
-                            if(contas.get(i).getEmail().equalsIgnoreCase(email_novo)){
-                                System.out.println("O email " + contas.get(i).getEmail() + " já está cadastrado. Tente outro!");
-                                foiSalvo = false;
-                                flag = 1;
-                                break;
-                            }   
-                        }
+                        
+                        if(emailExiste(email_novo)){
+                            System.out.println("O email " + email_novo + " já está cadastrado. Tente outro!");
+                            foiSalvo = false;
+                            flag = 1;
+                            break;
+                        }   
+                        
                     }
                     if(foiSalvo){
                         System.out.println("Email anterior: " + conta.getEmail() + "\nNovo email: " + email_novo +
@@ -361,6 +361,18 @@ public class Loja extends Bysvem{
         }
 
         return biblioteca;
+    }
+
+    public boolean emailExiste(String email){
+
+        for(int i = 0; i < contas.size(); i++){
+            
+            if(contas.get(i).getEmail().equalsIgnoreCase(email)){
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     public Usuario criaUsuario(String nome, int senha, String email){

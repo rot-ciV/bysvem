@@ -1,2 +1,4 @@
 USR;7451;bernardinlindao;2141;resendebr21@gmail.com;0.0
 USR;1301;Mateus;28;mateus@gmail.com;0.0
+USR;7073;victor;2580;oi;0.0
+USR;3127;Sparky;2580;victor@gmail.com;0.0
