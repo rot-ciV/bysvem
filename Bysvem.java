@@ -17,7 +17,8 @@ public abstract class Bysvem{
     }
 
     public void setId(int id){ this.id = id; }
+    public void setFoisalvo(boolean foiSalvo) { this.foiSalvo = foiSalvo; }
+
     public int getId() { return this.id; }
-
-
+    public boolean getFoiSalvo() { return  this.foiSalvo; } 
 }

@@ -1,9 +1,8 @@
 USR;7451;bernardinlindao;2141;resendebr21@gmail.com;0.0
 USR;1301;Alberto;25;abc@gamil.com;0.0
-USR;7073;victor;2580;oi;0.0
-USR;3127;Sparky;2580;victor@gmail.com;0.0
-USR;3252;Mateus;28;oi;0.0
+USR;3127;Sparky;2580;fagundes@gmail.com;0.0
 USR;4473;Mateus;25;m@gmail.com;0.0
 USR;3054;Joao;28;mateus@gmail.com;0.0
 USR;8651;Abacate;28;abc@gmail.com;0.0
 USR;6066;Eu;17;eu@gmail.com;0.0
+USR;7153;Igor Cruzeiro ;6969;igor.homemNamoro@gmail.com;0.0

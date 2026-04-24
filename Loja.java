@@ -256,17 +256,32 @@ public class Loja extends Bysvem{
                         foiSalvo = true;    
                         System.out.println("Para voltar, digite 0\nDigite seu novo email: ");
                         email_novo = scn.nextLine();
+
                         if(email_novo.equalsIgnoreCase("0")){
                             foiSalvo = false;
                             break;
                         }
                         
-                        email_novo = emailExiste(email_novo, scn);  
-                        
+                        if (emailValido(email_novo)){
+
+                            if(emailExiste(email_novo)){
+                                System.out.println("O email " + email_novo + " já está cadastrado. Tente outro!\n");
+                                flag = 1;
+                                continue;
+                            }
+
+                            alteraEmail(conta, email_novo);
+                            foiSalvo = true;
+                            continue;
+                        }
+
+                        System.out.println("Por favor, digite um email válido.\n");
+                        flag = 1;
                     }
+
                     if(foiSalvo){
-                        System.out.println("Email anterior: " + conta.getEmail() + "\nNovo email: " + email_novo +
-                            "\nDeseja salvar \n1 - Salvar\n2 - Cancelar");
+                        System.out.println("Email anterior: " + conta.getEmail() + " | Novo email: " + email_novo);
+                        System.out.println("Deseja salvar? \n1 - Salvar\n2 - Cancelar");
                         salvar = scn.nextInt();
                         if(salvar == 1){
                             for(int i = 0; i < contas.size(); i++){
@@ -356,30 +371,34 @@ public class Loja extends Bysvem{
         return biblioteca;
     }
 
-    public String emailExiste(String email, Scanner scn){
+    public boolean emailValido(String email){
+        
         String regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
-        while(true){
-            boolean email_existe = false;
-            
-            if (!email.matches(regex)){
-                System.out.println("Por favor digite um email válido!");
-                email = scn.nextLine();
-                continue;
-            }
-            for(int i = 0; i < contas.size(); i++){
-                if(contas.get(i).getEmail().equalsIgnoreCase(email)){
-                    email_existe = true;
-                }
-            }
+        return email.matches(regex);
+    }
 
-            if(email_existe == true){
-                System.out.println("O email " + email + " já está cadastrado. Tente outro!");
-                email = scn.nextLine();
-                continue;
-            }else{
-                return email;
+    public boolean emailExiste(String email){
+            
+        for(int i = 0; i < contas.size(); i++){
+            if(contas.get(i).getEmail().equalsIgnoreCase(email)){
+                return true;
+            }    
+        }
+        return false;
+    }
+
+    public void alteraEmail(Conta conta, String novoEmail){
+
+        for(int i = 0; i < this.contas.size(); i++){
+
+            if(contas.get(i).getId() == conta.getId()){        
+                contas.get(i).setEmail(novoEmail);
+                Gerenciador.salvarContas(contas);
+                contas.get(i).setFoisalvo(true);
+                break;
             }
         }
+        conta.setFoisalvo(false);
     }
 
     public Usuario criaUsuario(String nome, int senha, String email){

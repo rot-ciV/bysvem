@@ -60,9 +60,25 @@ public abstract class Programa{
 
                         System.out.println("Você escolheu a opção de criar uma nova conta!");
                         System.out.println("\nCadastre um email: ");
+
                         String email_novo = leitor.nextLine();
                         
-                        email_novo = loja.emailExiste(email_novo, leitor);
+                        while(true){
+
+                            if(loja.emailExiste(email_novo)){
+                                System.out.println("\nO email " + email_novo + " já está em uso.");
+                                System.out.println("Por favor, tente outro.");
+                                email_novo = leitor.nextLine();
+                                continue;
+
+                            }else if(!loja.emailValido(email_novo)){
+                                System.out.println("\nEmail inválido! Tente novamente.");
+                                email_novo = leitor.nextLine();
+                                continue;
+                            }
+
+                            break;
+                        }
                         
                         System.out.println("\nDigite o nome do usuário: ");
                         String nome = leitor.nextLine();
