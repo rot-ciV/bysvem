@@ -62,22 +62,7 @@ public abstract class Programa{
                         System.out.println("\nCadastre um email: ");
                         String email_novo = leitor.nextLine();
                         
-                        while (true) { 
-
-                            if (!email_novo.matches(regex)){
-                                System.out.println("Por favor digite um email válido!");
-                                email_novo = leitor.nextLine();
-                                continue;
-                            }
-
-                            if (loja.emailExiste(email_novo)){
-                                System.out.println("O email " + email_novo + " já está cadastrado. Tente outro!");
-                                email_novo = leitor.nextLine();
-                                continue;
-                            }
-
-                            break;
-                        }
+                        email_novo = loja.emailExiste(email_novo, leitor);
                         
                         System.out.println("\nDigite o nome do usuário: ");
                         String nome = leitor.nextLine();

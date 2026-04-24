@@ -196,13 +196,11 @@ public class Loja extends Bysvem{
                             foiSalvo = false;
                             break;
                         }
-                        for(Conta j : contas){
-                            if(j.getNome().equalsIgnoreCase(nome)){
-                                System.out.println("Esse nome de usuário já esta em uso. Tente outro");
-                                foiSalvo = false;
-                                flag = 1;
-                                break;
-                            }
+                        if(nome.equalsIgnoreCase(conta.getNome())){
+                            System.out.println("O nome deve ser diferente do nome antigo.\n");
+                            foiSalvo = false;
+                            flag = 1;
+                            continue;
                         }
                     }
                     if(foiSalvo){
@@ -263,12 +261,7 @@ public class Loja extends Bysvem{
                             break;
                         }
                         
-                        if(emailExiste(email_novo)){
-                            System.out.println("O email " + email_novo + " já está cadastrado. Tente outro!");
-                            foiSalvo = false;
-                            flag = 1;
-                            break;
-                        }   
+                        email_novo = emailExiste(email_novo, scn);  
                         
                     }
                     if(foiSalvo){
@@ -363,16 +356,30 @@ public class Loja extends Bysvem{
         return biblioteca;
     }
 
-    public boolean emailExiste(String email){
-
-        for(int i = 0; i < contas.size(); i++){
+    public String emailExiste(String email, Scanner scn){
+        String regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
+        while(true){
+            boolean email_existe = false;
             
-            if(contas.get(i).getEmail().equalsIgnoreCase(email)){
-                return true;
+            if (!email.matches(regex)){
+                System.out.println("Por favor digite um email válido!");
+                email = scn.nextLine();
+                continue;
+            }
+            for(int i = 0; i < contas.size(); i++){
+                if(contas.get(i).getEmail().equalsIgnoreCase(email)){
+                    email_existe = true;
+                }
+            }
+
+            if(email_existe == true){
+                System.out.println("O email " + email + " já está cadastrado. Tente outro!");
+                email = scn.nextLine();
+                continue;
+            }else{
+                return email;
             }
         }
-        
-        return false;
     }
 
     public Usuario criaUsuario(String nome, int senha, String email){
@@ -398,4 +405,3 @@ public class Loja extends Bysvem{
     }
 
 }
-
