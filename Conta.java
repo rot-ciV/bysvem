@@ -21,7 +21,7 @@ public abstract class Conta extends Bysvem{
 
     public void setNome(String nome){ this.nome = nome;}
     public void setSenha(int senha){ this.senha = senha;}
-    public void setEmail(String nome){ this.nome = nome;}
+    public void setEmail(String email){ this.email = email;}
 
     public String getNome(){ return this.nome;}
     public int getSenha(){ return this.senha;}

@@ -89,44 +89,12 @@ public class Loja extends Bysvem{
                         break;    
 
                     case 3:
-                        System.out.println("Selecione uma opção:\n1 - Alterar nome\n2 - Alterar senha");
-                        int escolha = scn.nextInt();
-                        
-                        if(escolha == 1){
-                            System.out.println("Digite o novo nome: ");
-                            String nome = scn.next();
-                            System.out.println("Nome anterior: " + conta.getNome() + "\nNovo nome: " + nome + "\nDESEJA SALVAR:\n" + 
-                            "1 - Salvar\n0 - Cancelar");
-                            int salvar = scn.nextInt();
-                            if(salvar == 1){
-                                for(Conta j : contas){
-                                    if(j.getNome() == nome){
-                                        System.out.println("Esse nome de usuário já esta em uso.");
-                                        foiSalvo = false;
-                                    }else{
-                                        conta.setNome(nome);
-                                        Gerenciador.salvarContas(contas);
-                                        foiSalvo = true;
-                                    }
-                                }
-                            }else{
-                                foiSalvo = false;
-                            }
-                        }else if(escolha == 2){
-                            System.out.println("Digite a nova senha: ");
-                            int senha = scn.nextInt();
-                            System.out.println("Nova senha: " + senha + "\nDeseja salvar: 1 - Salvar\n2 - Cancelar");
-                            int salvar = scn.nextInt();
-                            if(salvar == 1){
-                                conta.setSenha(senha);
-                                foiSalvo = true;
-                            }else{
-                                foiSalvo = false;
-                            }
-                        }
+                        boolean save = altera_info(conta, scn);
                         break;
                     case 4:
-                        return;       
+                        return;
+                    default:
+                        System.out.println("Opção inválida.");       
                 }
             }
         }else if(conta instanceof Operador){
@@ -158,11 +126,14 @@ public class Loja extends Bysvem{
                         break;    
 
                     case 3:
+                        boolean save = altera_info(conta, scn);
                         //ainda não sei oq vai ser
                         break;
 
                     case 4:
-                        return;            
+                        return;
+                    default:
+                        System.out.println("Opção inválida.");            
                 }
             }
         
@@ -196,96 +167,12 @@ public class Loja extends Bysvem{
                         break;    
 
                     case 3:
-                        System.out.println("Selecione uma opção:\n1 - Alterar nome\n2 - Alterar senha\n3 - Alterar o email");
-                        int escolha = scn.nextInt();
-                        switch(escolha){
-                            case 1:
-                                System.out.println("Digite o novo nome: ");
-                                String nome = scn.next();
-                                System.out.println("Nome anterior: " + conta.getNome() + "\nNovo nome: " + nome + "\nDESEJA SALVAR:\n" + 
-                                "1 - Salvar\n0 - Cancelar");
-                                int salvar = scn.nextInt();
-                                if(salvar == 1){
-                                    for(Conta j : contas){
-                                        if(j.getNome() == nome){
-                                            System.out.println("Esse nome de usuário já esta em uso.");
-                                            foiSalvo = false;
-                                            break;
-                                        }
-                                    }
-                                    for(int i = 0; i < contas.size(); i++){
-                                        if(contas.get(i).getId() == conta.getId()){
-                                            contas.get(i).setNome(nome);
-                                        }
-                                    }
-                                    Gerenciador.salvarContas(contas);
-                                    foiSalvo = true;
-                                    break;
-                                }else if (salvar == 0){
-                                    foiSalvo = false;
-                                    System.out.println("Nome do usuário não foi alterado.");
-                                    break;
-                                }else{
-                                    System.out.println("Opção inválida.");
-                                    break;
-                                }
-                            case 2:
-                                System.out.println("Digite a nova senha: ");
-                                int senha = scn.nextInt();
-                                System.out.println("Nova senha: " + senha + "\nDeseja salvar:\n1 - Salvar\n2 - Cancelar");
-                                salvar = scn.nextInt();
-                                if(salvar == 1){
-                                    for(int i = 0; i < contas.size(); i++){
-                                        if(conta.getId() == contas.get(i).getId()){
-                                            contas.get(i).setSenha(senha);
-                                        }
-                                    }
-                                    Gerenciador.salvarContas(contas);
-                                    foiSalvo = true;
-                                }else if(salvar == 0){
-                                    foiSalvo = false;
-                                    System.out.println("A senha não foi alterada.");
-                                    break;
-                                }else{
-                                    System.out.println("Opção inválida.");
-                                }
-                                break;
-                            case 3:
-                                System.out.println("Digite seu novo email: ");
-                                String email_novo = scn.nextLine();
-                                for(int i = 0; i < contas.size(); i++){
-                                    if(contas.get(i).getEmail() == email_novo){
-                                        System.out.println("O email " + contas.get(i).getId() + " já está cadastrado.");
-                                        foiSalvo = false;
-                                        break;
-                                    }
-                                }
-                                System.out.println("Email anterior: " + conta.getEmail() + "\nNovo email: " + email_novo +
-                                    "\nDeseja salvar \n1 - Salvar\n2 - Cancelar");
-                                salvar = scn.nextInt();
-                                if(salvar == 1){
-                                    for(int i = 0; i < contas.size(); i++){
-                                        if(conta.getId() == contas.get(i).getId()){
-                                            conta.setEmail(email_novo);
-                                            contas.get(i).setEmail(email_novo);
-                                        }
-                                    }
-                                    Gerenciador.salvarContas(contas);
-                                    foiSalvo = true;
-                                    break;
-                                }else if(salvar == 0){
-                                    System.out.println("O email não foi alterado.");
-                                    foiSalvo = false;
-                                    break;
-                                }else{
-                                    System.out.println("Opção inválida");
-                                }
-                                break;
-                        }
-                        break;
+                        boolean save = altera_info(conta, scn);
 
                     case 4:
                         return;
+                    default:
+                        System.out.println("Opção inválida.");
 
                 }
             }
@@ -294,44 +181,58 @@ public class Loja extends Bysvem{
     }
 
     public boolean altera_info(Conta conta, Scanner scn){
-        System.out.println("Selecione uma opção:\n1 - Alterar nome\n2 - Alterar senha\n3 - Alterar o email");
+        System.out.println("Selecione uma opção:\n1 - Alterar nome\n2 - Alterar senha\n3 - Alterar o email\n4 - Voltar");
         int escolha = scn.nextInt();
         switch(escolha){
                 case 1:
-                    System.out.println("Digite o novo nome: ");
-                    String nome = scn.next();
-                    System.out.println("Nome anterior: " + conta.getNome() + "\nNovo nome: " + nome + "\nDESEJA SALVAR:\n" + 
-                    "1 - Salvar\n0 - Cancelar");
-                    int salvar = scn.nextInt();
-                    if(salvar == 1){
+                    int flag = 1;
+                    String nome = null;
+                    while(flag == 1){
+                        flag = 0;
+                        foiSalvo = true;
+                        System.out.println("Caso quiser cancelar, digite 0\nDigite o novo nome: ");
+                        nome = scn.next();
+                        if(nome.equalsIgnoreCase("0")){
+                            foiSalvo = false;
+                            break;
+                        }
                         for(Conta j : contas){
-                            if(j.getNome() == nome){
-                                System.out.println("Esse nome de usuário já esta em uso.");
+                            if(j.getNome().equalsIgnoreCase(nome)){
+                                System.out.println("Esse nome de usuário já esta em uso. Tente outro");
                                 foiSalvo = false;
+                                flag = 1;
                                 break;
                             }
                         }
-                        for(int i = 0; i < contas.size(); i++){
-                            if(contas.get(i).getId() == conta.getId()){
-                                contas.get(i).setNome(nome);
-                            }
-                        }
-                        Gerenciador.salvarContas(contas);
-                        foiSalvo = true;
-                        break;
-                    }else if (salvar == 0){
-                        foiSalvo = false;
-                        System.out.println("Nome do usuário não foi alterado.");
-                        break;
-                    }else{
-                        System.out.println("Opção inválida.");
-                        break;
                     }
+                    if(foiSalvo){
+                        System.out.println("Nome anterior: " + conta.getNome() + "\nNovo nome: " + nome + "\nDESEJA SALVAR:\n" + 
+                        "1 - Salvar\n0 - Cancelar");
+                        int salvar = scn.nextInt();
+                        if(salvar == 1){
+                            for(int i = 0; i < contas.size(); i++){
+                                if(contas.get(i).getId() == conta.getId()){
+                                    contas.get(i).setNome(nome);
+                                }
+                            }
+                            Gerenciador.salvarContas(contas);
+                            foiSalvo = true;
+                            break;
+                        }else if (salvar == 0){
+                            foiSalvo = false;
+                            System.out.println("Nome do usuário não foi alterado.");
+                            break;
+                        }else{
+                            System.out.println("Opção inválida.");
+                            break;
+                        }
+                    }
+                    break;
                 case 2:
                     System.out.println("Digite a nova senha: ");
                     int senha = scn.nextInt();
                     System.out.println("Nova senha: " + senha + "\nDeseja salvar:\n1 - Salvar\n2 - Cancelar");
-                    salvar = scn.nextInt();
+                    int salvar = scn.nextInt();
                     if(salvar == 1){
                         for(int i = 0; i < contas.size(); i++){
                             if(conta.getId() == contas.get(i).getId()){
@@ -340,6 +241,7 @@ public class Loja extends Bysvem{
                         }
                         Gerenciador.salvarContas(contas);
                         foiSalvo = true;
+                        break;
                     }else if(salvar == 0){
                         foiSalvo = false;
                         System.out.println("A senha não foi alterada.");
@@ -348,35 +250,54 @@ public class Loja extends Bysvem{
                         System.out.println("Opção inválida.");
                     }
                 case 3:
-                    System.out.println("Digite seu novo email: ");
-                    String email_novo = scn.nextLine();
-                    for(int i = 0; i < contas.size(); i++){
-                        if(contas.get(i).getEmail() == email_novo){
-                            System.out.println("O email " + contas.get(i).getId() + " já está cadastrado.");
+                    flag = 1;
+                    String email_novo = null;
+                    scn.nextLine(); //Limpar o \n que sobra da resposta
+                    while(flag == 1){
+                        flag = 0;
+                        foiSalvo = true;    
+                        System.out.println("Para voltar, digite 0\nDigite seu novo email: ");
+                        email_novo = scn.nextLine();
+                        if(email_novo.equalsIgnoreCase("0")){
                             foiSalvo = false;
                             break;
                         }
-                    }
-                    System.out.println("Email anterior: " + conta.getEmail() + "\nNovo email: " + email_novo +
-                        "\nDeseja salvar \n1 - Salvar\n2 - Cancelar");
-                    salvar = scn.nextInt();
-                    if(salvar == 1){
                         for(int i = 0; i < contas.size(); i++){
-                            if(conta.getId() == contas.get(i).getId()){
-                                conta.setEmail(email_novo);
-                                contas.get(i).setEmail(email_novo);
-                            }
+                            if(contas.get(i).getEmail().equalsIgnoreCase(email_novo)){
+                                System.out.println("O email " + contas.get(i).getEmail() + " já está cadastrado. Tente outro!");
+                                foiSalvo = false;
+                                flag = 1;
+                                break;
+                            }   
                         }
-                        Gerenciador.salvarContas(contas);
-                        foiSalvo = true;
-                        break;
-                    }else if(salvar == 0){
-                        System.out.println("O email não foi alterado.");
-                        foiSalvo = false;
-                        break;
-                    }else{
-                        System.out.println("Opção inválida");
-                    } 
+                    }
+                    if(foiSalvo){
+                        System.out.println("Email anterior: " + conta.getEmail() + "\nNovo email: " + email_novo +
+                            "\nDeseja salvar \n1 - Salvar\n2 - Cancelar");
+                        salvar = scn.nextInt();
+                        if(salvar == 1){
+                            for(int i = 0; i < contas.size(); i++){
+                                if(conta.getId() == contas.get(i).getId()){
+                                    conta.setEmail(email_novo);
+                                    contas.get(i).setEmail(email_novo);
+                                }
+                            }
+                            Gerenciador.salvarContas(contas);
+                            foiSalvo = true;
+                            break;
+                        }else if(salvar == 2){
+                            System.out.println("O email não foi alterado.");
+                            foiSalvo = false;
+                            break;
+                        }else{
+                            System.out.println("Opção inválida");
+                        }
+                    }
+                    break;
+                case 4:
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
         }
         return foiSalvo;
     }
