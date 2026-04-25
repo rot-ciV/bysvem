@@ -92,11 +92,24 @@ public class Loja extends Bysvem{
                         return;
 
                     case 4:
-                        System.out.println("\nDeseja editar:\n1 - Usuários      2 - Jogos\n");
+                        System.out.println("\nDeseja editar:\n1- Usuários      2- Desenvolvedores      3-Jogos\n");
                         int escolha = scn.nextInt();
+
                         if(escolha == 1){
-                            //falta pensar oq fazer
-                        }else if(escolha == 2){
+
+                            listarUsuario();
+                            System.out.println("\nQual usuário você deseja banir?");
+                            int opcao = scn.nextInt();
+
+                            for(int i = 1; i <= contas.size(); i++){
+                                if(i == opcao){
+                                    (Usuario) contas.get(i-1).se
+                                }
+                            }
+                        }else if (true) {
+                            listaDevs();
+
+                        }else if(escolha == 3){
                             listarJogos();
                             System.out.println("\nQual jogo você deseja excluir?");
                             int opcao = scn.nextInt();
@@ -419,6 +432,32 @@ public class Loja extends Bysvem{
         for (int i = 1; i <= jogos.size(); i++) {
             System.out.println( i + "-" + jogos.get(i-1).getNome());
             System.out.println("-------------------");
+        }
+    }
+
+    public void listarUsuario(){
+
+        System.out.println("--- Usuários Ativos do Bysvem --- ");
+
+        for(int i = 1; i <= contas.size(); i++){
+
+            Conta contaAtual = contas.get(i - 1);
+            if( contaAtual instanceof Usuario){
+                System.out.println(i + "- " + contaAtual.getNome());
+            }
+        }
+    }
+
+    public void listaDevs(){
+
+        System.out.println("--- Desenvolvedores Ativos do Bysvem --- ");
+
+        for(int i = 1; i <= contas.size(); i++){
+
+            Conta contaAtual = contas.get(i - 1);
+            if( contaAtual instanceof Desenvolvedor){
+                System.out.println(i + "- " + contaAtual.getNome());
+            }
         }
     }
 
