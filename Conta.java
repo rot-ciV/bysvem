@@ -19,5 +19,10 @@ public abstract class Conta extends Bysvem{
     
     public String getNome(){ return this.nome;}
     public int getSenha(){ return this.senha;}
-    public String getEmail(){ return this.email;}   
+    public String getEmail(){ return this.email;}  
+
+    @Override
+    public String toString(){
+        return String.format("\n%s, Nome: %s, senha: %d, Email: %s", super.toString(), nome, senha, email);
+    }
 }

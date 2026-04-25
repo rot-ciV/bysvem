@@ -21,4 +21,8 @@ public abstract class Bysvem{
 
     public int getId() { return this.id; }
     public boolean getFoiSalvo() { return  this.foiSalvo; } 
+
+    public String toString(){
+        return String.format("\nId: %d, Foi Salvo: %b", id, foiSalvo);
+    }
 }
