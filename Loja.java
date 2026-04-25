@@ -46,7 +46,7 @@ public class Loja extends Bysvem{
 
                     case 3:
                         boolean save = altera_info(conta);
-                        if(save){
+                        if(save){ //mudanca possiveis
                             return;
                         }
                         break;
@@ -129,14 +129,17 @@ public class Loja extends Bysvem{
 
     public boolean altera_info(Conta conta){
         System.out.println("Selecione uma opção:");
-        if(conta instanceof Usuario){
-            System.out.println("1 - Alterar nome\n2 - Alterar senha\n3 - Alterar o email\n4 - Alterar conta para desenvolvedor\n5 - Voltar");
-        } else{
-            System.out.println("1 - Alterar nome\n2 - Alterar senha\n3 - Alterar o email\n4 - Voltar");
+        boolean alteração_dev = false;
+        boolean condition = true;
+        while(condition){
+            if(conta instanceof Usuario){
+                System.out.println("1 - Alterar nome\n2 - Alterar senha\n3 - Alterar o email\n4 - Alterar conta para desenvolvedor\n5 - Voltar");
+            } else{
+                System.out.println("1 - Alterar nome\n2 - Alterar senha\n3 - Alterar o email\n4 - Voltar");
             }
-        int escolha = scn.nextInt();
-        boolean salvar = false;
-        switch(escolha){
+            int escolha = scn.nextInt();
+            boolean salvar = false;
+            switch(escolha){
                 case 1:
                     int flag = 1;
                     String nome = null;
@@ -161,6 +164,7 @@ public class Loja extends Bysvem{
                         "1 - Salvar\n0 - Cancelar");
                         int opcao = scn.nextInt();
                         if(opcao == 1){
+                            System.out.println("Seu novo nome foi alterado com sucesso!");
                             for(int i = 0; i < contas.size(); i++){
                                 if(contas.get(i).getId() == conta.getId()){
                                     contas.get(i).setNome(nome);
@@ -186,6 +190,7 @@ public class Loja extends Bysvem{
                     System.out.println("Nova senha: " + senha + "\nDeseja salvar:\n1 - Salvar\n2 - Cancelar");
                     int opcao = scn.nextInt();
                     if(opcao == 1){
+                        System.out.println("Sua senha foi alterada com sucesso!");
                         for(int i = 0; i < contas.size(); i++){
                             if(conta.getId() == contas.get(i).getId()){
                                 contas.get(i).setSenha(senha);
@@ -236,6 +241,7 @@ public class Loja extends Bysvem{
                         System.out.println("Deseja salvar? \n1 - Salvar\n2 - Cancelar");
                         opcao = scn.nextInt();
                         if(opcao == 1){
+                            System.out.println("Seu email foi alterado com sucesso!");
                             alteraEmail(conta, email_novo);
                         }else if(opcao == 2){
                             System.out.println("O email não foi alterado.");
@@ -263,15 +269,18 @@ public class Loja extends Bysvem{
                             System.out.println("Você será agora redirecionado ao menu principal e já poderá acessar a nossa loja com a conta de desenvolvedor.");
                             conta = nova_conta;
                         }
-                        salvar = true;
+                        alteração_dev = true;
                     }
+                    condition = false;
                     break;
                 case 5:
+                    condition = false;
                     break;
                 default:
                     System.out.println("Opção inválida.");
+            }
         }
-        return salvar;
+        return alteração_dev;
     }
 
     /*public void jogos_disponiveis(Conta conta){
