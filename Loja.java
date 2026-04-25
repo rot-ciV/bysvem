@@ -67,7 +67,7 @@ public class Loja extends Bysvem{
                         break;
 
                     case 2:
-                        for(Jogo jogo : conta.jogosadquiridos){
+                        for(Jogo jogo : biblioteca((Usuario) conta)){
                             System.out.println(contador + "-" + jogo.getNome());
                             System.out.println(jogo.getDesc());
                             System.out.println("-------------------");
@@ -102,7 +102,7 @@ public class Loja extends Bysvem{
                         break;
 
                     case 2:
-                        for(Jogo jogo : conta.jogosadquiridos){
+                        for(Jogo jogo : biblioteca((Usuario) conta)){
                             System.out.println(contador + "-" + jogo.getNome());
                             System.out.println(jogo.getDesc());
                             System.out.println("-------------------");
@@ -323,7 +323,7 @@ public class Loja extends Bysvem{
                 boolean voltarLista = false;
                 while(!voltarLista){
                     imprimirJogo(escolhido);
-                    if(conta.PossuiJogo(escolhido)){
+                    if(jogoNaBiblioteca(escolhido, biblioteca((Usuario) conta))){
                         System.out.println("[Jogo Adquirido]\nPara voltar, digite 1");
                         int resposta = scn.nextInt();
                         if(resposta == 1){
@@ -432,7 +432,6 @@ public class Loja extends Bysvem{
             for(int i = 0; i < contas.size(); i++){
                 if(contas.get(i).getId() == usuario.getId()){
                     usuario.setSaldo(novoSaldo); 
-                    usuario.addJogo(jogoComprado);
                     ((Usuario)contas.get(i)).setSaldo(novoSaldo);
                 }
             }
@@ -481,6 +480,17 @@ public class Loja extends Bysvem{
         }
 
         return biblioteca;
+    }
+
+    public boolean jogoNaBiblioteca(Jogo jogo, ArrayList<Jogo> biblioteca){
+
+        for(int i = 0; i < biblioteca.size(); i++){
+
+            if(jogo.getId() == biblioteca.get(i).getId()){
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean emailValido(String email){

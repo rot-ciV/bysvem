@@ -8,3 +8,4 @@ USR;6066;Eu;17;eu@gmail.com;0.0
 USR;7153;Igor Cruzeiro ;6969;igor.homemNamoro@gmail.com;0.0
 USR;7803;Tocomsono;8888;flipflop@gmail.com;0.0
 USR;1930;Teste1999;0;eu2@gmail.com;110.11999999999998
+USR;8919;10;10;teste@teste.com;1000.0
