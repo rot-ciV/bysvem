@@ -244,14 +244,15 @@ public class Loja extends Bysvem{
     }
 
     public void jogos_disponiveis(Conta conta){
-        int contador = 1;
+ //       int contador = 1;
         while(true){
+            int contador = 1;
             System.out.println("--- Jogos Disponíveis ---");
             for (Jogo jogo : jogos) {
-                System.out.println(contador + "-" + jogo.getNome());
+                System.out.println(contador + " - " + jogo.getNome());
                 //System.out.println(jogo.getDesc());
-                System.out.println(jogo.getId());
-                System.out.println("-------------------");
+                //System.out.println(jogo.getId());
+                System.out.println("----------------------------");
                 contador++;
             }
             System.out.println("Selecione o jogo que deseja saber mais | (Digite 0 para voltar ao menu): ");
