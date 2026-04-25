@@ -483,24 +483,37 @@ public class Loja extends Bysvem{
         return false;
     }
 
-    public void compraSaldo(Usuario usuario, double valor){
+    public void compraSaldo(Usuario usuario, double valor) {
         double saldo = usuario.getSaldo();
-        System.out.println("Saldo anterior: R$" + saldo + "\nNovo saldo: R$" + (saldo + valor) + "\nDeseja confirmar:\n1 - Confirmar\n2 - Voltar");
-        while(true){
-            if(scn.nextInt() == 1){
-                for(int i = 0; i < this.contas.size(); i++){
-                    if(contas.get(i).getId() == usuario.getId()){
-                        ((Usuario)contas.get(i)).setSaldo(saldo + valor);
+        System.out.printf("Saldo anterior: R$%.2f\nNovo saldo: R$%.2f\n", saldo, saldo + valor);
+        System.out.println("Deseja confirmar:\n1 - Confirmar\n2 - Voltar");
+
+        while (true) {
+            scn.nextLine();
+            int opcao;
+            try {
+                opcao = Integer.parseInt(scn.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Opção inválida. Digite 1 ou 2.");
+                continue;
+            }
+
+            if (opcao == 1) {
+                for (int i = 0; i < this.contas.size(); i++) {
+                    if (contas.get(i).getId() == usuario.getId()) {
+                        ((Usuario) contas.get(i)).setSaldo(saldo + valor);
                         usuario.setSaldo(saldo + valor);
                         Gerenciador.salvarContas(contas);
                         contas.get(i).setFoisalvo(true);
+                        System.out.println("Saldo atualizado com sucesso!");
                         return;
                     }
                 }
-            }else if(scn.nextInt() == 2){
+            } else if (opcao == 2) {
+                System.out.println("Operação cancelada.");
                 return;
-            }else{
-                System.out.println("Opção inválida. Tente novamente");
+            } else {
+                System.out.println("Opção inválida. Tente novamente.");
             }
         }
     }

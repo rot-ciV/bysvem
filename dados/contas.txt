@@ -11,4 +11,4 @@ USR;7803;Tocomsono;8888;flipflop@gmail.com;0.0
 USR;1930;Teste1999;0;eu2@gmail.com;110.11999999999998
 USR;8919;10;10;teste@teste.com;1000.0
 DEV;6296;ronaldao;123456;ronaldo@outlook.com;fenomeno
-USR;4373;batinhalao;1222;alecrim@douradin.com;0.0
+USR;4373;batinhalao;1222;alecrim@douradin.com;634.36
