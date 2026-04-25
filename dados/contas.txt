@@ -1,2 +1,3 @@
 USR;8222;Soledby_Joaozin;6969;joaozinGameplays@gmail.com;0.0;false
 OP;1717;Victor;2580;victor.fagundes@gmail.com;false
+DEV;4148;Notch;418;notch@mojang.com;Mojang Studios;false

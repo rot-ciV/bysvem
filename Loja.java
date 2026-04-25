@@ -159,7 +159,7 @@ public class Loja extends Bysvem{
                                         }
                                         contas.get(i-1).setBan(true);
                                         Gerenciador.salvarContas(contas);
-                                        System.out.println("O usuário(a) " + contas.get(i).getNome() + " foi banido(a) com sucesso!");
+                                        System.out.println("Usuário " + contas.get(i).getNome() + " foi banido(a) com sucesso!");
                                         flag = false;
                                         break;
                                     }
@@ -169,8 +169,80 @@ public class Loja extends Bysvem{
                             }
                             
 
-                        }else if ( escolha == 3) {
-                           break;
+                        }else if ( escolha == 2) {
+                           
+                            ArrayList<Desenvolvedor> listaDev = criaListaDev();
+                            listarDevs(listaDev);
+                            System.out.println("\nDigite 0 para retornar");
+                            boolean flag = true;
+                            int opcao = -1;
+
+
+                            while (true) { 
+                                System.out.println("\nQual desenvolvedor você deseja banir?");
+                                try {
+                                    opcao = scn.nextInt();
+                                    break;
+                                } catch (Exception e) {
+                                    System.out.println("Opção inválida");
+                                    scn.nextLine();
+                                }
+                            }
+
+                            if(opcao == 0){
+                                break;
+                            
+                            }else if (opcao < 0 || opcao > listaDev.size()) {
+                                System.out.println("Nenhum desenvolvedor corresponde a essa opção");
+                                break;
+                            }
+
+                            Conta contaAtual = null;
+                            for(int i = 0; i < contas.size(); i++){
+                                
+                                contaAtual = contas.get(i);
+                                if(contaAtual == listaDev.get(opcao - 1)){
+                                    if(contas.get(i).getBan()){
+                                        System.out.println("O desenvolvedor já está banido.");
+                                        System.out.println("Gostaria de desbanir " + contas.get(i).getNome()+"?");
+                                        System.out.println("1- Sim | 2- Não");
+                                        int banir = -1;
+                                        while (true) { 
+                                            try{
+                                                banir = scn.nextInt();
+                                                break;
+                                            }catch (Exception e) {
+                                                System.out.println("Opção inválida.");
+                                                scn.nextLine();
+                                            }
+                                        }
+
+                                        if(banir == 1){
+                                            contas.get(i).setBan(false);
+                                            Gerenciador.salvarContas(contas);
+                                            System.out.println("Desenvolvedor(a) " + contas.get(i).getNome() + " foi desbanido(a) com sucesso!");
+                                            flag = false;
+                                            break;
+                                        }else if(banir == 2){
+                                            flag = false;
+                                            break;
+                                        }else{
+                                            System.out.println("Opcão inválida.");
+                                            flag = false;
+                                            break;
+                                        }
+                                        }
+                                        contas.get(i).setBan(true);
+                                        Gerenciador.salvarContas(contas);
+                                        System.out.println("Desenvolvedor(a) " + contas.get(i).getNome() + " foi banido(a) com sucesso!");
+                                        flag = false;
+                                        break;
+                                    }
+    
+                            }if(flag){
+                                System.out.println("Nenhum usuário corresponde a opção " + opcao + ".");
+                            }
+
 
                         }else if(escolha == 3){
                             listarJogos();
@@ -531,18 +603,38 @@ public class Loja extends Bysvem{
         }
     }
 
-    public void listraDevs(ArrayList<Desenvolvedor> listaDesenvolvedor){
+    public ArrayList<Desenvolvedor> criaListaDev(){
 
-        System.out.println("--- Desenvolvedores Ativos do Bysvem --- ");
+        ArrayList<Desenvolvedor> listaDev = new ArrayList<>();
+        Conta contaAtual = null;
 
-        for(int i = 1; i <= contas.size(); i++){
+        for(int i = 0; i < contas.size(); i++){
+            contaAtual = contas.get(i);
+            if(contaAtual instanceof Desenvolvedor){
 
-            Conta contaAtual = contas.get(i - 1);
-            if( contaAtual instanceof Desenvolvedor){
-                System.out.println(i + "- " + contaAtual.getNome());
+                listaDev.add((Desenvolvedor) contaAtual);
             }
         }
+
+        return listaDev;
     }
+
+    public void listarDevs(ArrayList<Desenvolvedor> listaDesenvolvedor){
+
+        Conta contaAtual = null;
+        System.out.println("\n--- Desenvolvedores Ativos do Bysvem --- ");
+
+        for(int i = 0; i < listaDesenvolvedor.size(); i++){
+
+            contaAtual = listaDesenvolvedor.get(i);
+            String ban = "";
+            if(contaAtual.getBan()){
+                ban = "(Banido)";
+            }
+            System.out.println(i+1 + "- " + contaAtual.getNome() + " " + ban);
+        }
+    }
+    
 
     public void imprimirJogo(Jogo escolhido){
         System.out.println("Jogo selecionado: " + escolhido.getNome());
