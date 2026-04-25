@@ -115,6 +115,7 @@ public class Loja extends Bysvem{
 
                     case 3:
                         boolean save = altera_info(conta);
+                        break;
 
                     case 4:
                         return;
