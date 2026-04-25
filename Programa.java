@@ -22,8 +22,16 @@ public abstract class Programa{
         while(true){
             System.out.println("Por favor escolha uma das opções abaixo para continuar");
             System.out.println("1)Entrar na loja        2)Sair");
-            int menu_option = leitor.nextInt();
-            leitor.nextLine(); //limpar o buffer 
+            int menu_option = -1; 
+
+            try {
+                menu_option = leitor.nextInt();
+                leitor.nextLine();
+
+            } catch (Exception e) {
+                leitor.nextLine(); //limpar o buffer
+            }
+             
             if(menu_option == 1){
                 System.out.println("Para entrar na plataforma você precisa digitar o seu email, ou digite <nova> se quer criar uma conta nova.");    
                 while(true){
@@ -56,10 +64,8 @@ public abstract class Programa{
                     } else if(email.equals("nova")){
 
                         System.out.println("Você escolheu a opção de criar uma nova conta!");
-                        System.out.println("\nCadastre um email: ");
-
+                        System.out.println("\nDigite seu email: ");
                         String email_novo = leitor.nextLine();
-                        
                         while(true){
 
                             if(loja.emailExiste(email_novo)){
@@ -76,7 +82,6 @@ public abstract class Programa{
 
                             break;
                         }
-                        
                         System.out.println("\nDigite o nome do usuário: ");
                         String nome = leitor.nextLine();
                         System.out.println("\nCrie uma senha (apenas digitos): ");
@@ -94,7 +99,8 @@ public abstract class Programa{
                 
             } else if(menu_option == 2){ 
                 break;
-                } else System.out.println("Infelizmente não temos essa opção.");
+
+            } else System.out.println("Infelizmente não temos essa opção.\n");
             
         }
         leitor.close();

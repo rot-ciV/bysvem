@@ -6,3 +6,8 @@ DEV;3679;Alberto;25;abc@gamil.com;indieno
 DEV;8518;Sparky;2580;fagundes@gmail.com;viados da meia noite
 DEV;3615;Mateus;25;m@gmail.com;gym everyday
 DEV;5276;Joao;28;mateus@gmail.com;teste
+USR;7153;Igor Cruzeiro ;6969;igor.homemNamoro@gmail.com;0.0
+USR;7803;Tocomsono;8888;flipflop@gmail.com;0.0
+USR;1930;Teste1999;0;eu2@gmail.com;110.11999999999998
+USR;8919;10;10;teste@teste.com;1000.0
+DEV;6296;ronaldao;123456;ronaldo@outlook.com;fenomeno

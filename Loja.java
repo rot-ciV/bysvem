@@ -70,7 +70,7 @@ public class Loja extends Bysvem{
                         break;
 
                     case 2:
-                        for(Jogo jogo : conta.jogosadquiridos){
+                        for(Jogo jogo : biblioteca((Usuario) conta)){
                             System.out.println(contador + "-" + jogo.getNome());
                             System.out.println(jogo.getDesc());
                             System.out.println("-------------------");
@@ -105,7 +105,7 @@ public class Loja extends Bysvem{
                         break;
 
                     case 2:
-                        for(Jogo jogo : conta.jogosadquiridos){
+                        for(Jogo jogo : biblioteca((Usuario) conta)){
                             System.out.println(contador + "-" + jogo.getNome());
                             System.out.println(jogo.getDesc());
                             System.out.println("-------------------");
@@ -164,6 +164,7 @@ public class Loja extends Bysvem{
                             for(int i = 0; i < contas.size(); i++){
                                 if(contas.get(i).getId() == conta.getId()){
                                     contas.get(i).setNome(nome);
+                                    conta.setNome(nome);
                                 }
                             }
                             Gerenciador.salvarContas(contas);
@@ -188,6 +189,7 @@ public class Loja extends Bysvem{
                         for(int i = 0; i < contas.size(); i++){
                             if(conta.getId() == contas.get(i).getId()){
                                 contas.get(i).setSenha(senha);
+                                conta.setSenha(senha);
                             }
                         }
                         Gerenciador.salvarContas(contas);
@@ -272,45 +274,62 @@ public class Loja extends Bysvem{
         return salvar;
     }
 
-    public void jogos_disponiveis(Conta conta){
-        int contador = 1;
-        System.out.println("--- Jogos Disponíveis ---");
-        for (Jogo jogo : jogos) {
-            System.out.println(contador + "-" + jogo.getNome());
-            //System.out.println(jogo.getDesc());
-            System.out.println(jogo.getId());
-            System.out.println("-------------------");
-            contador++;
-        }
+    /*public void jogos_disponiveis(Conta conta){
+ //       int contador = 1;
         while(true){
+            int contador = 1;
+            System.out.println("--- Jogos Disponíveis ---");
+            for (Jogo jogo : jogos) {
+                System.out.println(contador + " - " + jogo.getNome());
+                //System.out.println(jogo.getDesc());
+                //System.out.println(jogo.getId());
+                System.out.println("----------------------------");
+                contador++;
+            }
             System.out.println("Selecione o jogo que deseja saber mais | (Digite 0 para voltar ao menu): ");
             int escolha = scn.nextInt();
             if(escolha >= 1 && escolha <= jogos.size()){
                 Jogo escolhido = jogos.get(escolha - 1);
-                if(conta.PossuiJogo(escolhido) == true){
+                boolean voltarLista = false;
+                while(!voltarLista){
                     System.out.println("Jogo selecionado: " + escolhido.getNome());
                     System.out.println("Descrição: " + escolhido.getDesc());
                     System.out.println("Gênero: " + escolhido.getGenero());
                     System.out.println("Desenvolvedora: " + escolhido.getDesenvolvedora());
-                    System.out.println("[Jogo Adquirido]");
-                }else{
-                    System.out.println("Jogo selecionado: " + escolhido.getNome());
-                    System.out.println("Descrição: " + escolhido.getDesc());
-                    System.out.println("Gênero: " + escolhido.getGenero());
-                    System.out.println("Desenvolvedora: " + escolhido.getDesenvolvedora());
-                    System.out.println("Preço: " + escolhido.getPreco());
-                    if(conta instanceof Usuario){
-                        System.out.println("Gostaria de adquirir o jogo?\n1 - Comprar\n2 - Cancelar");
+                    if(conta.PossuiJogo(escolhido)){
+                        System.out.println("[Jogo Adquirido]\nPara voltar, digite 1");
                         int resposta = scn.nextInt();
                         if(resposta == 1){
-                            if(compraJogo(escolhido, (Usuario)conta)){                               
-                                System.out.println("Jogo adquirido com sucesso!");
-                            }else{
-                                System.out.println("Saldo insuficiente!");
-                                break;
-                            }
+                            voltarLista = true;
                         }else{
-                            break;
+                            System.out.println("Opção inválida");
+                            continue;
+                        }
+                    }else{
+                        System.out.println("Preço: " + escolhido.getPreco());
+                        if(conta instanceof Usuario){
+                            System.out.println("Gostaria de adquirir o jogo?\n1 - Comprar\n2 - Cancelar");
+                            int resposta_compra = scn.nextInt();
+                            if(resposta_compra == 1){
+                                if(compraJogo(escolhido, (Usuario)conta)){                               
+                                    System.out.println("Jogo adquirido com sucesso!");
+                                }else{
+                                    System.out.println("Saldo insuficiente!\n1 - Adicionar saldo\n2 - Voltar para os jogos disponíveis");
+                                    int resposta_saldo = scn.nextInt();
+                                    if(resposta_saldo == 1){
+                                        ((Usuario)conta).setSaldo(100);
+                                    }else if(resposta_saldo == 2){
+                                        voltarLista = true;
+                                    }else{
+                                        System.out.println("Opção inválida");
+                                    }
+                                }
+                            }else if(resposta_compra == 2){
+                                voltarLista = true;
+                            }else{
+                                System.out.println("Opção inválida.");
+                                continue;
+                            }
                         }
                     }
                 }
@@ -318,8 +337,91 @@ public class Loja extends Bysvem{
                 break;
             }else{
                 System.out.println("Opção Inválida!");
+                continue;
             }
         }
+    }*/
+
+    public void jogos_disponiveis(Conta conta){
+        while(true){   
+            listarJogos();
+            System.out.println("Selecione o jogo que deseja saber mais | (Digite 0 para voltar ao menu): ");
+            int escolha = scn.nextInt();
+            if(escolha >= 1 && escolha <= jogos.size()){
+                Jogo escolhido = jogos.get(escolha - 1);
+                boolean voltarLista = false;
+                while(!voltarLista){
+                    imprimirJogo(escolhido);
+                    if(jogoNaBiblioteca(escolhido, biblioteca((Usuario) conta))){
+                        System.out.println("[Jogo Adquirido]\nPara voltar, digite 1");
+                        int resposta = scn.nextInt();
+                        if(resposta == 1){
+                            voltarLista = true;
+                        }else{
+                            System.out.println("Opção inválida");
+                            continue;
+                        }
+                    }else{
+                        System.out.println("Preço: " + escolhido.getPreco());
+                        if(conta instanceof Usuario){
+                            voltarLista = compradeJogo(conta, escolhido);
+                        }
+                    }
+                }
+            }else if(escolha == 0){
+                break;
+            }else{
+                System.out.println("Opção Inválida!");
+                continue;
+            }
+
+        }
+    }
+
+    public void listarJogos(){
+        System.out.println("--- Jogos Disponíveis ---");
+        for (Jogo jogo : jogos) {
+            System.out.println(jogo.getId() + "-" + jogo.getNome());
+            System.out.println("-------------------");
+        }
+    }
+
+    public void imprimirJogo(Jogo escolhido){
+        System.out.println("Jogo selecionado: " + escolhido.getNome());
+        System.out.println("Descrição: " + escolhido.getDesc());
+        System.out.println("Gênero: " + escolhido.getGenero());
+        System.out.println("Desenvolvedora: " + escolhido.getDesenvolvedora());
+    }
+
+    public boolean compradeJogo(Conta conta, Jogo escolhido){
+        System.out.println("Gostaria de adquirir o jogo?\n1 - Comprar\n2 - Cancelar");
+        int resposta_compra = scn.nextInt();
+        if(resposta_compra == 1){
+            if(compraJogo(escolhido, (Usuario)conta)){                               
+                System.out.println("Jogo adquirido com sucesso!");
+                return false;
+            }else{
+                System.out.println("Saldo insuficiente!\n1 - Adicionar saldo\n2 - Voltar para os jogos disponíveis");
+                int resposta_saldo = scn.nextInt();
+                if(resposta_saldo == 1){
+                    System.out.println("Informe o valor que você deseja adicionar");
+                    double valor = scn.nextDouble();
+                    compraSaldo((Usuario)conta, valor);
+                    return false;
+                }else if(resposta_saldo == 2){
+                    return true;
+                }else{
+                    System.out.println("Opção inválida");
+                    return false;
+                }
+            }
+        }else if(resposta_compra == 2){
+            return true;
+        }else{
+            System.out.println("Opção inválida.");
+            return false;
+        }
+        
     }
 
     public int criaId(int verificação){
@@ -356,8 +458,12 @@ public class Loja extends Bysvem{
 
             int id = criaId(1);
             double novoSaldo = usuario.getSaldo() - jogoComprado.getPreco();
-            usuario.setSaldo(novoSaldo); 
-
+            for(int i = 0; i < contas.size(); i++){
+                if(contas.get(i).getId() == usuario.getId()){
+                    usuario.setSaldo(novoSaldo); 
+                    ((Usuario)contas.get(i)).setSaldo(novoSaldo);
+                }
+            }
             Registro novoRegistro = new Registro(id, jogoComprado, usuario, 0.0);
             this.registros.add(novoRegistro);
             Gerenciador.salvarRegistro(registros);
@@ -366,6 +472,28 @@ public class Loja extends Bysvem{
         }
 
         return false;
+    }
+
+    public void compraSaldo(Usuario usuario, double valor){
+        double saldo = usuario.getSaldo();
+        System.out.println("Saldo anterior: R$" + saldo + "\nNovo saldo: R$" + (saldo + valor) + "\nDeseja confirmar:\n1 - Confirmar\n2 - Voltar");
+        while(true){
+            if(scn.nextInt() == 1){
+                for(int i = 0; i < this.contas.size(); i++){
+                    if(contas.get(i).getId() == usuario.getId()){
+                        ((Usuario)contas.get(i)).setSaldo(saldo + valor);
+                        usuario.setSaldo(saldo + valor);
+                        Gerenciador.salvarContas(contas);
+                        contas.get(i).setFoisalvo(true);
+                        return;
+                    }
+                }
+            }else if(scn.nextInt() == 2){
+                return;
+            }else{
+                System.out.println("Opção inválida. Tente novamente");
+            }
+        }
     }
 
     public ArrayList<Jogo> biblioteca(Usuario usuario){
@@ -381,6 +509,17 @@ public class Loja extends Bysvem{
         }
 
         return biblioteca;
+    }
+
+    public boolean jogoNaBiblioteca(Jogo jogo, ArrayList<Jogo> biblioteca){
+
+        for(int i = 0; i < biblioteca.size(); i++){
+
+            if(jogo.getId() == biblioteca.get(i).getId()){
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean emailValido(String email){
@@ -405,6 +544,7 @@ public class Loja extends Bysvem{
 
             if(contas.get(i).getId() == conta.getId()){        
                 contas.get(i).setEmail(novoEmail);
+                conta.setEmail(novoEmail);
                 Gerenciador.salvarContas(contas);
                 contas.get(i).setFoisalvo(true);
                 break;
