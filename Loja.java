@@ -150,35 +150,40 @@ public class Loja extends Bysvem{
 
     public void gerenciarJogosDev(Conta conta){
         System.out.println("Selecione uma opção:\n1 - Adicionar jogo\n2 - Remover jogo\n3 - Voltar");
-            while(true){
-                if(scn.nextInt() == 1){
-                    
-                }else if(scn.nextInt() == 2){
-                    boolean removeu = removerJogoDev(conta);
-                    if(removeu){
-                        System.out.println("Jogo removido");
-                    }else{
-                        System.out.println("Nenhum jogo foi removido");
-                    }
-                }else if(scn.nextInt() == 3){
-                    return;
+        int opc = scn.nextInt();
+        while(true){
+            if(opc == 1){
+                devCriaJogo(conta);
+                break;
+            }else if(opc == 2){
+                boolean removeu = removerJogoDev(conta);
+                if(removeu){
+                    System.out.println("Jogo removido");
+                    break;
                 }else{
-                    System.out.println("Opção inválida");
+                    System.out.println("Nenhum jogo foi removido");
                 }
+                break;
+            }else if(opc == 3){
+                return;
+            }else{
+                System.out.println("Opção inválida");
             }
+        }
     }
 
     public void jogosDev(Conta conta){
         System.out.println("--- Jogos Disponíveis ---");
-        for (int i = 1; i <= jogos.size(); i++) {
-            if(jogos.get(i).getDesenvolvedora() == ((Desenvolvedor)conta).getEmpresa()){
-                System.out.println( i + "-" + jogos.get(i-1).getNome());
+        for (int i = 0; i < jogos.size(); i++) {
+            if (jogos.get(i).getDesenvolvedora().equalsIgnoreCase(((Desenvolvedor) conta).getEmpresa())) {
+                System.out.println( i + "-" + jogos.get(i).getNome());
                 System.out.println("-------------------");
             }
         }
     }
 
     public void devCriaJogo(Conta conta){
+        scn.nextLine();
         int id = criaId(2);
         System.out.println("Informe o nome do jogo: ");
         String nomeJogo = scn.nextLine();
@@ -186,31 +191,33 @@ public class Loja extends Bysvem{
         String genero = scn.nextLine();
         System.out.println("Informe o preço do jogo: ");
         double preco = scn.nextDouble();
+        scn.nextLine();
         System.out.println("Escreva uma mini discrição do jogo: ");
         String miniDisc = scn.nextLine();
         Jogo jogo = ((Desenvolvedor)conta).criaJogo(id, nomeJogo, genero, preco, miniDisc);
         jogos.add(jogo);
         Gerenciador.salvarJogos(jogos);
         jogos = Gerenciador.carregaJogos();
+        return;
     }
 
     public boolean removerJogoDev(Conta conta){
         jogosDev(conta);
         System.out.println("Digite o número do jogo que deseja remover, ou 0 para voltar");
-        int res = scn.nextInt();
         while(true){
+            int res = scn.nextInt();
             if(res == 0){
                 return false;
             }else{
                 for(int i = 1; i <= jogos.size(); i++){
-                    if(jogos.get(i).getDesenvolvedora() == ((Desenvolvedor)conta).getEmpresa() && i == res){
-                        jogos.remove(i);
+                    if(jogos.get(i).getDesenvolvedora().equalsIgnoreCase(((Desenvolvedor)conta).getEmpresa()) && i == res){
+                        jogos.remove(i - 1);
                         Gerenciador.salvarJogos(jogos);
                         jogos = Gerenciador.carregaJogos();
                         return true;
                     }
                 }
-                System.out.println("Esse jogo não está na lista. Digite um número válido.");
+                System.out.println("Esse jogo não está na lista. Digite um número válido ou 0 para cancelar");
             }
         }
     }

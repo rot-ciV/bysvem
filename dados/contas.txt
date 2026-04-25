@@ -13,4 +13,6 @@ USR;8919;10;10;teste@teste.com;1000.0
 DEV;6296;ronaldao;123456;ronaldo@outlook.com;fenomeno
 USR;4373;batinhalao;1222;alecrim@douradin.com;0.0
 OP;333;neymar;11;neymar@gmail.com
-USR;3185;percyjackson5;123;aleluia@gmail.com;224.9
+USR;3185;a;25;aleluia@gmail.com;224.9
+DEV;8452;Mateus;0;aaaaaaa@gmail.com;Rockstar Games
+USR;8026;hbfabufeu;0;gajnngs@bfab.com;0.0
