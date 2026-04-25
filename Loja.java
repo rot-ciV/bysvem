@@ -46,6 +46,9 @@ public class Loja extends Bysvem{
 
                     case 3:
                         boolean save = altera_info(conta);
+                        if(save){
+                            return;
+                        }
                         break;
                     case 4:
                         return;
@@ -125,7 +128,12 @@ public class Loja extends Bysvem{
     }
 
     public boolean altera_info(Conta conta){
-        System.out.println("Selecione uma opção:\n1 - Alterar nome\n2 - Alterar senha\n3 - Alterar o email\n4 - Voltar");
+        System.out.println("Selecione uma opção:");
+        if(conta instanceof Usuario){
+            System.out.println("1 - Alterar nome\n2 - Alterar senha\n3 - Alterar o email\n4 - Alterar conta para desenvolvedor\n5 - Voltar");
+        } else{
+            System.out.println("1 - Alterar nome\n2 - Alterar senha\n3 - Alterar o email\n4 - Voltar");
+            }
         int escolha = scn.nextInt();
         boolean salvar = false;
         switch(escolha){
@@ -236,6 +244,27 @@ public class Loja extends Bysvem{
                     }
                     break;
                 case 4:
+                    if(conta instanceof Usuario){
+                        //alteraçao pra conta dev
+                        System.out.println("Você escolheu a opçao para alterar para uma conta de desenvolvedor.");
+                        System.out.println("<<<<<< ATENÇÃO >>>>>>");
+                        System.out.println("Ao continuar essa conta deixará de ser uma conta comum e virará de deselvovedora, qualquer jogo que existir na biblioteca será apagado permanentemente");
+                        System.out.println("Aperte 1 para confirmar, ou qualquer outro número para voltar.");
+                        int choose = scn.nextInt();
+                        scn.nextLine();
+                        if(choose == 1){
+                            ApagaUsuario(conta);
+                            System.out.println("Qual o nome da sua empresa?");
+                            String dev_empresa = scn.nextLine();
+                            Conta nova_conta = criaDesenvolvedor(conta.getNome(), conta.getSenha(), conta.getEmail(), dev_empresa);
+                            System.out.println("Sua conta foi alterada para desenvolvedor com sucesso!");
+                            System.out.println("Você será agora redirecionado ao menu principal e já poderá acessar a nossa loja com a conta de desenvolvedor.");
+                            conta = nova_conta;
+                        }
+                        salvar = true;
+                    }
+                    break;
+                case 5:
                     break;
                 default:
                     System.out.println("Opção inválida.");
@@ -410,4 +439,14 @@ public class Loja extends Bysvem{
         return novoDesenvolvedor;
     }
 
+    public void ApagaUsuario(Conta conta){
+        ArrayList<Conta> contas = Gerenciador.carregaContas();
+
+        boolean removido = contas.removeIf(c -> c.getId() == conta.getId());
+
+        if (removido) {
+            Gerenciador.salvarContas(contas);
+            this.contas = Gerenciador.carregaContas();
+        }
+    }
 }

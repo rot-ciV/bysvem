@@ -1,8 +1,8 @@
-USR;7451;bernardinlindao;2141;resendebr21@gmail.com;0.0
-USR;1301;Alberto;25;abc@gamil.com;0.0
-USR;3127;Sparky;2580;fagundes@gmail.com;0.0
-USR;4473;Mateus;25;m@gmail.com;0.0
-USR;3054;Joao;28;mateus@gmail.com;0.0
 USR;8651;Lizard;0;lizard@gmail.com;0.0
 USR;6066;Eu;17;eu@gmail.com;0.0
-USR;7153;Igor Cruzeiro ;6969;igor.homemNamoro@gmail.com;0.0
+DEV;7153;Igor Cruzeiro ;6969;igor.homemNamoro@gmail.com;0.0
+DEV;3189;alo;1111;resendebr21@gmail.com;safados de plantao
+DEV;3679;Alberto;25;abc@gamil.com;indieno
+DEV;8518;Sparky;2580;fagundes@gmail.com;viados da meia noite
+DEV;3615;Mateus;25;m@gmail.com;gym everyday
+DEV;5276;Joao;28;mateus@gmail.com;teste

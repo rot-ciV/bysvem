@@ -2,9 +2,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 public abstract class Programa{
     
-    private static Conta buscarConta(String emailProcurado){
-        ArrayList<Conta> contas = Gerenciador.carregaContas();
-
+    private static Conta buscarConta(String emailProcurado, ArrayList<Conta> contas){
         for (int i = 0; i < contas.size(); i++) {
             Conta c = contas.get(i);
             if (c.getEmail().equals(emailProcurado) ) {
@@ -32,7 +30,7 @@ public abstract class Programa{
                     String email = leitor.nextLine();
                     if(loja.emailValido(email)){
 
-                        Conta conta_verificadora = buscarConta(email);
+                        Conta conta_verificadora = buscarConta(email, loja.contas);
                         
                         if(conta_verificadora != null){
                             boolean flag = true;
