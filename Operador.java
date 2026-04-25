@@ -1,8 +1,12 @@
 public class Operador extends Conta{
     
     
-    public Operador(int id, String nome, int senha, String email){
-        super(id,nome,senha,email);
+    public Operador(int id, String nome, int senha, String email, boolean ban){
+        super(id,nome,senha,email, ban);
+    }
+
+    public void banConta(Conta conta){
+        conta.setBan(true);
     }
 
     @Override

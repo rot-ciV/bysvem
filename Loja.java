@@ -92,22 +92,85 @@ public class Loja extends Bysvem{
                         return;
 
                     case 4:
-                        System.out.println("\nDeseja editar:\n1- Usuários      2- Desenvolvedores      3-Jogos\n");
+                        System.out.println("\nDeseja editar:\n1- Usuários      2- Desenvolvedores      3-Jogos");
                         int escolha = scn.nextInt();
 
                         if(escolha == 1){
 
-                            listarUsuario();
-                            System.out.println("\nQual usuário você deseja banir?");
-                            int opcao = scn.nextInt();
-
-                            for(int i = 1; i <= contas.size(); i++){
-                                if(i == opcao){
-                                    (Usuario) contas.get(i-1).se
+                            ArrayList<Usuario> listaUsuarios = criaListaUsuarios();
+                            listarUsuario(listaUsuarios);
+                            System.out.println("\nDigite 0 para retornar");
+                            boolean flag = true;
+                            int opcao = -1;
+                            
+                            while (true) { 
+                                System.out.println("\nQual usuário você deseja banir?");
+                                try {
+                                    opcao = scn.nextInt();
+                                    break;
+                                } catch (Exception e) {
+                                    System.out.println("Opção inválida");
+                                    scn.nextLine();
                                 }
                             }
-                        }else if (true) {
-                            listaDevs();
+
+                            if(opcao == 0){
+                                break;
+                            
+                            }else if (opcao < 0 || opcao > listaUsuarios.size()) {
+                                System.out.println("Nenhum usuário corresponde a essa opção");
+                                break;
+                            }
+
+                            Conta contaAtual = null;
+                            for(int i = 0; i < contas.size(); i++){
+                                
+                                contaAtual = contas.get(i);
+                                if(contaAtual == listaUsuarios.get(opcao - 1)){
+                                    if(contas.get(i).getBan()){
+                                        System.out.println("O usuário já está banido.");
+                                        System.out.println("Gostaria de desbanir " + contas.get(i).getNome()+"?");
+                                        System.out.println("1- Sim | 2- Não");
+                                        int banir = -1;
+                                        while (true) { 
+                                            try{
+                                                banir = scn.nextInt();
+                                                break;
+                                            }catch (Exception e) {
+                                                System.out.println("Opção inválida.");
+                                                scn.nextLine();
+                                            }
+                                        }
+
+                                        if(banir == 1){
+                                            contas.get(i).setBan(false);
+                                            Gerenciador.salvarContas(contas);
+                                            System.out.println("O usuário(a) " + contas.get(i).getNome() + " foi desbanido(a) com sucesso!");
+                                            flag = false;
+                                            break;
+                                        }else if(banir == 2){
+                                            flag = false;
+                                            break;
+                                        }else{
+                                            System.out.println("Opcão inválida.");
+                                            flag = false;
+                                            break;
+                                        }
+                                        }
+                                        contas.get(i-1).setBan(true);
+                                        Gerenciador.salvarContas(contas);
+                                        System.out.println("O usuário(a) " + contas.get(i).getNome() + " foi banido(a) com sucesso!");
+                                        flag = false;
+                                        break;
+                                    }
+    
+                            }if(flag){
+                                System.out.println("Nenhum usuário corresponde a opção " + opcao + ".");
+                            }
+                            
+
+                        }else if ( escolha == 3) {
+                           break;
 
                         }else if(escolha == 3){
                             listarJogos();
@@ -435,20 +498,40 @@ public class Loja extends Bysvem{
         }
     }
 
-    public void listarUsuario(){
+    public ArrayList<Usuario> criaListaUsuarios(){
 
-        System.out.println("--- Usuários Ativos do Bysvem --- ");
+        ArrayList<Usuario> listaUsuarios = new ArrayList<>();
+        Conta contaAtual = null;
 
-        for(int i = 1; i <= contas.size(); i++){
+        for(int i = 0; i < contas.size(); i++){
+            contaAtual = contas.get(i);
+            if(contaAtual instanceof Usuario){
 
-            Conta contaAtual = contas.get(i - 1);
-            if( contaAtual instanceof Usuario){
-                System.out.println(i + "- " + contaAtual.getNome());
+                listaUsuarios.add((Usuario) contaAtual);
             }
+        }
+
+        return listaUsuarios;
+    }
+
+    public void listarUsuario(ArrayList<Usuario> listaUsuarios){
+
+        Usuario contaAtual;
+        System.out.println("\n--- Usuários Ativos do Bysvem --- ");
+
+        for(int i = 0; i < listaUsuarios.size(); i++){
+
+            contaAtual = listaUsuarios.get(i);
+            String ban = "";
+            if(contaAtual.getBan()){
+                ban = "(Banido)";
+            }
+
+            System.out.println(i+1 + "- " + contaAtual.getNome() + " " + ban);
         }
     }
 
-    public void listaDevs(){
+    public void listraDevs(ArrayList<Desenvolvedor> listaDesenvolvedor){
 
         System.out.println("--- Desenvolvedores Ativos do Bysvem --- ");
 
@@ -648,7 +731,7 @@ public class Loja extends Bysvem{
     public Usuario criaUsuario(String nome, int senha, String email){
 
         int id = criaId(0);
-        Usuario novoUsuario = new Usuario(id, nome, senha, email, 0.0);
+        Usuario novoUsuario = new Usuario(id, nome, senha, email, 0.0, false);
         this.contas.add(novoUsuario);
         Gerenciador.salvarContas(contas);
         novoUsuario.foiSalvo = true;
@@ -659,7 +742,7 @@ public class Loja extends Bysvem{
     public Desenvolvedor criaDesenvolvedor(String nome, int senha, String email, String empresa){
 
         int id = criaId(0);
-        Desenvolvedor novoDesenvolvedor = new Desenvolvedor(id, nome, senha, email, empresa);
+        Desenvolvedor novoDesenvolvedor = new Desenvolvedor(id, nome, senha, email, empresa, false);
         this.contas.add(novoDesenvolvedor);
         Gerenciador.salvarContas(contas);
         novoDesenvolvedor.foiSalvo = true;

@@ -6,9 +6,9 @@ public class Desenvolvedor extends Conta{
     public void seteEpresa(String empresa) { this.empresa = empresa; }
     public String getEmpresa() { return empresa; }
 
-    public Desenvolvedor(int id, String nome, int senha, String email, String empresa){
+    public Desenvolvedor(int id, String nome, int senha, String email, String empresa, boolean ban){
         
-        super(id,nome,senha,email);
+        super(id,nome,senha,email, ban);
         this.empresa = empresa;
     }
 

@@ -1,18 +1,2 @@
-USR;8651;Lizard;0;lizard@gmail.com;0.0
-USR;6066;Eu;17;eu@gmail.com;0.0
-DEV;7153;Igor Cruzeiro ;6969;igor.homemNamoro@gmail.com;0.0
-DEV;3189;alo;1111;resendebr21@gmail.com;safados de plantao
-DEV;3679;Alberto;25;abc@gamil.com;indieno
-DEV;8518;Sparky;2580;fagundes@gmail.com;viados da meia noite
-DEV;3615;Mateus;25;m@gmail.com;gym everyday
-DEV;5276;Joao;28;mateus@gmail.com;teste
-USR;7153;Igor Cruzeiro ;6969;igor.homemNamoro@gmail.com;0.0
-USR;7803;Tocomsono;8888;flipflop@gmail.com;0.0
-USR;1930;Teste1999;0;eu2@gmail.com;110.11999999999998
-USR;8919;10;10;teste@teste.com;1000.0
-DEV;6296;ronaldao;123456;ronaldo@outlook.com;fenomeno
-USR;4373;batinhalao;1222;alecrim@douradin.com;0.0
-OP;333;neymar;11;neymar@gmail.com
-USR;3185;a;25;aleluia@gmail.com;224.9
-DEV;8452;Mateus;0;aaaaaaa@gmail.com;Rockstar Games
-USR;8026;hbfabufeu;0;gajnngs@bfab.com;0.0
+USR;8222;Soledby_Joaozin;6969;joaozinGameplays@gmail.com;0.0;false
+OP;1717;Victor;2580;victor.fagundes@gmail.com;false
