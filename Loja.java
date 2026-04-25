@@ -350,14 +350,10 @@ public class Loja extends Bysvem{
     }
 
     public void listarJogos(){
-        int contador = 1;
         System.out.println("--- Jogos Disponíveis ---");
         for (Jogo jogo : jogos) {
-            System.out.println(contador + "-" + jogo.getNome());
-            //System.out.println(jogo.getDesc());
-            //System.out.println(jogo.getId());
+            System.out.println(jogo.getId() + "-" + jogo.getNome());
             System.out.println("-------------------");
-            contador++;
         }
     }
 
@@ -379,7 +375,9 @@ public class Loja extends Bysvem{
                 System.out.println("Saldo insuficiente!\n1 - Adicionar saldo\n2 - Voltar para os jogos disponíveis");
                 int resposta_saldo = scn.nextInt();
                 if(resposta_saldo == 1){
-                    ((Usuario)conta).setSaldo(100);
+                    System.out.println("Informe o valor que você deseja adicionar");
+                    double valor = scn.nextDouble();
+                    compraSaldo((Usuario)conta, valor);
                     return false;
                 }else if(resposta_saldo == 2){
                     return true;
@@ -431,8 +429,13 @@ public class Loja extends Bysvem{
 
             int id = criaId(1);
             double novoSaldo = usuario.getSaldo() - jogoComprado.getPreco();
-            usuario.setSaldo(novoSaldo); 
-            usuario.addJogo(jogoComprado);
+            for(int i = 0; i < contas.size(); i++){
+                if(contas.get(i).getId() == usuario.getId()){
+                    usuario.setSaldo(novoSaldo); 
+                    usuario.addJogo(jogoComprado);
+                    ((Usuario)contas.get(i)).setSaldo(novoSaldo);
+                }
+            }
             Registro novoRegistro = new Registro(id, jogoComprado, usuario, 0.0);
             this.registros.add(novoRegistro);
             Gerenciador.salvarRegistro(registros);
@@ -441,6 +444,28 @@ public class Loja extends Bysvem{
         }
 
         return false;
+    }
+
+    public void compraSaldo(Usuario usuario, double valor){
+        double saldo = usuario.getSaldo();
+        System.out.println("Saldo anterior: R$" + saldo + "\nNovo saldo: R$" + (saldo + valor) + "\nDeseja confirmar:\n1 - Confirmar\n2 - Voltar");
+        while(true){
+            if(scn.nextInt() == 1){
+                for(int i = 0; i < this.contas.size(); i++){
+                    if(contas.get(i).getId() == usuario.getId()){
+                        ((Usuario)contas.get(i)).setSaldo(saldo + valor);
+                        usuario.setSaldo(saldo + valor);
+                        Gerenciador.salvarContas(contas);
+                        contas.get(i).setFoisalvo(true);
+                        return;
+                    }
+                }
+            }else if(scn.nextInt() == 2){
+                return;
+            }else{
+                System.out.println("Opção inválida. Tente novamente");
+            }
+        }
     }
 
     public ArrayList<Jogo> biblioteca(Usuario usuario){

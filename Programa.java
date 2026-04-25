@@ -36,10 +36,9 @@ public abstract class Programa{
              
             if(menu_option == 1){
                 System.out.println("Para entrar na plataforma você precisa digitar o seu email, ou digite <nova> se quer criar uma conta nova.");    
-                String regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
                 while(true){
                     String email = leitor.nextLine();
-                    if(email.matches(regex)){
+                    if(loja.emailValido(email)){
 
                         Conta conta_verificadora = buscarConta(email);
                         
@@ -69,6 +68,22 @@ public abstract class Programa{
                         System.out.println("Você escolheu a opção de criar uma nova conta!");
                         System.out.println("\nDigite seu email: ");
                         String email_novo = leitor.nextLine();
+                        while(true){
+
+                            if(loja.emailExiste(email_novo)){
+                                System.out.println("\nO email " + email_novo + " já está em uso.");
+                                System.out.println("Por favor, tente outro.");
+                                email_novo = leitor.nextLine();
+                                continue;
+
+                            }else if(!loja.emailValido(email_novo)){
+                                System.out.println("\nEmail inválido! Tente novamente.");
+                                email_novo = leitor.nextLine();
+                                continue;
+                            }
+
+                            break;
+                        }
                         System.out.println("\nDigite o nome do usuário: ");
                         String nome = leitor.nextLine();
                         System.out.println("\nCrie uma senha (apenas digitos): ");
