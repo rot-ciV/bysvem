@@ -842,8 +842,9 @@ public class Loja extends Bysvem{
                 int resposta_saldo = scn.nextInt();
                 if(resposta_saldo == 1){
                     System.out.print("\nInforme o valor que você deseja adicionar: ");
-                    double valor = scn.nextDouble();
-                    compraSaldo((Usuario)conta, valor);
+                    String valor = scn.next();
+                    double valorSaldo = Double.parseDouble(valor);
+                    compraSaldo((Usuario)conta, valorSaldo);
                     return false;
                 }else if(resposta_saldo == 2){
                     return true;
