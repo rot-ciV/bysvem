@@ -361,8 +361,7 @@ public class Loja extends Bysvem{
                 //int op = scn.nextInt();
                 //scn.nextLine();
                 int op = -1;
-                String opcaoString;
-                opcaoString = scn.nextLine();
+                String opcaoString = scn.nextLine();
                 if(entradaInt(opcaoString)){
                     op = Integer.parseInt(opcaoString);
                 }
@@ -408,14 +407,12 @@ public class Loja extends Bysvem{
     }
 
     public void gerenciarJogosDev(Conta conta){
-        System.out.println("\n================ Configuração ================");
-        System.out.println("1 - Adicionar jogo\n2 - Remover jogo\n3 - Voltar");
-        System.out.print("\nSelecione uma opção: ");
-        //int opc = scn.nextInt();
         while(true){
+            System.out.println("\n================ Configuração ================");
+            System.out.println("1 - Adicionar jogo\n2 - Remover jogo\n3 - Voltar");
+            System.out.print("\nSelecione uma opção: ");
             int opc = -1;
-            String opcaoString;
-            opcaoString = scn.nextLine();
+            String opcaoString = scn.nextLine();
             if(entradaInt(opcaoString)){
                 opc = Integer.parseInt(opcaoString);
             }
@@ -434,7 +431,7 @@ public class Loja extends Bysvem{
             }else if(opc == 3){
                 return;
             }else{
-                System.out.println("Opção inválida\n1 - Adicionar jogo\n2 - Remover jogo\n3 - Voltar");
+                System.out.println("\nOpção inválida\n");
             }
         }
     }
@@ -489,7 +486,6 @@ public class Loja extends Bysvem{
 }
 
     public void devCriaJogo(Conta conta){
-        scn.nextLine();
         int id = criaId(2);
         System.out.print("\nInforme o nome do jogo: ");
         String nomeJogo = scn.nextLine();
