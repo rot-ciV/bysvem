@@ -18,10 +18,11 @@ public abstract class Programa{
         loja.contas = Gerenciador.carregaContas();
         loja.registros = Gerenciador.CarregaRegistros(loja.jogos, loja.contas);
         Scanner leitor = new Scanner(System.in);
-        System.out.println("=============== Olá, seja muito bem vindo ao Bysvem! ===============\n");
+        System.out.println("================ Olá, seja muito bem vindo ao Bysvem! ================\n");
         while(true){
-            System.out.println("Por favor escolha uma das opções abaixo para continuar");
-            System.out.println("1)Entrar na loja        2)Sair");
+            System.out.println("================ Menu Principal ================\n");
+            System.out.println("Por favor escolha uma das opções abaixo para continuar\n");
+            System.out.println("1)Entrar na loja        2)Sair\n");
             int menu_option = -1; 
 
             try {
@@ -33,8 +34,9 @@ public abstract class Programa{
             }
              
             if(menu_option == 1){
-                System.out.println("Para entrar na plataforma você precisa digitar o seu email, ou digite <nova> se quer criar uma conta nova.");    
+                System.out.println("Para entrar na plataforma você precisa digitar o seu email, ou digite <nova> se quer criar uma conta nova.\n");    
                 while(true){
+                    System.out.print("Email: ");
                     String email = leitor.nextLine();
                     if(loja.emailValido(email)){
 
@@ -49,7 +51,7 @@ public abstract class Programa{
                             }
                             boolean flag = true;
                             for(int tent = 3; tent>0; tent--){
-                                System.out.println("Digite sua senha: ");
+                                System.out.print("Digite sua senha: ");
                                 int password = leitor.nextInt();
                                 if (password == conta_verificadora.getSenha()){
                                     loja.lojaMenu(conta_verificadora);
@@ -69,28 +71,26 @@ public abstract class Programa{
                             }
                     } else if(email.equals("nova")){
 
-                        System.out.println("Você escolheu a opção de criar uma nova conta!");
-                        System.out.println("\nDigite seu email: ");
-                        String email_novo = leitor.nextLine();
+                        System.out.println("\nVocê escolheu a opção de criar uma nova conta!");
+                        String email_novo;
                         while(true){
-
+                            System.out.print("Digite seu email: ");
+                            email_novo = leitor.nextLine();
                             if(loja.emailExiste(email_novo)){
                                 System.out.println("\nO email " + email_novo + " já está em uso.");
-                                System.out.println("Por favor, tente outro.");
-                                email_novo = leitor.nextLine();
+                                System.out.println("Por favor, tente outro.\n");
                                 continue;
 
                             }else if(!loja.emailValido(email_novo)){
-                                System.out.println("\nEmail inválido! Tente novamente.");
-                                email_novo = leitor.nextLine();
+                                System.out.println("\nEmail inválido! Tente novamente.\n");
                                 continue;
                             }
 
                             break;
                         }
-                        System.out.println("\nDigite o nome do usuário: ");
+                        System.out.print("Digite o nome do usuário: ");
                         String nome = leitor.nextLine();
-                        System.out.println("\nCrie uma senha (apenas digitos): ");
+                        System.out.print("Crie uma senha (apenas digitos): ");
                         int senha = leitor.nextInt();
 
                         loja.criaUsuario(nome, senha, email_novo); 

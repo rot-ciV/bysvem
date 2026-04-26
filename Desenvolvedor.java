@@ -3,7 +3,7 @@ public class Desenvolvedor extends Conta{
 
     protected String empresa;
 
-    public void seteEpresa(String empresa) { this.empresa = empresa; }
+    public void setEmpresa(String empresa) { this.empresa = empresa; }
     public String getEmpresa() { return empresa; }
 
     public Desenvolvedor(int id, String nome, int senha, String email, String empresa, boolean ban){
