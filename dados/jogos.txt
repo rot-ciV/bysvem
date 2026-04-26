@@ -6,6 +6,4 @@
 6;Minecraft;Sandbox;Mojang Studios;199.69;Construa qualquer coisa que você possa imaginar, descubra mistérios assustadores e sobreviva à noite no jogo de aventura sandbox definitivo.
 7;Resident Evil Requiem;Terror;CAPCOM;299.0;O nono game da série principal combina survival horror tenso e ação frenética. Controle a agente Grace ou o lendário Leon em duas experiências únicas.
 8;EA SPORTS FC™ 26;Simulador de Futebol;EA Canada;299.0;O simulador de futebol da EA chega com jogabilidade reformulada baseada no feedback da comunidade
-10;The Sims™ 4;Simulação;Maxis;0.0;Aprecie o poder de criar e controlar pessoas num mundo virtual onde não há regras. Seja poderoso e livre, diverte-se e jogue com a vida!
-11;Grand Theft Auto V;Ação e Aventura;Rockstar Games;224.9;O jogo combina elementos de tiro, direção e exploração, permitindo que os jogadores alternem entre personagens e completem missões em um ambiente ricamente detalhado.
-12;Overcooked! 2;Indie;Ghost Town Games Ltd;59.9;Overcooked é um jogo de culinária cooperativo para 1 a 4 jogadores.
+50;fdfWSEW;GEWERWGER;Rockstar Games;2555.0;fasgasfdeafge

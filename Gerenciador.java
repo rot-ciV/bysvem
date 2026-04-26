@@ -86,19 +86,33 @@ public abstract class Gerenciador extends Bysvem{
 
                 if(conta_atual instanceof Usuario){
 
-                    String linha = "USR;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + conta_atual.getEmail() + ";" + ((Usuario) conta_atual).getSaldo();
+                    String linha = null;
+
+                    if(conta_atual.getBan()){
+                        linha = "BAN_USR;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + conta_atual.getEmail() + ";" + ((Usuario) conta_atual).getSaldo() + ";" + conta_atual.getBan();
+                    }else{
+                        linha = "USR;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + conta_atual.getEmail() + ";" + ((Usuario) conta_atual).getSaldo() + ";" + conta_atual.getBan();
+                    }
+
                     escritor.write(linha);
                     escritor.newLine();
                     
                 }else if( conta_atual instanceof Desenvolvedor){
 
-                    String linha = "DEV;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + conta_atual.getEmail() + ";" + ((Desenvolvedor) conta_atual).getEmpresa();
+                    String linha = null;
+
+                    if(conta_atual.getBan()){
+                        linha = "BAN_DEV;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + conta_atual.getEmail() + ";" + ((Desenvolvedor) conta_atual).getEmpresa() + ";" + conta_atual.getBan();
+                    }else{
+                        linha = "DEV;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + conta_atual.getEmail() + ";" + ((Desenvolvedor) conta_atual).getEmpresa() + ";" + conta_atual.getBan();
+                    }
+                    
                     escritor.write(linha);
                     escritor.newLine();
 
                 }else{
 
-                    String linha = "OP;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + conta_atual.getEmail();
+                    String linha = "OP;" + conta_atual.getId() + ";" + conta_atual.getNome() + ";" + conta_atual.getSenha() + ";" + conta_atual.getEmail() + ";" + conta_atual.getBan();
                     escritor.write(linha);
                     escritor.newLine();
                 }
@@ -127,21 +141,21 @@ public abstract class Gerenciador extends Bysvem{
 
                 String[] dados = linhaAtual.split(";");
 
-                if(dados[0].equals("USR")){
+                if(dados[0].equals("USR") || dados[0].equals("BAN_USR")){
 
-                    Usuario contaUsuario = new Usuario(Integer.parseInt(dados[1]), dados[2], Integer.parseInt(dados[3]), dados[4], Double.parseDouble(dados[5]));
+                    Usuario contaUsuario = new Usuario(Integer.parseInt(dados[1]), dados[2], Integer.parseInt(dados[3]), dados[4], Double.parseDouble(dados[5]), Boolean.parseBoolean(dados[6]));
                     contasCarregadas.add(contaUsuario);
                 }
 
-                else if(dados[0].equals("DEV")){
+                else if(dados[0].equals("DEV") || dados[0].equals("BAN_DEV")){
 
-                    Desenvolvedor contaDev = new Desenvolvedor(Integer.parseInt(dados[1]), dados[2], Integer.parseInt(dados[3]), dados[4], dados[5]);
+                    Desenvolvedor contaDev = new Desenvolvedor(Integer.parseInt(dados[1]), dados[2], Integer.parseInt(dados[3]), dados[4], dados[5], Boolean.parseBoolean(dados[6]));
                     contasCarregadas.add(contaDev);
                 }
 
                 else if(dados[0].equals("OP")){
 
-                    Operador contaOp = new Operador(Integer.parseInt(dados[1]), dados[2], Integer.parseInt(dados[3]), dados[4]);
+                    Operador contaOp = new Operador(Integer.parseInt(dados[1]), dados[2], Integer.parseInt(dados[3]), dados[4], Boolean.parseBoolean(dados[5]));
                     contasCarregadas.add(contaOp);
                 }
 

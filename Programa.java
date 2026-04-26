@@ -41,6 +41,12 @@ public abstract class Programa{
                         Conta conta_verificadora = buscarConta(email, loja.contas);
                         
                         if(conta_verificadora != null){
+
+                            if(conta_verificadora.getBan()){
+                                System.out.println("\n <<<<<< AVISO >>>>>>");
+                                System.out.println("Sua conta foi banida por violar o termos de uso da Bysvem.\n");
+                                break;
+                            }
                             boolean flag = true;
                             for(int tent = 3; tent>0; tent--){
                                 System.out.println("Digite sua senha: ");
