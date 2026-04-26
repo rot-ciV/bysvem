@@ -1,4 +1,3 @@
-1;The Lizard game;Lizard;Lizard Studios;89.99;This awesome game of a lizard that also be a wizard.
 2;Among Us;Party;Innersloth;14.99;Um jogo de trabalho em equipe e trairagem online ou em rede local para 4 a 15 jogadores... no espaço!
 3;PEAK;Ação e aventura;Team PEAK;23.99;PEAK é um jogo cooperativo de escalada onde o menor erro pode custar a sua vida.
 4;Counter Strike 2;Fps;Valve;0.0;O clássico tiro tático de times, agora com gráficos novos e gratuito para PC.
@@ -6,4 +5,3 @@
 6;Minecraft;Sandbox;Mojang Studios;199.69;Construa qualquer coisa que você possa imaginar, descubra mistérios assustadores e sobreviva à noite no jogo de aventura sandbox definitivo.
 7;Resident Evil Requiem;Terror;CAPCOM;299.0;O nono game da série principal combina survival horror tenso e ação frenética. Controle a agente Grace ou o lendário Leon em duas experiências únicas.
 8;EA SPORTS FC™ 26;Simulador de Futebol;EA Canada;299.0;O simulador de futebol da EA chega com jogabilidade reformulada baseada no feedback da comunidade
-50;fdfWSEW;GEWERWGER;Rockstar Games;2555.0;fasgasfdeafge

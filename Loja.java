@@ -71,7 +71,7 @@ public class Loja extends Bysvem{
             while (true){
 
                 System.out.println("\n============ Loja Bysvem ============");
-                System.out.println("\n1 - Jogos Disponíveis\n\n2 - Biblioteca\n\n3 - Configuração\n\n4 - Editar\n\n5 - Sair\n");
+                System.out.println("\n1 - Jogos Disponíveis\n\n2 - Configuração\n\n3 - Editar\n\n4 - Sair\n");
                 System.out.println("Escolha a opção que deseja.");
                 int contador = 1;
                 int op = scn.nextInt();
@@ -80,23 +80,14 @@ public class Loja extends Bysvem{
 
                     case 1:
                         jogos_disponiveis(conta);
-                        break;
+                        break;   
 
                     case 2:
-                        for(Jogo jogo : biblioteca((Usuario) conta)){
-                            System.out.println(contador + "-" + jogo.getNome());
-                            System.out.println(jogo.getDesc());
-                            System.out.println("-------------------");
-                            contador++;
-                        }
-                        break;    
-
-                    case 3:
                         boolean save = altera_info(conta);
                         //ainda não sei oq vai ser
                         break;
 
-                    case 5:
+                    case 4:
                         while(true){
                             System.out.println("\nTem certeza que deseja sair?");
                             System.out.println("1) Sim -> Sair\n2) Não -> Voltar");
@@ -109,10 +100,25 @@ public class Loja extends Bysvem{
                         }
                         break;
 
-                    case 4:
-                        System.out.println("\nDeseja editar:\n1) Usuários      2) Desenvolvedores      3) Jogos");
-                        int escolha = scn.nextInt();
+                    case 3:
+                        System.out.println("\nDeseja editar:\n0) Voltar      1) Usuários      2) Desenvolvedores      3) Jogos");
+                        int escolha = -1;
+                        
+                        while(true) {
+                            try {
+                                escolha = scn.nextInt();
+                            } catch (Exception e) {
+                                scn.nextLine();
+                            }
 
+                            if(escolha == 0 || escolha == 1 || escolha == 2 || escolha == 3){
+                                break;
+                            }
+
+                            System.out.println("Opção inválida.");
+                        }
+                        
+                        
                         if(escolha == 1){
 
                             ArrayList<Usuario> listaUsuarios = criaListaUsuarios();
@@ -175,7 +181,7 @@ public class Loja extends Bysvem{
                                             break;
                                         }
                                         }
-                                        contas.get(i-1).setBan(true);
+                                        contas.get(i).setBan(true);
                                         Gerenciador.salvarContas(contas);
                                         System.out.println("Usuário " + contas.get(i).getNome() + " foi banido(a) com sucesso!");
                                         flag = false;
@@ -266,8 +272,8 @@ public class Loja extends Bysvem{
                             listarJogos();
                             System.out.println("\nQual jogo você deseja excluir?");
                             int opcao = scn.nextInt();
-                            for(int i = 1; i<=jogos.size(); i++){
-                                if(i == opcao){
+                            for(int i = 0; i<jogos.size(); i++){
+                                if(i == opcao - 1){
                                     jogos.remove(i);
                                     Gerenciador.salvarJogos(jogos);
                                     jogos = Gerenciador.carregaJogos();
@@ -526,18 +532,28 @@ public class Loja extends Bysvem{
                     }
                     break;
                 case 3:
-                    int senha = 0;
+                    int senha = -1;
                     while(flag == 1){
                         flag = 0;
                         salvar = true;
                         System.out.print("\nCaso quiser cancelar, digite 0.\nDigite a nova senha: ");
-                        senha = scn.nextInt();
+                        try {
+                            senha = scn.nextInt();
+                        } catch (Exception e) {
+                            scn.nextLine();
+                        }
+                        
                         if(senha == 0){
                             salvar = false;
                             break;
                         }
-                        if(senha == (conta.getSenha())){
+                        else if(senha == (conta.getSenha())){
                             System.out.println("\nA senha deve ser diferente da atual.\n");
+                            flag = 1;
+                            continue;
+                        }
+                        else{
+                            System.out.println("\nA senha deve ser apenas digitos.\n");
                             flag = 1;
                             continue;
                         }
@@ -629,14 +645,17 @@ public class Loja extends Bysvem{
                             alteração_dev = true;
                             condition = false;
                         }
-                    } else if(conta instanceof Desenvolvedor){
+                    } else if(conta instanceof Desenvolvedor || conta instanceof Operador){
                         condition = false;
                     }
                     
                     break;
                 case 6:
-                    condition = false;
-                    break;
+                    if(conta instanceof Usuario){
+                        condition = false;
+                        break;
+                    }
+
                 default:
                     System.out.println("Opção inválida.");
             }
@@ -653,7 +672,32 @@ public class Loja extends Bysvem{
                 Jogo escolhido = jogos.get(escolha - 1);
                 boolean voltarLista = false;
                 while(!voltarLista){
+
                     imprimirJogo(escolhido);
+
+                    if(conta instanceof Operador){
+
+                        while (true) { 
+                            System.out.println("\nPara voltar, digite 1");
+                            int resposta = -1;
+                            try {
+                                resposta = scn.nextInt();
+                            }catch (Exception e) {
+                                scn.nextLine();
+                            }
+                            if(resposta == 1){
+                                break;
+                            }
+                            else{
+                            System.out.println("Opção inválida");
+                            }
+                        }
+                        
+                        voltarLista = true;
+                        continue;
+                    }
+                        
+                    
                     if(jogoNaBiblioteca(escolhido, biblioteca((Usuario) conta))){
                         System.out.println("[Jogo Adquirido]\nPara voltar, digite 1");
                         int resposta = scn.nextInt();
@@ -963,10 +1007,6 @@ public class Loja extends Bysvem{
             }
         }
         conta.setFoisalvo(false);
-    }
-
-    public void salvaEmail(Conta conta, String novoEmail){
-
     }
 
     public Usuario criaUsuario(String nome, int senha, String email){

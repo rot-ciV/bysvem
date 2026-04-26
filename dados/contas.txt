@@ -1,5 +1,5 @@
-USR;8222;Soledby_Joaozin;6969;joaozinGameplays@gmail.com;0.0;false
-OP;1717;Victor;2580;victor.fagundes@gmail.com;false
+BAN_USR;8222;Soledby_Joaozin;6969;joaozinGameplays@gmail.com;0.0;true
+OP;1717;Victor;2580;victor.fagundes@bysvem.com;false
 DEV;4148;Notch;418;notch@mojang.com;Mojang Studios;false
-DEV;5033;bernardoresende;2141;bernardin@g.com;Mojang Studios;false
+BAN_DEV;5033;bernardoresende;2141;bernardin@g.com;Mojang Studios;true
 OP;2169;Bernardo;2141;resendebr21@gmail.com;false
