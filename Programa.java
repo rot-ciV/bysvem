@@ -25,12 +25,17 @@ public abstract class Programa{
             System.out.println("1)Entrar na loja        2)Sair\n");
             int menu_option = -1; 
 
-            try {
+            /*try {
                 menu_option = leitor.nextInt();
                 leitor.nextLine();
 
             } catch (Exception e) {
                 leitor.nextLine(); //limpar o buffer
+            }*/
+            String menu_optionString;
+            menu_optionString = leitor.nextLine();
+            if(loja.entradaInt(menu_optionString)){
+                menu_option = Integer.parseInt(menu_optionString);
             }
              
             if(menu_option == 1){
@@ -52,7 +57,14 @@ public abstract class Programa{
                             boolean flag = true;
                             for(int tent = 3; tent>0; tent--){
                                 System.out.print("Digite sua senha: ");
-                                int password = leitor.nextInt();
+                                //int password = leitor.nextInt();
+                                String passwordString;
+                                passwordString = leitor.nextLine();
+                                if(!loja.entradaInt(passwordString)){
+                                    System.out.println("Senha inválida, tente novamente.\n");
+                                    continue;
+                                }
+                                int password = Integer.parseInt(passwordString);       
                                 if (password == conta_verificadora.getSenha()){
                                     loja.lojaMenu(conta_verificadora);
                                     flag = false;
@@ -91,8 +103,18 @@ public abstract class Programa{
                         System.out.print("Digite o nome do usuário: ");
                         String nome = leitor.nextLine();
                         System.out.print("Crie uma senha (apenas digitos): ");
-                        int senha = leitor.nextInt();
-
+                        //int senha = leitor.nextInt();
+                        int senha;
+                        String senhaString;
+                        while(true){
+                            senhaString = leitor.nextLine();
+                            if(loja.entradaInt(senhaString)){
+                                senha = Integer.parseInt(senhaString);
+                                break;
+                            }else{
+                                System.out.println("Opção inválida, a senha só pode ter digitos.");
+                            }
+                        }
                         loja.criaUsuario(nome, senha, email_novo); 
                         System.out.println("\nConta criada com sucesso!\n");
                         break;

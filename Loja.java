@@ -33,8 +33,16 @@ public class Loja extends Bysvem{
                 System.out.println("\n1 - Jogos Disponíveis\n\n2 - Biblioteca\n\n3 - Configuração\n\n4 - Sair\n");
                 System.out.println("Escolha a opção que deseja.");
                 int contador = 1;
-                int op = scn.nextInt();
-                scn.nextLine();
+                /*int op = scn.nextInt();
+                scn.nextLine();*/
+                String opString = "";
+                int op;
+                opString = scn.nextLine();
+                if(entradaInt(opString)){
+                    op = Integer.parseInt(opString);
+                }else{
+                    op = -1;
+                }
                 switch (op){
 
                     case 1:
@@ -55,9 +63,17 @@ public class Loja extends Bysvem{
                         while(true){
                             System.out.println("\nTem certeza que deseja sair?");
                             System.out.println("1) Sim -> Sair\n2) Não -> Voltar");
-                            int sair_loja = scn.nextInt();
-                            if(sair_loja == 1){return;}
-                            else if(sair_loja == 2){break;}
+                            //int sair_loja = scn.nextInt();
+                            String sairLojaString = "";
+                            int sairLoja;
+                            sairLojaString = scn.nextLine();
+                            if(entradaInt(sairLojaString)){
+                                sairLoja = Integer.parseInt(sairLojaString);
+                            }else{
+                                sairLoja = -1;
+                            }
+                            if(sairLoja == 1){return;}
+                            else if(sairLoja == 2){break;}
                             else{
                                 System.out.println("Escolha apenas 1 ou 2");
                             }
@@ -74,8 +90,16 @@ public class Loja extends Bysvem{
                 System.out.println("\n1 - Jogos Disponíveis\n\n2 - Configuração\n\n3 - Editar\n\n4 - Sair\n");
                 System.out.println("Escolha a opção que deseja.");
                 int contador = 1;
-                int op = scn.nextInt();
-                scn.nextLine();
+                /*int op = scn.nextInt();
+                scn.nextLine();*/
+                String opString = "";
+                int op;
+                opString = scn.nextLine();
+                if(entradaInt(opString)){
+                    op = Integer.parseInt(opString);    
+                }else{
+                    op = -1;
+                }
                 switch (op){
 
                     case 1:
@@ -91,7 +115,15 @@ public class Loja extends Bysvem{
                         while(true){
                             System.out.println("\nTem certeza que deseja sair?");
                             System.out.println("1) Sim -> Sair\n2) Não -> Voltar");
-                            int sair_loja = scn.nextInt();
+                            //int sair_loja = scn.nextInt();
+                            String sair_lojaString = "";
+                            int sair_loja;
+                            sair_lojaString = scn.nextLine();
+                            if(entradaInt(sair_lojaString)){
+                                sair_loja = Integer.parseInt(sair_lojaString);
+                            }else{
+                                sair_loja = -1;
+                            }
                             if(sair_loja == 1){return;}
                             else if(sair_loja == 2){break;}
                             else{
@@ -102,22 +134,20 @@ public class Loja extends Bysvem{
 
                     case 3:
                         System.out.println("\nDeseja editar:\n0) Voltar      1) Usuários      2) Desenvolvedores      3) Jogos");
-                        int escolha = -1;
-                        
-                        while(true) {
-                            try {
-                                escolha = scn.nextInt();
-                            } catch (Exception e) {
-                                scn.nextLine();
+                        //int escolha = -1;
+                        String escolhaString = "";
+                        int escolha;
+                        while(true){
+                            escolhaString = scn.nextLine();
+                            if(entradaInt(escolhaString)){
+                                escolha = Integer.parseInt(escolhaString);
+                                if(escolha == 0 || escolha == 1 || escolha == 2 || escolha == 3){
+                                    break;
+                                }
+                            }else{
+                                System.out.println("Opção inválida, digite uma opção válida.");
                             }
-
-                            if(escolha == 0 || escolha == 1 || escolha == 2 || escolha == 3){
-                                break;
-                            }
-
-                            System.out.println("Opção inválida.");
-                        }
-                        
+                        }       
                         
                         if(escolha == 1){
 
@@ -125,7 +155,7 @@ public class Loja extends Bysvem{
                             listarUsuario(listaUsuarios);
                             System.out.println("\nDigite 0 para retornar");
                             boolean flag = true;
-                            int opcao = -1;
+                            /*int opcao = -1;
                             
                             while (true) { 
                                 System.out.println("\nQual usuário você deseja banir?");
@@ -136,6 +166,13 @@ public class Loja extends Bysvem{
                                     System.out.println("Opção inválida");
                                     scn.nextLine();
                                 }
+                            }*/
+                            int opcao = -1;
+                            System.out.println("\nQual usuário você deseja banir?");
+                            opString = "";
+                            opString = scn.nextLine();
+                            if(entradaInt(opString)){
+                                opcao = Integer.parseInt(opString);
                             }
 
                             if(opcao == 0){
@@ -155,7 +192,7 @@ public class Loja extends Bysvem{
                                         System.out.println("O usuário já está banido.");
                                         System.out.println("Gostaria de desbanir " + contas.get(i).getNome()+"?");
                                         System.out.println("1- Sim | 2- Não");
-                                        int banir = -1;
+                                        /*int banir = -1;
                                         while (true) { 
                                             try{
                                                 banir = scn.nextInt();
@@ -164,6 +201,12 @@ public class Loja extends Bysvem{
                                                 System.out.println("Opção inválida.");
                                                 scn.nextLine();
                                             }
+                                        }*/
+                                        String banirString = "";
+                                        int banir = -1;
+                                        banirString = scn.nextLine();
+                                        if(entradaInt(banirString)){
+                                            banir = Integer.parseInt(banirString);
                                         }
 
                                         if(banir == 1){
@@ -201,8 +244,7 @@ public class Loja extends Bysvem{
                             boolean flag = true;
                             int opcao = -1;
 
-
-                            while (true) { 
+                            /*while (true) { 
                                 System.out.println("\nQual desenvolvedor você deseja banir?");
                                 try {
                                     opcao = scn.nextInt();
@@ -211,8 +253,12 @@ public class Loja extends Bysvem{
                                     System.out.println("Opção inválida");
                                     scn.nextLine();
                                 }
+                            }*/
+                            opString = "";
+                            opString = scn.nextLine();
+                            if(entradaInt(opString)){
+                                opcao = Integer.parseInt(opString);
                             }
-
                             if(opcao == 0){
                                 break;
                             
@@ -231,7 +277,7 @@ public class Loja extends Bysvem{
                                         System.out.println("Gostaria de desbanir " + contas.get(i).getNome()+"?");
                                         System.out.println("1- Sim | 2- Não");
                                         int banir = -1;
-                                        while (true) { 
+                                        /*while (true) { 
                                             try{
                                                 banir = scn.nextInt();
                                                 break;
@@ -239,6 +285,11 @@ public class Loja extends Bysvem{
                                                 System.out.println("Opção inválida.");
                                                 scn.nextLine();
                                             }
+                                        }*/
+                                        String banirString;
+                                        banirString = scn.nextLine();
+                                        if(entradaInt(banirString)){
+                                            banir = Integer.parseInt(banirString);
                                         }
 
                                         if(banir == 1){
@@ -271,7 +322,18 @@ public class Loja extends Bysvem{
                         }else if(escolha == 3){
                             listarJogos();
                             System.out.println("\nQual jogo você deseja excluir?");
-                            int opcao = scn.nextInt();
+                            //int opcao = scn.nextInt();
+                            int opcao;
+                            String opcaoString;
+                            while(true){
+                                opcaoString = scn.nextLine();
+                                if(entradaInt(opcaoString)){
+                                    opcao = Integer.parseInt(opcaoString);
+                                    break;
+                                }else{
+                                    System.out.println("Opção inválida, digite uma opção válida.");
+                                }
+                            }
                             for(int i = 0; i<jogos.size(); i++){
                                 if(i == opcao - 1){
                                     jogos.remove(i);
@@ -296,8 +358,15 @@ public class Loja extends Bysvem{
                 System.out.println("\n============ Loja Bysvem ============");
                 System.out.println("\n1 - Jogos Disponíveis\n\n2 - Gerenciar jogos\n\n3 - Configuração\n\n4 - Sair\n");
                 System.out.println("Escolha a opção que deseja.");
-                int op = scn.nextInt();
-                scn.nextLine();
+                //int op = scn.nextInt();
+                //scn.nextLine();
+                int op = -1;
+                String opcaoString;
+                opcaoString = scn.nextLine();
+                if(entradaInt(opcaoString)){
+                    op = Integer.parseInt(opcaoString);
+                }
+            
                 switch (op){
 
                     case 1:
@@ -315,7 +384,13 @@ public class Loja extends Bysvem{
                         while(true){
                             System.out.println("\nTem certeza que deseja sair?");
                             System.out.println("1) Sim -> Sair\n2) Não -> Voltar");
-                            int sair_loja = scn.nextInt();
+                            //int sair_loja = scn.nextInt();
+                            int sair_loja = -1;
+                            String sair_lojaString;
+                            sair_lojaString = scn.nextLine();
+                            if(entradaInt(sair_lojaString)){
+                                sair_loja = Integer.parseInt(sair_lojaString);
+                            }
                             if(sair_loja == 1){return;}
                             else if(sair_loja == 2){break;}
                             else{
@@ -336,8 +411,14 @@ public class Loja extends Bysvem{
         System.out.println("\n================ Configuração ================");
         System.out.println("1 - Adicionar jogo\n2 - Remover jogo\n3 - Voltar");
         System.out.print("\nSelecione uma opção: ");
-        int opc = scn.nextInt();
+        //int opc = scn.nextInt();
         while(true){
+            int opc = -1;
+            String opcaoString;
+            opcaoString = scn.nextLine();
+            if(entradaInt(opcaoString)){
+                opc = Integer.parseInt(opcaoString);
+            }
             if(opc == 1){
                 devCriaJogo(conta);
                 break;
@@ -353,7 +434,7 @@ public class Loja extends Bysvem{
             }else if(opc == 3){
                 return;
             }else{
-                System.out.println("Opção inválida");
+                System.out.println("Opção inválida\n1 - Adicionar jogo\n2 - Remover jogo\n3 - Voltar");
             }
         }
     }
@@ -381,14 +462,20 @@ public class Loja extends Bysvem{
 
         while(true){   
             System.out.println("Selecione o jogo que deseja saber mais | (Digite 0 para voltar ao menu): ");
-            int escolha = scn.nextInt();
+            //int escolha = scn.nextInt();
+            int escolha = -1;
+            String escolhaString;
+            escolhaString = scn.nextLine();
+            if(entradaInt(escolhaString)){
+                escolha = Integer.parseInt(escolhaString);
+            }
 
             if(escolha >= 1 && escolha <= jogosDoDev.size()){
                 Jogo escolhido = jogosDoDev.get(escolha - 1);
                 imprimirJogo(escolhido);
 
                 System.out.println("\nAperte enter para voltar");
-                scn.nextLine();
+                //scn.nextLine();
                 scn.nextLine();
                 break;
 
@@ -409,8 +496,19 @@ public class Loja extends Bysvem{
         System.out.print("Informe o gênero do jogo: ");
         String genero = scn.nextLine();
         System.out.print("Informe o preço do jogo: ");
-        double preco = scn.nextDouble();
-        scn.nextLine();
+        //double preco = scn.nextDouble();
+        //scn.nextLine();
+        double preco;
+        String precoString;
+        while(true){
+            precoString = scn.nextLine();
+            if(entradaDouble(precoString)){
+                preco = Double.parseDouble(precoString);
+                break;
+            }else{
+                System.out.println("Opção inválida, digite uma opção válida.");
+            }
+        }
         System.out.print("Escreva uma descrição do jogo: ");
         String miniDisc = scn.nextLine();
         Jogo jogo = ((Desenvolvedor)conta).criaJogo(id, nomeJogo, genero, preco, miniDisc);
@@ -442,8 +540,13 @@ public class Loja extends Bysvem{
         System.out.println("Digite o número do jogo que deseja remover, ou 0 para voltar");
 
         while(true){
-            int res = scn.nextInt();
-
+            //int res = scn.nextInt();
+            int res = -1;
+            String resString;
+            resString = scn.nextLine();
+            if(entradaInt(resString)){
+                res = Integer.parseInt(resString);
+            }
             if(res == 0){
                 return false;
             }
@@ -482,7 +585,13 @@ public class Loja extends Bysvem{
                 System.out.println("1 - Ver Perfil\n2 - Alterar nome\n3 - Alterar senha\n4 - Alterar o email\n5 - Voltar\n");
             }
             System.out.print("Selecione uma opção: ");
-            int escolha = scn.nextInt();
+            //int escolha = scn.nextInt();
+            int escolha = -1;
+            String escolhaString;
+            escolhaString = scn.nextLine();
+            if(entradaInt(escolhaString)){
+                escolha = Integer.parseInt(escolhaString);
+            }
             boolean salvar = false;
             int flag = 1;   
             switch(escolha){
@@ -495,7 +604,7 @@ public class Loja extends Bysvem{
                         flag = 0;
                         salvar = true;
                         System.out.print("\nCaso quiser cancelar, digite 0.\nDigite o novo nome: ");
-                        nome = scn.next();
+                        nome = scn.nextLine();
                         if(nome.equalsIgnoreCase("0")){
                             salvar = false;
                             break;
@@ -509,7 +618,13 @@ public class Loja extends Bysvem{
                     }
                     if(salvar){
                         System.out.println("\nNome anterior: " + conta.getNome() + "\nNovo nome: " + nome + "\n\nDESEJA SALVAR?\n" + "1 - Salvar\n0 - Cancelar");
-                        int opcao = scn.nextInt();
+                        //int opcao = scn.nextInt();
+                        int opcao = -1;
+                        String opcaoString;
+                        opcaoString = scn.nextLine();
+                        if(entradaInt(opcaoString)){
+                            opcao = Integer.parseInt(opcaoString);
+                        }
                         if(opcao == 1){
                             System.out.println("Seu nome foi alterado com sucesso!");
                             for(int i = 0; i < contas.size(); i++){
@@ -537,12 +652,20 @@ public class Loja extends Bysvem{
                         flag = 0;
                         salvar = true;
                         System.out.print("\nCaso quiser cancelar, digite 0.\nDigite a nova senha: ");
-                        try {
+                        /*try {
                             senha = scn.nextInt();
                         } catch (Exception e) {
                             System.out.println("\nA senha deve ser apenas digitos.\n");
                             senha = -1;
                             scn.nextLine();
+                        }*/
+                        String senhaString;                       
+                        senhaString = scn.nextLine();
+                        if(entradaInt(senhaString)){
+                            senha = Integer.parseInt(senhaString);
+                        }else{
+                            System.out.println("A senha deve ser apenas digitos.");
+                            senha = -1;
                         }
                         
                         if(senha == 0){
@@ -564,11 +687,16 @@ public class Loja extends Bysvem{
                     }
                     System.out.println("Nova senha: " + senha + "\nDeseja salvar:\n1 - Salvar\n2 - Cancelar");
                     int opcao = -1;
-                    try {
+                    /*try {
                         opcao = scn.nextInt();
                     } catch (Exception e) {
                         scn.nextLine();
                         opcao = -1;
+                    }*/
+                    String opcaoString;
+                        opcaoString = scn.nextLine();
+                    if(entradaInt(opcaoString)){
+                        opcao = Integer.parseInt(opcaoString);
                     }
                     if(opcao == 1){
                         System.out.println("Sua senha foi alterada com sucesso!");
@@ -592,7 +720,7 @@ public class Loja extends Bysvem{
                 case 4:
                     flag = 1;
                     String email_novo = null;
-                    scn.nextLine(); //Limpar o \n que sobra da resposta
+                    //scn.nextLine(); //Limpar o \n que sobra da resposta
                     while(flag == 1){
                         flag = 0;
                         salvar = true;    
@@ -621,7 +749,20 @@ public class Loja extends Bysvem{
                     if(salvar){
                         System.out.println("\nEmail anterior: " + conta.getEmail() + "\nNovo email: " + email_novo + "\n");
                         System.out.println("Deseja salvar? \n1 - Salvar\n2 - Cancelar");
-                        opcao = scn.nextInt();
+                        //opcao = scn.nextInt();
+                        while(true){
+                            opcaoString = scn.nextLine();
+                            if(entradaInt(opcaoString)){
+                                opcao = Integer.parseInt(opcaoString);
+                                if(opcao == 1 || opcao == 2){
+                                    break;
+                                }else{
+                                    System.out.println("Opção inválida, digite 1 ou 2.");
+                                }
+                            }else{
+                                System.out.println("Opção inválida, digite 1 ou 2.");
+                            }
+                        }
                         if(opcao == 1){
                             System.out.println("Seu email foi alterado com sucesso!");
                             alteraEmail(conta, email_novo);
@@ -629,6 +770,7 @@ public class Loja extends Bysvem{
                             System.out.println("O email não foi alterado.");
                             break;
                         }else{
+                            //ERROOOOO
                             System.out.println("Opção inválida");
                         }
                     }
@@ -640,8 +782,19 @@ public class Loja extends Bysvem{
                         System.out.println("<<<<<<<<<<< ATENÇÃO >>>>>>>>>>>\n");
                         System.out.println("Ao continuar essa conta deixará de ser uma conta comum e virará de deselvovedora, qualquer jogo que existir na biblioteca será apagado permanentemente");
                         System.out.println("\nAperte 1 para confirmar, ou qualquer outro número para voltar.");
-                        int choose = scn.nextInt();
-                        scn.nextLine();
+                        /*int choose = scn.nextInt();
+                        scn.nextLine();*/
+                        int choose;
+                        String chooseString;
+                        while(true){
+                            chooseString = scn.nextLine();
+                            if(entradaInt(chooseString)){
+                                choose = Integer.parseInt(chooseString);
+                                break;
+                            }else{
+                                System.out.println("Opção inválida, digite 1 para confirmar, ou qualquer outro número para voltar.");
+                            }
+                        }
                         if(choose == 1){
                             ApagaUsuario(conta);
                             System.out.print("Escreva o nome da sua empresa: ");
@@ -675,7 +828,13 @@ public class Loja extends Bysvem{
         while(true){   
             listarJogos();
             System.out.println("Selecione o jogo que deseja saber mais | (Digite 0 para voltar ao menu): ");
-            int escolha = scn.nextInt();
+            //int escolha = scn.nextInt();
+            int escolha = -1;
+            String escolhaString;
+            escolhaString = scn.nextLine();
+            if(entradaInt(escolhaString)){
+                escolha = Integer.parseInt(escolhaString);
+            }
             if(escolha >= 1 && escolha <= jogos.size()){
                 Jogo escolhido = jogos.get(escolha - 1);
                 boolean voltarLista = false;
@@ -688,16 +847,20 @@ public class Loja extends Bysvem{
                         while (true) { 
                             System.out.println("\nPara voltar, digite 1");
                             int resposta = -1;
-                            try {
+                            /*try {
                                 resposta = scn.nextInt();
                             }catch (Exception e) {
                                 scn.nextLine();
+                            }*/
+                            String respostaString;
+                            respostaString = scn.nextLine();
+                            if(entradaInt(respostaString)){
+                                resposta = Integer.parseInt(respostaString);
                             }
                             if(resposta == 1){
                                 break;
-                            }
-                            else{
-                            System.out.println("Opção inválida");
+                            }else{
+                                System.out.println("Opção inválida");
                             }
                         }
                         
@@ -708,7 +871,13 @@ public class Loja extends Bysvem{
                     
                     if(jogoNaBiblioteca(escolhido, biblioteca((Usuario) conta))){
                         System.out.println("[Jogo Adquirido]\nPara voltar, digite 1");
-                        int resposta = scn.nextInt();
+                        //int resposta = scn.nextInt();
+                        int resposta = - 1;
+                        String respostaString;
+                        respostaString = scn.nextLine();
+                        if(entradaInt(respostaString)){
+                            resposta = Integer.parseInt(respostaString);
+                        }
                         if(resposta == 1){
                             voltarLista = true;
                         }else{
@@ -819,7 +988,7 @@ public class Loja extends Bysvem{
             System.out.println("Empresa: " + companie.getEmpresa());
         }
         System.out.println("Aperte enter para voltar.");
-        scn.nextLine();
+        //scn.nextLine();
         scn.nextLine();
     }
 
@@ -832,18 +1001,44 @@ public class Loja extends Bysvem{
 
     public boolean compradeJogo(Conta conta, Jogo escolhido){
         System.out.println("Gostaria de adquirir o jogo?\n1 - Comprar\n2 - Cancelar");
-        int resposta_compra = scn.nextInt();
+        //int resposta_compra = scn.nextInt();
+        int resposta_compra = -1;
+        String resposta_compraString;
+        resposta_compraString = scn.nextLine();
+        if(entradaInt(resposta_compraString)){
+            resposta_compra = Integer.parseInt(resposta_compraString);
+        }
         if(resposta_compra == 1){
             if(compraJogo(escolhido, (Usuario)conta)){                               
                 System.out.println("Jogo adquirido com sucesso!");
                 return false;
             }else{
                 System.out.println("\nSaldo insuficiente!\n\n1 - Adicionar saldo\n2 - Voltar para os jogos disponíveis");
-                int resposta_saldo = scn.nextInt();
+                //int resposta_saldo = scn.nextInt();
+                int resposta_saldo;
+                String resposta_saldoString;
+                while(true){
+                    resposta_saldoString = scn.nextLine();
+                    if(entradaInt(resposta_saldoString)){
+                        resposta_saldo = Integer.parseInt(resposta_saldoString);
+                        break;
+                    }else{
+                        System.out.println("Opção inválida, digite 1 ou 2.");
+                    }
+                }
                 if(resposta_saldo == 1){
                     System.out.print("\nInforme o valor que você deseja adicionar: ");
-                    String valor = scn.next();
-                    double valorSaldo = Double.parseDouble(valor);
+                    double valorSaldo = 0.0;
+                    String valor = "";
+                    while(true){
+                        valor = scn.nextLine();
+                        if(entradaDouble(valor)){
+                            valorSaldo = Double.parseDouble(valor);
+                            break;
+                        }else{
+                            System.out.println("Digite um valor válido.");
+                        }
+                    }
                     compraSaldo((Usuario)conta, valorSaldo);
                     return false;
                 }else if(resposta_saldo == 2){
@@ -918,14 +1113,25 @@ public class Loja extends Bysvem{
         System.out.println("Deseja confirmar:\n1 - Confirmar\n2 - Voltar");
 
         while (true) {
-            scn.nextLine();
+            /*scn.nextLine();
             int opcao;
             try {
                 opcao = Integer.parseInt(scn.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("Opção inválida. Digite 1 ou 2.");
                 continue;
-            }
+            }*/
+           String opcaoString = "";
+           int opcao;
+           while(true){
+                opcaoString = scn.nextLine();
+                if(entradaInt(opcaoString)){
+                    opcao = Integer.parseInt(opcaoString);
+                    break;
+                }else{
+                    System.out.println("Opção inválida, digite 1 ou 2");
+                }
+           }
 
             if (opcao == 1) {
                 for (int i = 0; i < this.contas.size(); i++) {
@@ -1048,6 +1254,22 @@ public class Loja extends Bysvem{
         if (removido) {
             Gerenciador.salvarContas(contas);
             this.contas = Gerenciador.carregaContas();
+        }
+    }
+
+    public boolean entradaDouble(String valor){
+        if(valor != null && valor.matches("-?\\d+(\\.\\d+)?")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public boolean entradaInt(String valor){
+        if(valor != null && valor.matches("-?\\d+")){
+            return true;
+        }else{
+            return false;
         }
     }
 }
