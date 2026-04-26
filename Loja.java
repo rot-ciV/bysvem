@@ -540,6 +540,8 @@ public class Loja extends Bysvem{
                         try {
                             senha = scn.nextInt();
                         } catch (Exception e) {
+                            System.out.println("\nA senha deve ser apenas digitos.\n");
+                            senha = -1;
                             scn.nextLine();
                         }
                         
@@ -552,8 +554,7 @@ public class Loja extends Bysvem{
                             flag = 1;
                             continue;
                         }
-                        else{
-                            System.out.println("\nA senha deve ser apenas digitos.\n");
+                        else if(senha == -1){
                             flag = 1;
                             continue;
                         }
@@ -562,7 +563,13 @@ public class Loja extends Bysvem{
                         break;
                     }
                     System.out.println("Nova senha: " + senha + "\nDeseja salvar:\n1 - Salvar\n2 - Cancelar");
-                    int opcao = scn.nextInt();
+                    int opcao = -1;
+                    try {
+                        opcao = scn.nextInt();
+                    } catch (Exception e) {
+                        scn.nextLine();
+                        opcao = -1;
+                    }
                     if(opcao == 1){
                         System.out.println("Sua senha foi alterada com sucesso!");
                         for(int i = 0; i < contas.size(); i++){
@@ -574,12 +581,13 @@ public class Loja extends Bysvem{
                         Gerenciador.salvarContas(contas);
                         salvar = true;
                         break;
-                    }else if(opcao == 0){
+                    }else if(opcao == 2){
                         salvar = false;
                         System.out.println("A senha não foi alterada.");
                         break;
                     }else{
                         System.out.println("Opção inválida.");
+                        break;
                     }
                 case 4:
                     flag = 1;
