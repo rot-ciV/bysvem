@@ -19,6 +19,11 @@ public class Desenvolvedor extends Conta{
         return novoJogo; 
     }
 
+    @Override
+    public String toString(){
+        return String.format("\n%s, Empresa: %s", super.toString(), empresa);
+    }
+
 }
 
  

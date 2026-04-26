@@ -23,5 +23,10 @@ public class Registro extends Bysvem{
     public Jogo getJogo() { return this.jogo; }
     public Conta getConta() { return conta; }
     public double getHorasJogadas() { return horasJogadas; }
+
+    @Override
+    public String toString(){
+        return String.format("\n%s, Jogo: %s, Conta: %s", super.toString(), jogo.toString(), conta.toString());
+    }
     
 }

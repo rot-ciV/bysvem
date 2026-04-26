@@ -1,6 +1,6 @@
 public class Jogo extends Bysvem{
 
-    private  String nome;
+    private String nome;
     private String genero;
     private String desenvolvedora;
     private double preco;
@@ -37,5 +37,10 @@ public class Jogo extends Bysvem{
     public String getDesenvolvedora() { return this.desenvolvedora; }
     public double getPreco() { return this.preco; }
     public String getDesc() { return this.desc; }
+
+    @Override
+    public String toString(){
+        return String.format("\n%s, Nome: %s, Genero: %s, Desenvolvedora: %s, Preço: %ff, Descrição: %s", super.toString(), nome, genero, desenvolvedora, preco, desc);
+    }
 
 }

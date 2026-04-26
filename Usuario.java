@@ -11,4 +11,9 @@ public class Usuario extends Conta{
     public void setSaldo(double saldo) { this.saldo = saldo; }
     public double getSaldo() { return this.saldo; }
 
+    @Override
+    public String toString(){
+        return String.format("\n%s, Saldo: %ff", super.toString(), saldo);
+    }
+
 }
