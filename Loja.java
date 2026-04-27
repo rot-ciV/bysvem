@@ -550,7 +550,6 @@ public class Loja extends Bysvem{
             if(res >= 1 && res <= jogosDoDev.size()){
                 System.out.println("Tem certeza que deseja remover esse jogo? Ao confirmar não tem como recuperar.");
                 System.out.println("Digite 0 se quiser retornar, ou aperte enter para continuar");
-                scn.nextLine();
                 String remocao = scn.nextLine();
                 if(remocao.equals("0")){
                     System.out.println("\nAção cancelada com sucesso!");
