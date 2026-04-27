@@ -13,6 +13,47 @@ public class Usuario extends Conta{
     public void setSaldo(double saldo) { this.saldo = saldo; }
     public double getSaldo() { return this.saldo; }
 
+    /*ESSE MÉTODO ERA DE LOJA, PASSEI PARA CÁ E EM LOJA ESTÁ COMENTADO */
+    public boolean compraJogo(Jogo jogoComprado, ArrayList<Conta> contas, ArrayList<Registro> registros, Loja loja){
+
+        if (getSaldo() >= jogoComprado.getPreco()){
+
+            
+            double novoSaldo = getSaldo() - jogoComprado.getPreco();
+            for(int i = 0; i < contas.size(); i++){
+                if(contas.get(i).getId() == getId()){
+                    setSaldo(novoSaldo); 
+                    ((Usuario)contas.get(i)).setSaldo(novoSaldo);
+                }
+            }
+            //MUDEI
+            if(atualizar(contas)){
+                int id = loja.criaId(1);
+                Registro novoRegistro = new Registro(id, jogoComprado, this, 0.0);
+
+                return novoRegistro.salvar(registros);
+            }
+        }
+
+        return false;
+    }
+
+    /*MÉTODO ORIGINALMENTE NA LOJA, FAZ MAIS SENTIDO AQUI*/
+    public ArrayList<Jogo> biblioteca(ArrayList<Registro> registros){
+
+        ArrayList<Jogo> biblioteca = new ArrayList<>();
+
+        for(int i = 0; i < registros.size(); i++){
+
+            if (getId() == registros.get(i).getConta().getId()){
+
+                biblioteca.add(registros.get(i).getJogo());
+            }
+        }
+
+        return biblioteca;
+    }
+
     @Override
     public boolean carregar(int id, ArrayList<Conta> listaContas){
 

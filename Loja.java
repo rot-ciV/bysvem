@@ -387,11 +387,12 @@ public class Loja extends Bysvem{
                 switch (op){
 
                     case 1:
-                        jogosDev(conta); 
+                        //jogosDev(conta);
+                        ((Desenvolvedor)conta).jogosDev(this.jogos, this, scn);  
                         break;
 
                     case 2:    
-                        gerenciarJogosDev(conta);
+                        ((Desenvolvedor)conta).gerenciarJogosDev(this.jogos, this, scn);
                         break;
                     case 3:
                         boolean save = altera_info(conta);
@@ -424,6 +425,7 @@ public class Loja extends Bysvem{
         scn.close();
     }
 
+    /*PASSADO PARA DESENVOLVEDOR 
     public void gerenciarJogosDev(Conta conta){
         while(true){
             System.out.println("\n================ Configuração ================");
@@ -438,7 +440,8 @@ public class Loja extends Bysvem{
                 devCriaJogo(conta);
                 break;
             }else if(opc == 2){
-                boolean removeu = removerJogoDev(conta);
+                //boolean removeu = removerJogoDev(conta);  ERA USADO QUANDO O MÉTODO ESTAVA NESSA CLASSE LOJA
+                boolean removeu = ((Desenvolvedor)conta).removerJogoDev(this.jogos, this, scn);
                 if(removeu){
                     System.out.println("Jogo removido com sucesso!");
                     break;
@@ -452,8 +455,9 @@ public class Loja extends Bysvem{
                 System.out.println("\nOpção inválida\n");
             }
         }
-    }
+    }*/
 
+    /*PASSADO PARA A CLASSE DESENVOLVEDOR 
     public void jogosDev(Conta conta){
         System.out.println("\n================ Jogos Disponíveis ================");
 
@@ -501,8 +505,8 @@ public class Loja extends Bysvem{
                 System.out.println("Opção Inválida!");
             }
         }
-}
-
+    }*/
+    /*FOI PARA A CLASSE DESENVOLVEDOR 
     public void devCriaJogo(Conta conta){
         int id = criaId(2);
         System.out.print("\nInforme o nome do jogo: ");
@@ -533,8 +537,9 @@ public class Loja extends Bysvem{
         }else{
             System.out.println("\nHouve um erro ao criar o jogo.");
         }
-    }
+    }*/
 
+    /*PASSADO PARA A CLASSE DESENVOLVEDOR
     public boolean removerJogoDev(Conta conta){
 
         ArrayList<Jogo> jogosDoDev = new ArrayList<>();
@@ -583,8 +588,8 @@ public class Loja extends Bysvem{
                 System.out.println("Número inválido. Tente novamente ou digite 0 para cancelar.");
             }
         }
-}
-
+    }*/
+    
     public boolean altera_info(Conta conta){
         boolean alteração_dev = false;
         boolean condition = true;
@@ -610,7 +615,7 @@ public class Loja extends Bysvem{
                     Perfil_da_Conta(conta);
                     break;
                 case 2:
-                    String nome = null;
+                    /*String nome = null;
                     while(flag == 1){
                         flag = 0;
                         salvar = true;
@@ -661,10 +666,11 @@ public class Loja extends Bysvem{
                             System.out.println("Opção inválida.");
                             break;
                         }
-                    }
+                    }*/
+                    conta.alteraNome(this, scn, this.contas);
                     break;
                 case 3:
-                    int senha = -1;
+                    /*int senha = -1;
                     while(flag == 1){
                         flag = 0;
                         salvar = true;
@@ -675,7 +681,7 @@ public class Loja extends Bysvem{
                             System.out.println("\nA senha deve ser apenas digitos.\n");
                             senha = -1;
                             scn.nextLine();
-                        }*/
+                        }*//*
                         String senhaString;                       
                         senhaString = scn.nextLine();
                         if(entradaInt(senhaString)){
@@ -709,7 +715,7 @@ public class Loja extends Bysvem{
                     } catch (Exception e) {
                         scn.nextLine();
                         opcao = -1;
-                    }*/
+                    }*//* 
                     String opcaoString;
                         opcaoString = scn.nextLine();
                     if(entradaInt(opcaoString)){
@@ -739,7 +745,9 @@ public class Loja extends Bysvem{
                     }else{
                         System.out.println("Opção inválida.");
                         break;
-                    }
+                    }*/
+                    conta.alteraSenha(contas, this, scn);
+                    break;
                 case 4:
                     flag = 1;
                     String email_novo = null;
@@ -773,6 +781,8 @@ public class Loja extends Bysvem{
                         System.out.println("\nEmail anterior: " + conta.getEmail() + "\nNovo email: " + email_novo + "\n");
                         System.out.println("Deseja salvar? \n1 - Salvar\n2 - Cancelar");
                         //opcao = scn.nextInt();
+                        int opcao = -1;
+                        String opcaoString = "";
                         while(true){
                             opcaoString = scn.nextLine();
                             if(entradaInt(opcaoString)){
@@ -858,6 +868,8 @@ public class Loja extends Bysvem{
         return alteração_dev;
     }
 
+
+
     public void jogos_disponiveis(Conta conta){
         while(true){   
             listarJogos();
@@ -903,7 +915,7 @@ public class Loja extends Bysvem{
                     }
                         
                     
-                    if(jogoNaBiblioteca(escolhido, biblioteca((Usuario) conta))){
+                    if(jogoNaBiblioteca(escolhido, (((Usuario) conta)).biblioteca(this.registros))){
                         System.out.println("[Jogo Adquirido]\nPara voltar, digite 1");
                         //int resposta = scn.nextInt();
                         int resposta = - 1;
@@ -1043,7 +1055,7 @@ public class Loja extends Bysvem{
             resposta_compra = Integer.parseInt(resposta_compraString);
         }
         if(resposta_compra == 1){
-            if(compraJogo(escolhido, (Usuario)conta)){                               
+            if(((Usuario)conta).compraJogo(escolhido, contas, registros, this)){                               
                 System.out.println("Jogo adquirido com sucesso!");
                 return false;
             }else{
@@ -1118,7 +1130,7 @@ public class Loja extends Bysvem{
         }
         return id;
     }
-    
+    /* MÉTODO FOI PASSADO PARA O USUÁRIO
     public boolean compraJogo(Jogo jogoComprado, Usuario usuario){
 
         if (usuario.getSaldo() >= jogoComprado.getPreco()){
@@ -1141,7 +1153,7 @@ public class Loja extends Bysvem{
         }
 
         return false;
-    }
+    }*/
 
     public void compraSaldo(Usuario usuario, double valor) {
         double saldo = usuario.getSaldo();
@@ -1194,7 +1206,8 @@ public class Loja extends Bysvem{
             }
         }
     }
-
+    
+    /*PASSADO PARA USUÁRIO 
     public ArrayList<Jogo> biblioteca(Usuario usuario){
 
         ArrayList<Jogo> biblioteca = new ArrayList<>();
@@ -1208,7 +1221,7 @@ public class Loja extends Bysvem{
         }
 
         return biblioteca;
-    }
+    }*/
 
     public boolean jogoNaBiblioteca(Jogo jogo, ArrayList<Jogo> biblioteca){
 
@@ -1225,7 +1238,7 @@ public class Loja extends Bysvem{
 
         System.out.println("\n============ Sua Biblioteca ============\n");
         Usuario usuario = (Usuario) conta;
-        for(Jogo jogo : biblioteca(usuario)){
+        for(Jogo jogo : (usuario).biblioteca(this.registros)){
             System.out.println(contador + "-" + jogo.getNome());
             System.out.println(jogo.getDesc());
             System.out.println("-------------------------------------------------");
