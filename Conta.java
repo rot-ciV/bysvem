@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public abstract class Conta extends Bysvem{
+public abstract class Conta extends Entidade{
 
     private String nome;
     private int senha;

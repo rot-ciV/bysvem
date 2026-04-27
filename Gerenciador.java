@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public abstract class Gerenciador extends Bysvem{
+public abstract class Gerenciador extends Entidade{
 
     private static final String CAMINHO_CONTAS = "dados/contas.txt";
     private static final String CAMINHO_JOGOS = "dados/jogos.txt";

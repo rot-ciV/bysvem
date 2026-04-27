@@ -1,9 +1,6 @@
-
-import java.awt.image.RescaleOp;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class Registro extends Bysvem{
+public class Registro extends Entidade{
 
     private Jogo jogo;
     private Conta conta; 

@@ -1,15 +1,15 @@
 
-public abstract class Bysvem{
+public abstract class Entidade{
 
     protected int id;
     protected boolean foiSalvo;
 
-    public Bysvem() {
+    public Entidade() {
         this.id = 0;
         this.foiSalvo = false;
     }
 
-    public Bysvem(int id) {
+    public Entidade(int id) {
         this.id = id;
         this.foiSalvo = false;
     }

@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Loja extends Bysvem{
+public class Loja extends Entidade{
 
     // A loja que centraliza todas as informações: Todos os jogos disponíveis, todas as contas existentes e todos os registros já feitos 
     protected ArrayList<Jogo> jogos;

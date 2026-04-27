@@ -1,7 +1,7 @@
 
 import java.util.ArrayList;
 
-public class Jogo extends Bysvem{
+public class Jogo extends Entidade{
 
     private String nome;
     private String genero;
