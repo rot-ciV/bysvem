@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Usuario extends Conta{
     
@@ -70,6 +71,57 @@ public class Usuario extends Conta{
         }
 
         return false;
+    }
+
+    public void compraSaldo(ArrayList<Conta> contas, Usuario usuario, double valor, Scanner scn) {
+        double saldo = usuario.getSaldo();
+        System.out.printf("\nSaldo anterior: R$%.2f\nNovo saldo: R$%.2f\n\n", saldo, saldo + valor);
+        System.out.println("Deseja confirmar:\n1 - Confirmar\n2 - Voltar");
+
+        while (true) {
+           String opcaoString = "";
+           int opcao;
+           while(true){
+                opcaoString = scn.nextLine();
+                if(entradaInt(opcaoString)){
+                    opcao = Integer.parseInt(opcaoString);
+                    break;
+                }else{
+                    System.out.println("Opção inválida, digite 1 ou 2");
+                }
+           }
+
+            if (opcao == 1) {
+                double saldoAntigo = this.saldo;
+                for (int i = 0; i <contas.size(); i++) {
+                    if (contas.get(i).getId() == usuario.getId()) {
+                        ((Usuario) contas.get(i)).setSaldo(saldo + valor);
+                        usuario.setSaldo(saldo + valor);
+                        if(usuario.atualizar(contas)){
+                            System.out.println("Saldo atualizado com sucesso!");
+                        }else{
+                            System.out.println("Não foi possível atualizar o saldo.");
+                            ((Usuario) contas.get(i)).setSaldo(saldoAntigo);
+                            usuario.setSaldo(saldoAntigo);
+                        }
+                        return;
+                    }
+                }
+            } else if (opcao == 2) {
+                System.out.println("Operação cancelada.");
+                return;
+            } else {
+                System.out.println("Opção inválida. Tente novamente.");
+            }
+        }
+    }
+
+    public boolean entradaInt(String valor){
+        if(valor != null && valor.matches("-?\\d+")){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     @Override
