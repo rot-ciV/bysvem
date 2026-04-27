@@ -1,4 +1,4 @@
-
+package bysvem.modelo;
 public class Operador extends Conta{
     
     

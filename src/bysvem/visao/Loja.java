@@ -1,3 +1,6 @@
+package bysvem.visao;
+
+import bysvem.modelo.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -5,9 +8,9 @@ import java.util.Scanner;
 public class Loja{
 
     // A loja que centraliza todas as informações: Todos os jogos disponíveis, todas as contas existentes e todos os registros já feitos 
-    protected ArrayList<Jogo> jogos;
-    protected ArrayList<Conta> contas;
-    protected ArrayList<Registro> registros;
+    public ArrayList<Jogo> jogos;
+    public ArrayList<Conta> contas;
+    public ArrayList<Registro> registros;
 
     public Loja(){
 
@@ -330,12 +333,13 @@ public class Loja{
                 if(entradaInt(opcaoString)){
                     op = Integer.parseInt(opcaoString);
                 }
-            
+
                 switch (op){
 
                     case 1:
                         //jogosDev(conta);
-                        ((Desenvolvedor)conta).jogosDev(this.jogos, this, scn);  
+                        ((Desenvolvedor)conta).jogosDev(this.jogos, this, scn);
+
                         break;
 
                     case 2:    
@@ -532,9 +536,11 @@ public class Loja{
                 while(!voltarLista){
 
                     imprimirJogo(escolhido);
+                    
 
                     if(conta instanceof Operador){
 
+                        imprimirDadosJogo(escolhido);
                         while (true) { 
                             System.out.println("\nPara voltar, digite 1");
                             int resposta = -1;
@@ -674,6 +680,22 @@ public class Loja{
         System.out.println("\nDesenvolvedora: " + escolhido.getDesenvolvedora());
         System.out.println("Gênero: " + escolhido.getGenero());
         System.out.println("\nDescrição: " + escolhido.getDesc());
+    }
+
+    public void imprimirDadosJogo(Jogo escolhido){
+
+        int totalCompras = 0;
+        double receita = 0;
+        for(int i = 0; i < registros.size(); i++){
+
+            if(registros.get(i).getJogo().getId() == escolhido.getId()){
+                totalCompras++;
+                receita += escolhido.getPreco();
+            }
+        }
+
+        System.out.println("\nTotal de vendas: "+ totalCompras);
+        System.out.println("\nTotal de receita: R$" + receita);
     }
 
     public boolean compradeJogo(Conta conta, Jogo escolhido){

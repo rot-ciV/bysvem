@@ -19,4 +19,3 @@ USR;9439;Ronaldo;123;ronaldo@gmail.com;548.7600000000002;false
 USR;9465;Luisa;123;luisa@gmail.com;150.0;false
 USR;5925;João;123;joao@gmail.com;449.11;false
 USR;7363;Olisko;242424;olisogames@gmail.com;25.5;false
-DEV;7530;1234;1234;teste@gmail.com;L;false

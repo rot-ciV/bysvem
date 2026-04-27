@@ -1,3 +1,7 @@
+package bysvem;
+
+import bysvem.modelo.*;
+import bysvem.visao.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 public abstract class Programa{

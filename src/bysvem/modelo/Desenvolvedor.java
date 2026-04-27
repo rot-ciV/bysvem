@@ -1,4 +1,6 @@
+package bysvem.modelo;
 
+import bysvem.visao.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -91,6 +93,7 @@ public class Desenvolvedor extends Conta{
             if(escolha >= 1 && escolha <= jogosDoDev.size()){
                 Jogo escolhido = jogosDoDev.get(escolha - 1);
                 loja.imprimirJogo(escolhido);
+                loja.imprimirDadosJogo(escolhido);
 
                 System.out.println("\nAperte enter para voltar");
                 //scn.nextLine();

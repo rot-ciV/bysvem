@@ -1,4 +1,6 @@
+package bysvem.modelo;
 
+import bysvem.visao.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
