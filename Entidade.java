@@ -1,5 +1,7 @@
 
-public abstract class Entidade{
+import java.util.ArrayList;
+
+public abstract class Entidade<T>{
 
     protected int id;
     protected boolean foiSalvo;
@@ -23,4 +25,29 @@ public abstract class Entidade{
     public String toString(){
         return String.format("\nId: %d, Foi Salvo: %b", id, foiSalvo);
     }
+
+    public boolean salvar(ArrayList<T> lista) {
+        if (foiSalvo) return false;
+        foiSalvo = true;
+        return true;
+    }
+
+    public boolean atualizar(ArrayList<T> lista) {
+        if (!foiSalvo) return false;
+        return true;
+    }
+
+    public boolean apagar(int id, ArrayList<T> lista) {
+        if (!foiSalvo) return false;
+        foiSalvo = false;
+        return true;    
+    }
+
+    public boolean carregar(int id, ArrayList<T> lista) {
+        this.id = id;
+        foiSalvo = true;
+        return true;
+    }
+
+    public abstract ArrayList<T> carregarTodos();  
 }

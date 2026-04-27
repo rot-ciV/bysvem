@@ -2,16 +2,15 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Loja extends Entidade{
+public class Loja{
 
     // A loja que centraliza todas as informações: Todos os jogos disponíveis, todas as contas existentes e todos os registros já feitos 
     protected ArrayList<Jogo> jogos;
     protected ArrayList<Conta> contas;
     protected ArrayList<Registro> registros;
 
-    public Loja(int id){
+    public Loja(){
 
-        super(id);
         this.jogos = new ArrayList<>();
         this.contas = new ArrayList<>();
         this.registros = new ArrayList<>();
@@ -299,9 +298,9 @@ public class Loja extends Entidade{
                             //MUDEI
                             if(opcao > 0 && opcao <= jogos.size()){
 
-                                int idAlvo = jogos.get(opcao - 1).getId();
+                                Jogo jogoSelecionado = jogos.get(opcao - 1);
 
-                                if(Jogo.apagar(idAlvo, jogos)){
+                                if(jogoSelecionado.apagar(jogoSelecionado.getId(), jogos)){
                                     System.out.println("\nRemoção executada com sucesso!");
                                 }else{
                                     System.out.println("\nErro: Não foi possível apagar o jogo");
@@ -481,7 +480,7 @@ public class Loja extends Entidade{
                             }
                         }
                         if(choose == 1){
-                            if(Conta.apagar(conta.getId(), contas)){
+                            if(contas.get(0).apagar(conta.getId(), contas)){
                                 System.out.print("Escreva o nome da sua empresa: ");
                                 String dev_empresa = scn.nextLine();
                                 Conta nova_conta = criaDesenvolvedor(conta.getNome(), conta.getSenha(), conta.getEmail(), dev_empresa);
@@ -664,15 +663,7 @@ public class Loja extends Entidade{
     
     public void Perfil_da_Conta(Conta conta){
         System.out.println("\n================ Perfil ================");
-        System.out.println("Nome do perfil: " + conta.getNome());
-        System.out.println("Senha: " + conta.getSenha());
-        if(conta instanceof Usuario){
-            Usuario banker = (Usuario) conta;
-            System.out.printf("Saldo: R$%.2f\n", banker.getSaldo());
-        } else if(conta instanceof Desenvolvedor){
-            Desenvolvedor companie = (Desenvolvedor) conta;
-            System.out.println("Empresa: " + companie.getEmpresa());
-        }
+        System.out.println(conta.toString());
         System.out.println("Aperte enter para voltar.");
         //scn.nextLine();
         scn.nextLine();
@@ -854,4 +845,5 @@ public class Loja extends Entidade{
             return false;
         }
     }
+
 }

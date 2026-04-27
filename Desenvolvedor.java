@@ -1,5 +1,7 @@
+
 import java.util.ArrayList;
 import java.util.Scanner;
+
 
 public class Desenvolvedor extends Conta{
 
@@ -147,7 +149,7 @@ public class Desenvolvedor extends Conta{
                 }
                 
                 //MUDEI
-                return Jogo.apagar(jogosDoDev.get(res - 1).getId(), jogos);
+                return jogos.get(0).apagar(jogosDoDev.get(res - 1).getId(), jogos);
                 
             } else {
                 System.out.println("Número inválido. Tente novamente ou digite 0 para cancelar.");
@@ -207,7 +209,7 @@ public class Desenvolvedor extends Conta{
 
     @Override
     public String toString(){
-        return String.format("\n%s, Empresa: %s", super.toString(), empresa);
+        return String.format("\n%s\nEmpresa: %s", super.toString(), empresa);
     }
 
 }

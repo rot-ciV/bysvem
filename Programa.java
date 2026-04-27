@@ -13,7 +13,7 @@ public abstract class Programa{
     }
 
     public static void main(String[] args){
-        Loja loja = new Loja(1);
+        Loja loja = new Loja();
         
         Jogo auxJogo = new Jogo(0, "", "", "", 0.0, "");
         loja.jogos = auxJogo.carregarTodos();

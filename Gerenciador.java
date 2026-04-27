@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -5,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public abstract class Gerenciador extends Entidade{
+public abstract class Gerenciador{
 
     private static final String CAMINHO_CONTAS = "dados/contas.txt";
     private static final String CAMINHO_JOGOS = "dados/jogos.txt";

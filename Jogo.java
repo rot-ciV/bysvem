@@ -1,7 +1,8 @@
 
+
 import java.util.ArrayList;
 
-public class Jogo extends Entidade{
+public class Jogo extends Entidade<Jogo>{
 
     private String nome;
     private String genero;
@@ -63,7 +64,7 @@ public class Jogo extends Entidade{
         return true;
     }
 
-    public static boolean apagar(int id, ArrayList<Jogo> listaJogos){
+    public boolean apagar(int id, ArrayList<Jogo> listaJogos){
 
         for(int i = 0; i < listaJogos.size(); i++){
 
@@ -101,6 +102,7 @@ public class Jogo extends Entidade{
         return false;
     }
 
+    @Override
     public ArrayList<Jogo> carregarTodos() {
 
         ArrayList<Jogo> jogos = Gerenciador.carregaJogos();

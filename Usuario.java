@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -126,7 +127,7 @@ public class Usuario extends Conta{
 
     @Override
     public String toString(){
-        return String.format("\n%s, Saldo: %ff", super.toString(), saldo);
+        return String.format("\n%s\nSaldo: %.2f", super.toString(), saldo);
     }
 
 }

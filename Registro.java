@@ -1,6 +1,7 @@
+
 import java.util.ArrayList;
 
-public class Registro extends Entidade{
+public class Registro extends Entidade<Registro>{
 
     private Jogo jogo;
     private Conta conta; 
@@ -26,6 +27,7 @@ public class Registro extends Entidade{
     public Conta getConta() { return conta; }
     public double getHorasJogadas() { return horasJogadas; }
 
+    @Override
     public boolean salvar(ArrayList<Registro> listaRegistros){
 
         if(this.foiSalvo){
@@ -38,6 +40,7 @@ public class Registro extends Entidade{
         return true;
     }
 
+    @Override
     public boolean atualizar(ArrayList<Registro> listaRegistros){
 
         if(!this.foiSalvo){
@@ -48,7 +51,8 @@ public class Registro extends Entidade{
         return true;
     }
 
-    public static boolean apagar(int id, ArrayList<Registro> listaRegistros){
+    @Override
+    public boolean apagar(int id, ArrayList<Registro> listaRegistros){
 
         for(int i = 0; i < listaRegistros.size(); i++){
 
@@ -65,6 +69,7 @@ public class Registro extends Entidade{
         return false;
     }
 
+    @Override
     public boolean carregar(int id, ArrayList<Registro> listaRegistros){
 
         for(int i = 0; i < listaRegistros.size(); i++){
@@ -99,5 +104,10 @@ public class Registro extends Entidade{
     public String toString(){
         return String.format("\n%s, Jogo: %s, Conta: %s", super.toString(), jogo.toString(), conta.toString());
     }
-    
+
+    @Override
+    public ArrayList<Registro> carregarTodos() {
+        return new ArrayList<>(); // ou lança erro
+    }
+
 }

@@ -1,7 +1,8 @@
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public abstract class Conta extends Entidade{
+public abstract class Conta extends Entidade<Conta>{
 
     private String nome;
     private int senha;
@@ -49,7 +50,7 @@ public abstract class Conta extends Entidade{
         return true;
     }
 
-    public static boolean apagar(int id, ArrayList<Conta> listaContas){
+    public boolean apagar(int id, ArrayList<Conta> listaContas){
 
         for(int i = 0; i < listaContas.size(); i++){
 
@@ -232,6 +233,8 @@ public abstract class Conta extends Entidade{
 
     @Override
     public String toString(){
-        return String.format("\n%s, Nome: %s, Senha: %d, Email: %s, Ban: %b", super.toString(), nome, senha, email, ban);
+        String nome =("Nome do perfil: " + getNome());
+        String senha = ("Senha: " + getSenha());
+        return String.format("\n%s\n%s", nome, senha);
     }
 }
