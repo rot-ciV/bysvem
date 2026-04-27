@@ -49,7 +49,7 @@ public class Registro extends Bysvem{
         return true;
     }
 
-    public boolean apagar(int id, ArrayList<Registro> listaRegistros){
+    public static boolean apagar(int id, ArrayList<Registro> listaRegistros){
 
         for(int i = 0; i < listaRegistros.size(); i++){
 

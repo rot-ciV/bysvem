@@ -63,7 +63,7 @@ public class Jogo extends Bysvem{
         return true;
     }
 
-    public boolean apagar(int id, ArrayList<Jogo> listaJogos){
+    public static boolean apagar(int id, ArrayList<Jogo> listaJogos){
 
         for(int i = 0; i < listaJogos.size(); i++){
 

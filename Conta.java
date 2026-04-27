@@ -48,7 +48,7 @@ public abstract class Conta extends Bysvem{
         return true;
     }
 
-    public boolean apagar(int id, ArrayList<Conta> listaContas){
+    public static boolean apagar(int id, ArrayList<Conta> listaContas){
 
         for(int i = 0; i < listaContas.size(); i++){
 

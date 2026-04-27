@@ -211,8 +211,11 @@ public class Loja extends Bysvem{
 
                                         if(banir == 1){
                                             contas.get(i).setBan(false);
-                                            Gerenciador.salvarContas(contas);
-                                            System.out.println("O usuário(a) " + contas.get(i).getNome() + " foi desbanido(a) com sucesso!");
+                                            //MUDEI
+                                            if(contas.get(i).atualizar(contas)){
+                                                System.out.println("O usuário(a) " + contas.get(i).getNome() + " foi desbanido(a) com sucesso!");
+                                            }
+                                            
                                             flag = false;
                                             break;
                                         }else if(banir == 2){
@@ -225,8 +228,11 @@ public class Loja extends Bysvem{
                                         }
                                         }
                                         contas.get(i).setBan(true);
-                                        Gerenciador.salvarContas(contas);
-                                        System.out.println("Usuário " + contas.get(i).getNome() + " foi banido(a) com sucesso!");
+                                        //MUDEI
+                                        if(contas.get(i).atualizar(contas)){
+                                            System.out.println("Usuário " + contas.get(i).getNome() + " foi banido(a) com sucesso!");
+                                        }
+                                        
                                         flag = false;
                                         break;
                                     }
@@ -294,8 +300,11 @@ public class Loja extends Bysvem{
 
                                         if(banir == 1){
                                             contas.get(i).setBan(false);
-                                            Gerenciador.salvarContas(contas);
-                                            System.out.println("Desenvolvedor(a) " + contas.get(i).getNome() + " foi desbanido(a) com sucesso!");
+                                            //MUDEI
+                                            if(contas.get(i).atualizar(contas)){
+                                                System.out.println("Desenvolvedor(a) " + contas.get(i).getNome() + " foi desbanido(a) com sucesso!");
+                                            }
+                                            
                                             flag = false;
                                             break;
                                         }else if(banir == 2){
@@ -308,8 +317,11 @@ public class Loja extends Bysvem{
                                         }
                                         }
                                         contas.get(i).setBan(true);
-                                        Gerenciador.salvarContas(contas);
-                                        System.out.println("Desenvolvedor(a) " + contas.get(i).getNome() + " foi banido(a) com sucesso!");
+                                        //MUDEI
+                                        if(contas.get(i).atualizar(contas)){
+                                            System.out.println("Desenvolvedor(a) " + contas.get(i).getNome() + " foi banido(a) com sucesso!");
+                                        }
+                                        
                                         flag = false;
                                         break;
                                     }
@@ -334,15 +346,21 @@ public class Loja extends Bysvem{
                                     System.out.println("Opção inválida, digite uma opção válida.");
                                 }
                             }
-                            for(int i = 0; i<jogos.size(); i++){
-                                if(i == opcao - 1){
-                                    jogos.remove(i);
-                                    Gerenciador.salvarJogos(jogos);
-                                    jogos = Gerenciador.carregaJogos();
-                                }
-                            }
-                            System.out.println("\nRemoção executada com sucesso!");
+                            //MUDEI
+                            if(opcao > 0 && opcao <= jogos.size()){
 
+                                int idAlvo = jogos.get(opcao - 1).getId();
+
+                                if(Jogo.apagar(idAlvo, jogos)){
+                                    System.out.println("\nRemoção executada com sucesso!");
+                                }else{
+                                    System.out.println("\nErro: Não foi possível apagar o jogo");
+                                }
+
+                            }else{
+
+                                System.out.println("Opção inválida."); 
+                            }
                         }
                         break;
 
@@ -508,11 +526,13 @@ public class Loja extends Bysvem{
         System.out.print("Escreva uma descrição do jogo: ");
         String miniDisc = scn.nextLine();
         Jogo jogo = ((Desenvolvedor)conta).criaJogo(id, nomeJogo, genero, preco, miniDisc);
-        jogos.add(jogo);
-        Gerenciador.salvarJogos(jogos);
-        jogos = Gerenciador.carregaJogos();
-        System.out.println("\nSeu jogo foi criado com sucesso!");
-        return;
+
+        //MUDEI
+        if(jogo.salvar(jogos)){
+            System.out.println("\nSeu jogo foi criado com sucesso!");
+        }else{
+            System.out.println("\nHouve um erro ao criar o jogo.");
+        }
     }
 
     public boolean removerJogoDev(Conta conta){
@@ -555,14 +575,10 @@ public class Loja extends Bysvem{
                     System.out.println("\nAção cancelada com sucesso!");
                     return false;
                 }
-                Jogo jogoRemover = jogosDoDev.get(res - 1);
-
-                jogos.remove(jogoRemover);
-
-                Gerenciador.salvarJogos(jogos);
-                jogos = Gerenciador.carregaJogos();
-
-                return true;
+                
+                //MUDEI
+                return Jogo.apagar(jogos.get(res - 1).getId(), jogos);
+                
             } else {
                 System.out.println("Número inválido. Tente novamente ou digite 0 para cancelar.");
             }
@@ -628,6 +644,7 @@ public class Loja extends Bysvem{
                                     conta.setNome(nome);
                                 }
                             }
+                            //MUDEI
                             Gerenciador.salvarContas(contas);
                             salvar = true;
                             break;
@@ -1134,7 +1151,7 @@ public class Loja extends Bysvem{
                         ((Usuario) contas.get(i)).setSaldo(saldo + valor);
                         usuario.setSaldo(saldo + valor);
                         Gerenciador.salvarContas(contas);
-                        contas.get(i).setFoisalvo(true);
+                        //contas.get(i).setFoisalvo(true);
                         System.out.println("Saldo atualizado com sucesso!");
                         return;
                     }
@@ -1212,11 +1229,11 @@ public class Loja extends Bysvem{
                 contas.get(i).setEmail(novoEmail);
                 conta.setEmail(novoEmail);
                 Gerenciador.salvarContas(contas);
-                contas.get(i).setFoisalvo(true);
+                //contas.get(i).setFoisalvo(true);
                 break;
             }
         }
-        conta.setFoisalvo(false);
+        //conta.setFoisalvo(false);
     }
 
     public Usuario criaUsuario(String nome, int senha, String email){

@@ -14,9 +14,16 @@ public abstract class Programa{
 
     public static void main(String[] args){
         Loja loja = new Loja(1);
-        loja.jogos = Gerenciador.carregaJogos();
-        loja.contas = Gerenciador.carregaContas();
-        loja.registros = Gerenciador.CarregaRegistros(loja.jogos, loja.contas);
+        
+        Jogo auxJogo = new Jogo(0, "", "", "", 0.0, "");
+        loja.jogos = auxJogo.carregarTodos();
+        
+        Conta auxConta = new Usuario(0, "", 0, "", 0.0, false);
+        loja.contas = auxConta.carregarTodos();
+
+        Registro auxRegistro = new Registro(0, null, null, 0);
+        loja.registros = auxRegistro.carregarTodos(loja.contas, loja.jogos);
+
         Scanner leitor = new Scanner(System.in);
         System.out.println("================ Olá, seja muito bem vindo ao Bysvem! ================\n");
         while(true){
