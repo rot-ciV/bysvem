@@ -110,8 +110,57 @@ public class Desenvolvedor extends Conta{
     }
 
     /*MÉTODO ERA DE LOJA, MAS AQUI FAZ MAIS SENTIDO */
-    public boolean removerJogoDev(ArrayList<Jogo> jogos, Loja loja, Scanner scn){
+        public boolean removerJogoDev(ArrayList<Jogo> jogos, Loja loja, Scanner scn){
 
+            ArrayList<Jogo> jogosDoDev = new ArrayList<>();
+
+            for (Jogo jogo : jogos) {
+                if (jogo.getDesenvolvedora().equalsIgnoreCase(getEmpresa())) {
+                    jogosDoDev.add(jogo);
+                }
+            }
+
+            if(jogosDoDev.isEmpty()){
+                System.out.println("Você não possui jogos cadastrados.");
+                return false;
+            }
+
+            for (int i = 0; i < jogosDoDev.size(); i++) {
+                System.out.println((i+1) + " - " + jogosDoDev.get(i).getNome());
+            }
+            System.out.println("Digite o número do jogo que deseja remover, ou 0 para voltar");
+
+            while(true){
+                //int res = scn.nextInt();
+                int res = -1;
+                String resString;
+                resString = scn.nextLine();
+                if(loja.entradaInt(resString)){
+                    res = Integer.parseInt(resString);
+                }
+                if(res == 0){
+                    return false;
+                }
+
+                if(res >= 1 && res <= jogosDoDev.size()){
+                    System.out.println("Tem certeza que deseja remover esse jogo? Ao confirmar não tem como recuperar.");
+                    System.out.println("Digite 0 se quiser retornar, ou aperte enter para continuar");
+                    String remocao = scn.nextLine();
+                    if(remocao.equals("0")){
+                        System.out.println("\nAção cancelada com sucesso!");
+                        return false;
+                    }
+                    
+                    return jogos.get(0).apagar(jogosDoDev.get(res - 1).getId(), jogos);
+                    
+                } else {
+                    System.out.println("Número inválido. Tente novamente ou digite 0 para cancelar.");
+                }
+            }
+        }
+
+    public boolean alterarJogosDev(ArrayList<Jogo> jogos, Loja loja, Scanner scn){
+    
         ArrayList<Jogo> jogosDoDev = new ArrayList<>();
 
         for (Jogo jogo : jogos) {
@@ -128,43 +177,94 @@ public class Desenvolvedor extends Conta{
         for (int i = 0; i < jogosDoDev.size(); i++) {
             System.out.println((i+1) + " - " + jogosDoDev.get(i).getNome());
         }
-        System.out.println("Digite o número do jogo que deseja remover, ou 0 para voltar");
 
+        System.out.println("Escolha um jogo para editar (0 para voltar):");
+
+        int res = -1;
+        String resString;
+        resString = scn.nextLine();
+        if(loja.entradaInt(resString)){
+            res = Integer.parseInt(resString);
+        }
+
+        if(loja.entradaInt(resString)){
+            res = Integer.parseInt(resString);
+        }
+
+        if(res == 0) return false;
+
+        if(res < 1 || res > jogosDoDev.size()){
+            System.out.println("Opção inválida.");
+            return false;
+        }
+
+        Jogo jogo = jogosDoDev.get(res - 1);
+        String new_name = jogo.getNome();
+        String new_desc = jogo.getDesc();
+        Double new_price = jogo.getPreco();
         while(true){
-            //int res = scn.nextInt();
-            int res = -1;
-            String resString;
-            resString = scn.nextLine();
-            if(loja.entradaInt(resString)){
-                res = Integer.parseInt(resString);
-            }
-            if(res == 0){
-                return false;
-            }
+            System.out.println("\n============= Editando: " + jogo.getNome() + " =============");
+            System.out.println("1 - Alterar nome");
+            System.out.println("2 - Alterar descrição");
+            System.out.println("3 - Alterar preço");
+            System.out.println("4 - Salvar e sair");
+            System.out.println("5 - Cancelar");
 
-            if(res >= 1 && res <= jogosDoDev.size()){
-                System.out.println("Tem certeza que deseja remover esse jogo? Ao confirmar não tem como recuperar.");
-                System.out.println("Digite 0 se quiser retornar, ou aperte enter para continuar");
-                String remocao = scn.nextLine();
-                if(remocao.equals("0")){
-                    System.out.println("\nAção cancelada com sucesso!");
+            int op = -1;
+            String opString = scn.nextLine();
+
+            if(loja.entradaInt(opString)){
+                op = Integer.parseInt(opString);
+            }
+            
+
+            switch(op){
+                case 1:
+                    System.out.print("Novo nome: ");
+                    new_name = scn.nextLine();
+                    break;
+
+                case 2:
+                    System.out.print("Nova descrição: ");
+                    new_desc = scn.nextLine();
+                    break;
+
+                case 3:
+                    System.out.print("Novo preço: ");
+                    String precoStr = scn.nextLine();
+                    if(loja.entradaDouble(precoStr)){
+                        new_price = Double.parseDouble(precoStr);
+                    }else{
+                        System.out.println("Preço inválido.");
+                    }
+                    break;
+
+                case 4:
+                    jogo.setNome(new_name);
+                    jogo.setDesc(new_desc);
+                    jogo.setPreco(new_price);
+                    if(jogo.atualizar(jogos)){
+                        System.out.println("Alteração salva com sucesso!");
+                        return true;
+                    }else{
+                        System.out.println("Erro ao atualizar.");
+                        return false;
+                    }
+
+                case 5:
+                    System.out.println("Alteração cancelada.");
                     return false;
-                }
-                
-                //MUDEI
-                return jogos.get(0).apagar(jogosDoDev.get(res - 1).getId(), jogos);
-                
-            } else {
-                System.out.println("Número inválido. Tente novamente ou digite 0 para cancelar.");
+
+                default:
+                    System.out.println("Opção inválida.");
             }
         }
     }
 
-    /*MÉTODO ERA DA LOJA, AQUI FAZ MAIS SENTIDO */
     public void gerenciarJogosDev(ArrayList<Jogo> jogos, Loja loja, Scanner scn){
         while(true){
             System.out.println("\n================ Configuração ================");
-            System.out.println("1 - Adicionar jogo\n2 - Remover jogo\n3 - Voltar");
+            System.out.println("1 - Adicionar jogo\n2 - Remover jogo\n3 - Alterar Jogo\n4 - Voltar");
             System.out.print("\nSelecione uma opção: ");
             int opc = -1;
             String opcaoString = scn.nextLine();
@@ -173,9 +273,8 @@ public class Desenvolvedor extends Conta{
             }
             if(opc == 1){
                 devCriaJogo(jogos, loja, scn);
-                break;
+                continue;
             }else if(opc == 2){
-                //boolean removeu = removerJogoDev(conta);  ERA USADO QUANDO O MÉTODO ESTAVA NESSA CLASSE LOJA
                 boolean removeu = removerJogoDev(jogos, loja, scn);
                 if(removeu){
                     System.out.println("Jogo removido com sucesso!");
@@ -183,10 +282,13 @@ public class Desenvolvedor extends Conta{
                 }else{
                     System.out.println("Nenhum jogo foi removido!");
                 }
-                break;
+                continue;
             }else if(opc == 3){
+                alterarJogosDev(jogos, loja, scn);
+                continue;
+            }else if(opc == 4){
                 return;
-            }else{
+            } else{
                 System.out.println("\nOpção inválida\n");
             }
         }

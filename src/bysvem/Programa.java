@@ -36,13 +36,6 @@ public abstract class Programa{
             System.out.println("1)Entrar na loja        2)Sair\n");
             int menu_option = -1; 
 
-            /*try {
-                menu_option = leitor.nextInt();
-                leitor.nextLine();
-
-            } catch (Exception e) {
-                leitor.nextLine(); //limpar o buffer
-            }*/
             String menu_optionString;
             menu_optionString = leitor.nextLine();
             if(loja.entradaInt(menu_optionString)){
@@ -87,7 +80,7 @@ public abstract class Programa{
                             if(flag){
                                 System.out.println("O limite de tentativas foi excedido, tente novamente mais tarde");
                             }
-                            break;//aqui ta saindo da loja e voltando para o menu principal, será que fica melhor sair da loja e fechar o aplicativo?
+                            break;
                         } else{
                             System.out.println("Não foi encontrada uma conta com esse email, tente novamente.");
                             break;
