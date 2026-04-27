@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Desenvolvedor extends Conta{
 
@@ -17,6 +18,24 @@ public class Desenvolvedor extends Conta{
         Jogo novoJogo = new Jogo(id, nome, genero, this.empresa, preco, disc);
         
         return novoJogo; 
+    }
+
+    @Override
+    public boolean carregar(int id, ArrayList<Conta> listaContas){
+
+        for(int i = 0; i < listaContas.size(); i++){
+
+            if(id == listaContas.get(i).getId()){
+
+                super.carregar(id, listaContas);
+                Desenvolvedor carregado = (Desenvolvedor) listaContas.get(i);
+                this.empresa = carregado.getEmpresa();
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Usuario extends Conta{
     
     private double saldo;
@@ -10,6 +12,24 @@ public class Usuario extends Conta{
 
     public void setSaldo(double saldo) { this.saldo = saldo; }
     public double getSaldo() { return this.saldo; }
+
+    @Override
+    public boolean carregar(int id, ArrayList<Conta> listaContas){
+
+        for(int i = 0; i < listaContas.size(); i++){
+
+            if(id == listaContas.get(i).getId()){
+
+                super.carregar(id, listaContas);
+                Usuario carregado = (Usuario) listaContas.get(i);
+                this.saldo = carregado.getSaldo();
+
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     @Override
     public String toString(){

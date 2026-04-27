@@ -1,3 +1,6 @@
+
+import java.util.ArrayList;
+
 public class Jogo extends Bysvem{
 
     private String nome;
@@ -37,6 +40,70 @@ public class Jogo extends Bysvem{
     public String getDesenvolvedora() { return this.desenvolvedora; }
     public double getPreco() { return this.preco; }
     public String getDesc() { return this.desc; }
+
+    public boolean salvar(ArrayList<Jogo> listaJogos){
+
+        if(this.foiSalvo){
+            return false;
+        }
+
+        listaJogos.add(this);
+        this.setFoiSalvo(true);
+        Gerenciador.salvarJogos(listaJogos);
+        return true;
+    }
+    
+    public boolean atualizar(ArrayList<Jogo> listaJogos){
+
+        if(!this.foiSalvo){
+            return false;
+        }
+
+        Gerenciador.salvarJogos(listaJogos);
+        return true;
+    }
+
+    public boolean apagar(int id, ArrayList<Jogo> listaJogos){
+
+        for(int i = 0; i < listaJogos.size(); i++){
+
+            if(id == listaJogos.get(i).getId()){
+
+                Jogo apagado = listaJogos.get(i);
+                apagado.setFoiSalvo(false);
+                listaJogos.remove(i);
+                Gerenciador.salvarJogos(listaJogos);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean carregar(int id, ArrayList<Jogo> listaJogos){
+
+        for(int i = 0; i < listaJogos.size(); i++){
+
+            if(id == listaJogos.get(i).getId()){
+
+                this.id = listaJogos.get(i).getId();
+                this.nome = listaJogos.get(i).getNome();
+                this.genero = listaJogos.get(i).getGenero();
+                this.desenvolvedora = listaJogos.get(i).getDesenvolvedora();
+                this.preco = listaJogos.get(i).getPreco();
+                this.desc = listaJogos.get(i).getDesc();
+                this.setFoiSalvo(true);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public ArrayList<Jogo> carregarTodos() {
+        return Gerenciador.carregaJogos();
+    }
 
     @Override
     public String toString(){

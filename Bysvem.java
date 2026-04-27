@@ -1,3 +1,4 @@
+
 public abstract class Bysvem{
 
     protected int id;
@@ -5,19 +6,16 @@ public abstract class Bysvem{
 
     public Bysvem() {
         this.id = 0;
+        this.foiSalvo = false;
     }
 
     public Bysvem(int id) {
         this.id = id;
-    }
-
-    public void salvar(){
-
-        this.foiSalvo = true;
+        this.foiSalvo = false;
     }
 
     public void setId(int id){ this.id = id; }
-    public void setFoisalvo(boolean foiSalvo) { this.foiSalvo = foiSalvo; }
+    public void setFoiSalvo(boolean foiSalvo) { this.foiSalvo = foiSalvo; }
 
     public int getId() { return this.id; }
     public boolean getFoiSalvo() { return  this.foiSalvo; } 
