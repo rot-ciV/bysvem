@@ -102,7 +102,15 @@ public class Jogo extends Bysvem{
     }
 
     public ArrayList<Jogo> carregarTodos() {
-        return Gerenciador.carregaJogos();
+
+        ArrayList<Jogo> jogos = Gerenciador.carregaJogos();
+
+        for(Jogo j : jogos){
+
+            j.setFoiSalvo(true);
+        }
+
+        return jogos;
     }
 
     @Override

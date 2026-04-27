@@ -637,7 +637,7 @@ public class Loja extends Bysvem{
                             opcao = Integer.parseInt(opcaoString);
                         }
                         if(opcao == 1){
-                            System.out.println("Seu nome foi alterado com sucesso!");
+                            
                             for(int i = 0; i < contas.size(); i++){
                                 if(contas.get(i).getId() == conta.getId()){
                                     contas.get(i).setNome(nome);
@@ -645,7 +645,12 @@ public class Loja extends Bysvem{
                                 }
                             }
                             //MUDEI
-                            Gerenciador.salvarContas(contas);
+                            if(conta.atualizar(contas)){
+                                System.out.println("Seu nome foi alterado com sucesso!");
+                            }else{
+                                System.out.println("Não foi possível alterar o nome do usuário");
+                            }
+
                             salvar = true;
                             break;
                         }else if (opcao == 0){
@@ -711,14 +716,20 @@ public class Loja extends Bysvem{
                         opcao = Integer.parseInt(opcaoString);
                     }
                     if(opcao == 1){
-                        System.out.println("Sua senha foi alterada com sucesso!");
+                        
                         for(int i = 0; i < contas.size(); i++){
                             if(conta.getId() == contas.get(i).getId()){
                                 contas.get(i).setSenha(senha);
                                 conta.setSenha(senha);
                             }
                         }
-                        Gerenciador.salvarContas(contas);
+                        //MUDEI
+                        if(conta.atualizar(contas)){
+                            System.out.println("Sua senha foi alterada com sucesso!");
+                        }else{
+                            System.out.println("Não foi possível alterar a senha do usuário");
+                        }
+
                         salvar = true;
                         break;
                     }else if(opcao == 2){
@@ -776,8 +787,12 @@ public class Loja extends Bysvem{
                             }
                         }
                         if(opcao == 1){
-                            System.out.println("Seu email foi alterado com sucesso!");
-                            alteraEmail(conta, email_novo);
+                            
+                            if(alteraEmail(conta, email_novo)){
+                                System.out.println("Seu email foi alterado com sucesso!");
+                            }else{
+                                System.out.println("Não foi possível alterar o email.");
+                            }
                         }else if(opcao == 2){
                             System.out.println("O email não foi alterado.");
                             break;
@@ -808,15 +823,22 @@ public class Loja extends Bysvem{
                             }
                         }
                         if(choose == 1){
-                            ApagaUsuario(conta);
-                            System.out.print("Escreva o nome da sua empresa: ");
-                            String dev_empresa = scn.nextLine();
-                            Conta nova_conta = criaDesenvolvedor(conta.getNome(), conta.getSenha(), conta.getEmail(), dev_empresa);
-                            System.out.println("\nSua conta foi alterada para desenvolvedor com sucesso!");
-                            System.out.println("\nVocê será agora redirecionado ao menu principal e já poderá acessar a nossa loja com a conta de desenvolvedor.\n");
-                            conta = nova_conta;
-                            alteração_dev = true;
-                            condition = false;
+                            //MUDEI (Também deletei a função apagaUsuario)
+                            if(Conta.apagar(conta.getId(), contas)){
+                                System.out.print("Escreva o nome da sua empresa: ");
+                                String dev_empresa = scn.nextLine();
+                                Conta nova_conta = criaDesenvolvedor(conta.getNome(), conta.getSenha(), conta.getEmail(), dev_empresa);
+                                System.out.println("\nSua conta foi alterada para desenvolvedor com sucesso!");
+                                System.out.println("\nVocê será agora redirecionado ao menu principal e já poderá acessar a nossa loja com a conta de desenvolvedor.\n");
+                                conta = nova_conta;
+                                alteração_dev = true;
+                                condition = false;
+                            }else{
+                                System.out.println("\nNão foi possível aterar a sua conta para desenvolvedor.");
+                                alteração_dev = false;
+                                condition = false;
+                            }
+
                         }
                     } else if(conta instanceof Desenvolvedor || conta instanceof Operador){
                         condition = false;
@@ -1101,7 +1123,7 @@ public class Loja extends Bysvem{
 
         if (usuario.getSaldo() >= jogoComprado.getPreco()){
 
-            int id = criaId(1);
+            
             double novoSaldo = usuario.getSaldo() - jogoComprado.getPreco();
             for(int i = 0; i < contas.size(); i++){
                 if(contas.get(i).getId() == usuario.getId()){
@@ -1109,11 +1131,13 @@ public class Loja extends Bysvem{
                     ((Usuario)contas.get(i)).setSaldo(novoSaldo);
                 }
             }
-            Registro novoRegistro = new Registro(id, jogoComprado, usuario, 0.0);
-            this.registros.add(novoRegistro);
-            Gerenciador.salvarRegistro(registros);
+            //MUDEI
+            if(usuario.atualizar(contas)){
+                int id = criaId(1);
+                Registro novoRegistro = new Registro(id, jogoComprado, usuario, 0.0);
 
-            return true;
+                return novoRegistro.salvar(registros);
+            }
         }
 
         return false;
@@ -1146,13 +1170,19 @@ public class Loja extends Bysvem{
            }
 
             if (opcao == 1) {
+                double saldoAntigo = usuario.getSaldo();
                 for (int i = 0; i < this.contas.size(); i++) {
                     if (contas.get(i).getId() == usuario.getId()) {
                         ((Usuario) contas.get(i)).setSaldo(saldo + valor);
                         usuario.setSaldo(saldo + valor);
-                        Gerenciador.salvarContas(contas);
-                        //contas.get(i).setFoisalvo(true);
-                        System.out.println("Saldo atualizado com sucesso!");
+                        //MUDEI
+                        if(usuario.atualizar(contas)){
+                            System.out.println("Saldo atualizado com sucesso!");
+                        }else{
+                            System.out.println("Não foi possível atualizar o saldo.");
+                            ((Usuario) contas.get(i)).setSaldo(saldoAntigo);
+                            usuario.setSaldo(saldoAntigo);
+                        }
                         return;
                     }
                 }
@@ -1221,52 +1251,36 @@ public class Loja extends Bysvem{
         return false;
     }
 
-    public void alteraEmail(Conta conta, String novoEmail){
+    public boolean alteraEmail(Conta conta, String novoEmail){
 
         for(int i = 0; i < this.contas.size(); i++){
 
             if(contas.get(i).getId() == conta.getId()){        
                 contas.get(i).setEmail(novoEmail);
                 conta.setEmail(novoEmail);
-                Gerenciador.salvarContas(contas);
-                //contas.get(i).setFoisalvo(true);
-                break;
+                //MUDEI
+                return conta.atualizar(contas);
             }
         }
-        //conta.setFoisalvo(false);
+        return false;
     }
 
-    public Usuario criaUsuario(String nome, int senha, String email){
+    public boolean criaUsuario(String nome, int senha, String email){
 
         int id = criaId(0);
         Usuario novoUsuario = new Usuario(id, nome, senha, email, 0.0, false);
-        this.contas.add(novoUsuario);
-        Gerenciador.salvarContas(contas);
-        novoUsuario.foiSalvo = true;
-
-        return novoUsuario;
+        //MUDEI
+        return novoUsuario.salvar(contas);
     }
 
     public Desenvolvedor criaDesenvolvedor(String nome, int senha, String email, String empresa){
 
         int id = criaId(0);
         Desenvolvedor novoDesenvolvedor = new Desenvolvedor(id, nome, senha, email, empresa, false);
-        this.contas.add(novoDesenvolvedor);
-        Gerenciador.salvarContas(contas);
-        novoDesenvolvedor.foiSalvo = true;
+        //MUDEI
+        novoDesenvolvedor.salvar(contas);
 
         return novoDesenvolvedor;
-    }
-
-    public void ApagaUsuario(Conta conta){
-        ArrayList<Conta> contas = Gerenciador.carregaContas();
-
-        boolean removido = contas.removeIf(c -> c.getId() == conta.getId());
-
-        if (removido) {
-            Gerenciador.salvarContas(contas);
-            this.contas = Gerenciador.carregaContas();
-        }
     }
 
     public boolean entradaDouble(String valor){

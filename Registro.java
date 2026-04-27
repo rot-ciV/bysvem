@@ -1,4 +1,6 @@
 
+import java.awt.image.RescaleOp;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Registro extends Bysvem{
@@ -86,7 +88,14 @@ public class Registro extends Bysvem{
     }
 
     public ArrayList<Registro> carregarTodos(ArrayList<Conta> listaContas, ArrayList<Jogo> listaJogos) {
-        return Gerenciador.CarregaRegistros(listaJogos, listaContas);
+
+        ArrayList<Registro> registros =  Gerenciador.CarregaRegistros(listaJogos, listaContas);
+
+        for(Registro r : registros){
+            r.setFoiSalvo(foiSalvo);
+        }
+
+        return registros;
     }
 
     @Override

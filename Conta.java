@@ -86,7 +86,15 @@ public abstract class Conta extends Bysvem{
     }
 
     public ArrayList<Conta> carregarTodos() {
-        return Gerenciador.carregaContas();
+
+        ArrayList<Conta> contas = Gerenciador.carregaContas();
+
+        for(Conta c : contas){
+
+            c.setFoiSalvo(true);
+        }
+
+        return contas;
     }
 
     @Override

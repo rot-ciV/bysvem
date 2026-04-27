@@ -122,8 +122,12 @@ public abstract class Programa{
                                 System.out.println("Opção inválida, a senha só pode ter digitos.");
                             }
                         }
-                        loja.criaUsuario(nome, senha, email_novo); 
-                        System.out.println("\nConta criada com sucesso!\n");
+                        if(loja.criaUsuario(nome, senha, email_novo)){
+                            System.out.println("\nConta criada com sucesso!\n");
+                        }else{
+                            System.out.println("\nNão foi possível criar a conta.\n");
+                        }
+                        
                         break;
 
                     } else{

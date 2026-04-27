@@ -2,7 +2,7 @@ OP;1717;Victor;2580;victor.fagundes@bysvem.com;false
 DEV;4148;Notch;418;notch@mojang.com;Mojang Studios;false
 OP;2169;Bernardo;2141;resendebr21@gmail.com;false
 DEV;5117;Net Ease;123;netease@gmail.com;Net Ease;false
-DEV;8074;Riot;123;riotgames@gmail.com;Riot Games;false
+BAN_DEV;8074;Riot;123;riotgames@gmail.com;Riot Games;true
 DEV;8884;Valve;123;valve@gmail.com;Valve;false
 DEV;2555;Capcom;123;capcom@gmail.com;Capcom;false
 DEV;4726;Epic Games;123;epicgames@gmail.com;Epic Games;false
@@ -13,10 +13,9 @@ DEV;4666;Peak;123;peak@gmail.com;Team PEAK;false
 DEV;9563;Forza;123;forza@gmail.com;Playground Games;false
 DEV;1262;FromSoftware;123;from@gmail.com;FromSoftware;false
 DEV;9441;CD PROJECT;123;cd@gmail.com;CD PROJEKT RED;false
-USR;7981;Pedro;123;pedro@gmail.com;521.1;false
+BAN_USR;7981;Pedro;123;pedro@gmail.com;521.1;true
 USR;4916;Lucas;123;lucas@gmail.com;0.0;false
 USR;9439;Ronaldo;123;ronaldo@gmail.com;548.7600000000002;false
 USR;9465;Luisa;123;luisa@gmail.com;150.0;false
 USR;5925;João;123;joao@gmail.com;0.0;false
-
-
+USR;7363;Olisko;242424;olisogames@gmail.com;25.5;false
