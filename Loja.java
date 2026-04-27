@@ -577,7 +577,7 @@ public class Loja extends Bysvem{
                 }
                 
                 //MUDEI
-                return Jogo.apagar(jogos.get(res - 1).getId(), jogos);
+                return Jogo.apagar(jogosDoDev.get(res - 1).getId(), jogos);
                 
             } else {
                 System.out.println("Número inválido. Tente novamente ou digite 0 para cancelar.");
