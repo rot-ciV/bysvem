@@ -1016,7 +1016,7 @@ public class Loja extends Bysvem{
         System.out.println("Senha: " + conta.getSenha());
         if(conta instanceof Usuario){
             Usuario banker = (Usuario) conta;
-            System.out.println("Saldo: R$" + banker.getSaldo());
+            System.out.printf("Saldo: R$%.2f\n", banker.getSaldo());
         } else if(conta instanceof Desenvolvedor){
             Desenvolvedor companie = (Desenvolvedor) conta;
             System.out.println("Empresa: " + companie.getEmpresa());
