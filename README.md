@@ -20,3 +20,35 @@ Jogos, Estudantes, Programação e Trabalho Prático, porque não juntar tudo em
 Nesse projeto o intuito era aprender uma linguagem orientada à objetos, e nosso orientador deu algumas ideias como venda, locação, manutenção, consulta, etc.
 Sendo assim, juntando nossos gostos e especialidades, decidimos fazer um programa relacionado com venda, espelhando na existente loja eletrônica Steam.
 
+---
+
+## 🛠️ Dependências
+
+- [Java JDK 17+](https://www.oracle.com/java/technologies/downloads/)
+- [Apache Maven 3.6+](https://maven.apache.org/download.cgi)
+
+Para verificar se já estão instalados:
+
+```bash
+java -version
+mvn -version
+```
+
+---
+
+## 🚀 Como compilar e rodar
+
+
+Compile o projeto:
+
+```bash
+mvn compile
+```
+
+Rode o programa:
+
+```bash
+mvn exec:java -Dexec.mainClass=bysvem.Programa
+```
+
+---
