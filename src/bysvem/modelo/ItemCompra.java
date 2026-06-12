@@ -2,12 +2,7 @@ package bysvem.modelo;
 
 import bysvem.visao.*;
 import java.util.ArrayList;
-import java.util.Scanner;
-
-public enum TipoAquisicao {
-    COMPRA_DEFINITIVA,
-    ASSINATURA
-}   
+import java.util.Scanner;   
 
 public class ItemCompra{
     private int id;
@@ -19,21 +14,20 @@ public class ItemCompra{
     private double precoPago;
     //private Assinatura assinatura;
 
-    public ItemCompra(int id, Jogo jogo, TipoAquisicao tipo, private double precoPago;){
+    public ItemCompra(int id, Jogo jogo, TipoAquisicao tipo, double precoPago){
         this.id = id;
         this.jogo = jogo;
         this.tipo = tipo;
         this.precoPago = precoPago;
     }
 
-    public void setId(Int id){ this.id = id;}
+    public void setId(int id){ this.id = id;}
     public void setJogo(Jogo jogo){ this.jogo = jogo;}
     public void setTipoAquisicao(TipoAquisicao tipo){ this.tipo = tipo;}
     public void setPrecoPago(double precoPago){ this.precoPago = precoPago;}
 
     public int getId(){ return this.id;}
-    public int getJogo(){ return this.jogo;}
-    public int getTipoAquisicao(){ return this.id;}
-    public int getPrecoPago(){ return this.id;}
-
+    public Jogo getJogo(){ return this.jogo;}
+    public TipoAquisicao getTipoAquisicao(){ return this.tipo;}
+    public double getPrecoPago(){ return this.precoPago;}
 }
