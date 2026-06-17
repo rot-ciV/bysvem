@@ -2,13 +2,13 @@ package visao;
 
 // import bysvem.modelo.*;  
 
+import java.awt.BorderLayout;
+import java.awt.Font;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-
-import java.awt.BorderLayout;
-import java.awt.Font;
 
 public class Aplicativo extends JFrame {
 
