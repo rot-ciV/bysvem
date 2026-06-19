@@ -1,11 +1,14 @@
-bysvem/modelo/TipoAquisicao.class
+visao/Aplicativo.class
 bysvem/modelo/Jogo.class
+bysvem/modelo/TipoAquisicao.class
 bysvem/modelo/Desenvolvedor.class
 bysvem/modelo/Gerenciador.class
 bysvem/modelo/ItemCompra.class
-bysvem/Programa.class
+visao/TelaLogin.class
 bysvem/modelo/Registro.class
+bysvem/Programa.class
 bysvem/modelo/Entidade.class
+visao/Opcoes_Usuario.class
 bysvem/modelo/Operador.class
 bysvem/visao/Loja.class
 bysvem/modelo/Compra.class
