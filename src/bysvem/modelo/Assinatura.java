@@ -1,35 +1,39 @@
 package bysvem.modelo;
 
-import bysvem.visao.*;
-import java.util.ArrayList;
-import java.util.Scanner;
 import java.time.LocalDate;
-import java.time.Month;
 
 public class Assinatura {
     private LocalDate dataInicio;
-    private LocalDate dataFim;      // ou duração em dias
-    //LocalDate ->  (AAAA-MM-DD) (É uma ferramenta do próprio java rapaziada)
-    //Pegar a data de hoje : ; LocalDate hoje = LocalDate.now();
-    //Colocar uma data específica : LocalDate aniversario = LocalDate.of(1995, Month.OCTOBER, 20);
+    private LocalDate dataFim;
     private boolean autoRenovacao;
     private TipoAssinatura tipo;
 
-    public Assinatura(LocalDate dataFim, TipoAssinatura tipo){
+    // Construtor para uso normal (data fim e tipo)
+    public Assinatura(LocalDate dataFim, TipoAssinatura tipo) {
         this.dataInicio = LocalDate.now();
         this.dataFim = dataFim;
-        this.autoRenovacao = true; //fiz essa similar a gamepass, onde sempre começa com reenovação automática
+        this.autoRenovacao = true;
         this.tipo = tipo;
     }
 
-    public void setDataInicio(LocalDate dataInicio){ this.dataInicio = dataInicio;}
-    public void setDataFim(LocalDate dataFim){ this.dataFim = dataFim;}
-    public void setAutoRenovacao(boolean autoRenovacao){ this.autoRenovacao = autoRenovacao;}
-    public void setTipo(TipoAssinatura tipo){ this.tipo = tipo;}
+    // Construtor para carregamento (com data início explícita)
+    public Assinatura(LocalDate dataInicio, LocalDate dataFim, TipoAssinatura tipo) {
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
+        this.autoRenovacao = true;
+        this.tipo = tipo;
+    }
 
-    public LocalDate getDataInicio(){ return this.dataInicio;}
-    public LocalDate getDataFim(){ return this.dataFim;}
-    public boolean getAutoRenovacao(){ return this.autoRenovacao;}
-    public TipoAssinatura getTipo(){ return this.tipo;}
+    // getters e setters
+    public LocalDate getDataInicio() { return dataInicio; }
+    public void setDataInicio(LocalDate dataInicio) { this.dataInicio = dataInicio; }
 
+    public LocalDate getDataFim() { return dataFim; }
+    public void setDataFim(LocalDate dataFim) { this.dataFim = dataFim; }
+
+    public boolean getAutoRenovacao() { return autoRenovacao; }
+    public void setAutoRenovacao(boolean autoRenovacao) { this.autoRenovacao = autoRenovacao; }
+
+    public TipoAssinatura getTipo() { return tipo; }
+    public void setTipo(TipoAssinatura tipo) { this.tipo = tipo; }
 }

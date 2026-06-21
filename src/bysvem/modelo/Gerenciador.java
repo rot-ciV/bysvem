@@ -3,23 +3,27 @@ package bysvem.modelo;
 import bysvem.visao.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.List;
 
 public abstract class Gerenciador{
 
+    private static ArrayList<Conta> listaContas = new ArrayList<>();
+    private static ArrayList<Jogo> listaJogos = new ArrayList<>();
+    private static ArrayList<Registro> listaRegistros = new ArrayList<>();
     private static final String CAMINHO_CONTAS = "dados/contas.txt";
     private static final String CAMINHO_JOGOS = "dados/jogos.txt";
     private static final String CAMINHO_REGISTROS = "dados/registros.txt";
-    // "final" declara uma constante, logo todos os caminhos nunca serão alterados.
-
-    // private para que ninguém consiga criar um objeto Gerenciador
+    private static final String CAMINHO_COMPRAS = "dados/compras.txt";
     private Gerenciador() {}
 
     public static void salvarJogos(ArrayList<Jogo> listaDeJogos){
-
+        garantirDiretorio();
         try {
 
             FileWriter arquivo = new FileWriter(CAMINHO_JOGOS);
@@ -75,9 +79,9 @@ public abstract class Gerenciador{
         
         return jogosCarregados;
     }
-  
-    public static void salvarContas(ArrayList<Conta> listaContas){
 
+    public static void salvarContas(ArrayList<Conta> listaContas){
+        garantirDiretorio();
         try {
             
             FileWriter arquivo = new FileWriter(CAMINHO_CONTAS);
@@ -176,7 +180,7 @@ public abstract class Gerenciador{
     }
 
     public static void salvarRegistro(ArrayList<Registro> listaRegistros){
-        
+        garantirDiretorio();
         try {
             
             FileWriter arquivo = new FileWriter(CAMINHO_REGISTROS);
@@ -263,6 +267,135 @@ public abstract class Gerenciador{
         }
 
         return registrosCarregados;
+    }
+
+
+    public static void carregarRegistros(ArrayList<Jogo> jogos, ArrayList<Conta> contas) {
+        listaRegistros = CarregaRegistros(jogos, contas);
+    }
+
+    public static void salvarRegistro(Registro registro) {
+        listaRegistros.add(registro);
+        salvarRegistro(listaRegistros);
+    }
+
+    public static void salvarCompras(ArrayList<Compra> compras) {
+        garantirDiretorio();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMINHO_COMPRAS))) {
+            for (Compra compra : compras) {
+                for (ItemCompra item : compra.getItens()) {
+                    // Formato: idCompra;idUsuario;data;idItem;idJogo;tipo;preco;idAssinatura - (se houver)
+                    String linha = compra.getId() + ";" + compra.getUsuario().getId() + ";" + compra.getDataCompra().toString() + ";" +item.getId() + ";" + item.getJogo().getId() + ";" + item.getTipoAquisicao().name() + ";" + item.getPrecoPago();
+                    //ainda não adicionei assinatura aqui não, não sei como vou fazer ainda
+                    writer.write(linha);
+                    writer.newLine();
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao salvar compras: " + e.getMessage());
+        }
+    }
+
+    public static void carregarCompras(ArrayList<Conta> contas, ArrayList<Jogo> jogos) {
+        System.out.println(">>> carregarCompras iniciado");
+        for (Conta c : contas) {
+            if (c instanceof Usuario) {
+                ((Usuario) c).setCompras(new ArrayList<>());
+            }
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(CAMINHO_COMPRAS))) {
+            String linha;
+            int count = 0;
+            while ((linha = reader.readLine()) != null) {
+                count++;
+                System.out.println(">>> Lendo linha " + count + ": " + linha);
+                String[] dados = linha.split(";");
+                int idCompra = Integer.parseInt(dados[0]);
+                int idUsuario = Integer.parseInt(dados[1]);
+                LocalDate data = LocalDate.parse(dados[2]);
+                int idItem = Integer.parseInt(dados[3]);
+                int idJogo = Integer.parseInt(dados[4]);
+                TipoAquisicao tipo = TipoAquisicao.valueOf(dados[5]);
+                double preco = Double.parseDouble(dados[6]);
+
+                Usuario usuario = null;
+                for (Conta c : contas) {
+                    if (c.getId() == idUsuario && c instanceof Usuario) {
+                        usuario = (Usuario) c;
+                        break;
+                    }
+                }
+                if (usuario == null) {
+                    System.out.println(">>> Usuário ID " + idUsuario + " não encontrado!");
+                    continue;
+                }
+
+                Jogo jogo = null;
+                for (Jogo j : jogos) {
+                    if (j.getId() == idJogo) {
+                        jogo = j;
+                        break;
+                    }
+                }
+                if (jogo == null) {
+                    System.out.println(">>> Jogo ID " + idJogo + " não encontrado!");
+                    continue;
+                }
+
+                ItemCompra item = new ItemCompra(idItem, jogo, tipo, preco);
+
+                Compra compraExistente = null;
+                for (Compra c : usuario.getCompras()) {
+                    if (c.getId() == idCompra) {
+                        compraExistente = c;
+                        break;
+                    }
+                }
+
+                if (compraExistente == null) {
+                    List<ItemCompra> itens = new ArrayList<>();
+                    itens.add(item);
+                    compraExistente = new Compra(idCompra, usuario, data, itens);
+                    usuario.adicionarCompra(compraExistente);
+                    System.out.println(">>> Nova compra adicionada ao usuário " + usuario.getNome());
+                } else {
+                    compraExistente.adicionarItem(item);
+                    System.out.println(">>> Item adicionado à compra existente " + idCompra);
+                }
+            }
+                System.out.println(">>> Total de compras carregadas: " + count);
+            } catch (IOException e) {
+                System.out.println(">>> Arquivo compras.txt não encontrado (primeira execução)");
+            } catch (Exception e) {
+                System.err.println(">>> Erro ao carregar compras: " + e.getMessage());
+                e.printStackTrace();
+        }
+    }
+
+    public static void salvarTodasCompras(ArrayList<Conta> contas) {
+        garantirDiretorio();
+        ArrayList<Compra> todas = new ArrayList<>();
+        for (Conta c : contas) {
+            if (c instanceof Usuario) {
+                todas.addAll(((Usuario) c).getCompras());
+            }
+        }
+        salvarCompras(todas);
+    }
+
+    public static void salvarTudo(ArrayList<Jogo> listaDeJogos, ArrayList<Conta> listaContas, ArrayList<Registro> listaRegistros, ArrayList<Conta> contas){
+        salvarJogos(listaDeJogos);
+        salvarContas(listaContas);
+        salvarRegistro(listaRegistros);
+        salvarTodasCompras(contas);
+    }
+
+    private static void garantirDiretorio() {
+        File arq = new File("dados");
+        if (!arq.exists()) {
+            arq.mkdirs();
+        }
     }
 
     public static boolean existeId(int id, ArrayList<Conta> contas, ArrayList<Jogo> jogos, ArrayList<Registro> registros) {

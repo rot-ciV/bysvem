@@ -17,6 +17,8 @@ import javax.swing.SwingUtilities;
 
 import bysvem.modelo.Conta;
 import bysvem.modelo.Gerenciador;
+import bysvem.modelo.Usuario;
+import bysvem.modelo.Jogo;
 
 public class TelaLogin extends JFrame {
 
@@ -121,62 +123,64 @@ public class TelaLogin extends JFrame {
     }
 
     private void autenticar() {
-        String email = campoEmail.getText().trim();       // agora usa email
-        String senhaDigitada = new String(campoSenha.getPassword()).trim();
+    String email = campoEmail.getText().trim();
+    String senhaDigitada = new String(campoSenha.getPassword()).trim();
 
-        if (email.isEmpty() || senhaDigitada.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Preencha ambos os campos!", "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        // Converte a senha
-        Integer senhaInt = converterSenha(senhaDigitada);
-        if (senhaInt == null) {
-            JOptionPane.showMessageDialog(this,
-                    "A senha deve conter apenas números.",
-                    "Erro", JOptionPane.ERROR_MESSAGE);
-            campoSenha.setText("");
-            campoSenha.requestFocus();
-            return;
-        }
-
-        // Carrega contas via Gerenciador
-        ArrayList<Conta> contas = Gerenciador.carregaContas();
-        if (contas.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Erro ao carregar contas. Verifique o arquivo.",
-                    "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Compara o email (campo c.getEmail()) com o digitado
-        for (Conta c : contas) {
-            if (c.getEmail().equals(email) && c.getSenha() == senhaInt) {
-                if (c.getBan()) {
-                    JOptionPane.showMessageDialog(this,
-                            "Usuário banido! Contate o administrador.",
-                            "Acesso negado", JOptionPane.ERROR_MESSAGE);
-                    campoSenha.setText("");
-                    campoSenha.requestFocus();
-                    return;
-                } else {
-                    JOptionPane.showMessageDialog(this,
-                            "Login realizado com sucesso!", "Sucesso",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    dispose();
-                    SwingUtilities.invokeLater(() -> new Opcoes_Usuario(c));
-                    return;
-                }
-            }
-        }
-
-        // Não encontrou
+    if (email.isEmpty() || senhaDigitada.isEmpty()) {
         JOptionPane.showMessageDialog(this,
-                "E-mail ou senha inválidos!", "Erro",
-                JOptionPane.ERROR_MESSAGE);
+                "Preencha ambos os campos!", "Aviso",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    Integer senhaInt = converterSenha(senhaDigitada);
+    if (senhaInt == null) {
+        JOptionPane.showMessageDialog(this,
+                "A senha deve conter apenas números.",
+                "Erro", JOptionPane.ERROR_MESSAGE);
         campoSenha.setText("");
         campoSenha.requestFocus();
+        return;
     }
+
+    // ===== CARREGAR TODOS OS DADOS =====
+    ArrayList<Jogo> jogos = Gerenciador.carregaJogos();
+    ArrayList<Conta> contas = Gerenciador.carregaContas();
+    if (contas.isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+                "Erro ao carregar contas. Verifique o arquivo.",
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    Gerenciador.carregarCompras(contas, jogos);
+    Gerenciador.carregarRegistros(jogos, contas);
+
+    for (Conta c : contas) {
+        if (c.getEmail().equals(email) && c.getSenha() == senhaInt) {
+            if (c.getBan()) {
+                JOptionPane.showMessageDialog(this,
+                        "Usuário banido! Contate o administrador.",
+                        "Acesso negado", JOptionPane.ERROR_MESSAGE);
+                campoSenha.setText("");
+                campoSenha.requestFocus();
+                return;
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Login realizado com sucesso!", "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE);
+                dispose();
+                // Passa o objeto que já está na lista (com compras)
+                SwingUtilities.invokeLater(() -> new Opcoes_Usuario(c));
+                return;
+            }
+        }
+    }
+
+    JOptionPane.showMessageDialog(this,
+            "E-mail ou senha inválidos!", "Erro",
+            JOptionPane.ERROR_MESSAGE);
+    campoSenha.setText("");
+    campoSenha.requestFocus();
+}
 }

@@ -8,6 +8,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -19,6 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import bysvem.modelo.Conta;
+import bysvem.modelo.Desenvolvedor;
+import bysvem.modelo.Operador;
 import bysvem.modelo.Usuario;
 
 public class Opcoes_Usuario extends JFrame {
@@ -26,14 +30,13 @@ public class Opcoes_Usuario extends JFrame {
     private Conta usuarioLogado;
 
     public Opcoes_Usuario(Conta conta) {
-        this.usuarioLogado = conta; 
+        this.usuarioLogado = conta;
         setTitle("Loja Bysvem");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 800);
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // Painel principal com GridBagLayout
         JPanel painel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
@@ -49,51 +52,45 @@ public class Opcoes_Usuario extends JFrame {
         gbc.insets = new Insets(25, 0, 45, 0);
         painel.add(titulo, gbc);
 
-        // Espaço vazio (linha 1)
         gbc.gridy = 1;
         painel.add(new JLabel(" "), gbc);
 
-        // Painel das opções (BoxLayout vertical)
         JPanel opcoesPanel = new JPanel();
         opcoesPanel.setLayout(new BoxLayout(opcoesPanel, BoxLayout.Y_AXIS));
         opcoesPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        String[] opcoes = {
-            " Jogos Disponíveis ",
-            " Biblioteca ",
-            " Configurações ",
-            " Sair "
-        };
+        // ---- ORDEM DOS BOTÕES ----
+        List<String> ordemBotoes = new ArrayList<>();
 
-        // Adiciona os botões com seus listeners
-        for (String texto : opcoes) {
-            JButton botao = new JButton(texto);
-            botao.setFont(new Font("Arial", Font.PLAIN, 24));
-            botao.setAlignmentX(Component.CENTER_ALIGNMENT);
-            botao.setMaximumSize(new Dimension(420, 60));
-            botao.setPreferredSize(new Dimension(420, 60));
+        // 1. Jogos Disponíveis (sempre)
+        ordemBotoes.add(" Jogos Disponíveis ");
 
-            // Ação de cada botão
-            botao.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    String comando = botao.getText();
-                    switch (comando) {
-                        case " Jogos Disponíveis ":
-                            new Jogos_Disponiveis();
-                            break;
-                        case " Biblioteca ":
-                            new Biblioteca(usuarioLogado);
-                            break;
-                        case " Configurações ":
-                            new Configuracoes(Opcoes_Usuario.this, usuarioLogado);
-                            break;
-                        case " Sair ":
-                            sair();
-                            break;
-                    }
-                }
-            });
+        // 2. Biblioteca e Carrinho (apenas para Usuário)
+        if (usuarioLogado instanceof Usuario) {
+            ordemBotoes.add(" Biblioteca ");
+            ordemBotoes.add(" Carrinho ");
+        }
 
+        // 3. Configurações (sempre)
+        ordemBotoes.add(" Configurações ");
+
+        // 4. Botões específicos de Desenvolvedor
+        if (usuarioLogado instanceof Desenvolvedor) {
+            ordemBotoes.add(" Gerenciar Jogos ");
+        }
+
+        // 5. Botões específicos de Operador
+        if (usuarioLogado instanceof Operador) {
+            ordemBotoes.add(" Gerenciar Usuários ");
+            ordemBotoes.add(" Gerenciar Jogos (Admin) ");
+        }
+
+        // 6. Sair (sempre no final)
+        ordemBotoes.add(" Sair ");
+
+        // Cria os botões na ordem definida
+        for (String texto : ordemBotoes) {
+            JButton botao = criarBotao(texto);
             opcoesPanel.add(botao);
             opcoesPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         }
@@ -103,36 +100,78 @@ public class Opcoes_Usuario extends JFrame {
         gbc.fill = GridBagConstraints.NONE;
         painel.add(opcoesPanel, gbc);
 
-        // Adiciona o painel à janela
         add(painel);
-
-        // Exibe a janela
         setVisible(true);
     }
 
-    private void sair() {
-    Object[] opcoes = {"Sim", "Voltar"};
+    private JButton criarBotao(String texto) {
+        JButton botao = new JButton(texto);
+        botao.setFont(new Font("Arial", Font.PLAIN, 24));
+        botao.setAlignmentX(Component.CENTER_ALIGNMENT);
+        botao.setMaximumSize(new Dimension(420, 60));
+        botao.setPreferredSize(new Dimension(420, 60));
 
-    int resposta = JOptionPane.showOptionDialog(
-        this,
-        "     Tem certeza que deseja sair?",
-        "Confirmação",
-        JOptionPane.DEFAULT_OPTION,      // não importa, pois definimos as opções
-        JOptionPane.PLAIN_MESSAGE,       // sem ícone (remove a interrogação verde)
-        null,                            // sem ícone personalizado
-        opcoes,                          // array com os textos dos botões
-        opcoes[0]                        // botão padrão (Sim)
-    );
-
-    if (resposta == 0) { 
-        dispose();
-        SwingUtilities.invokeLater(() -> new TelaLogin());
+        botao.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String comando = botao.getText().trim();
+                switch (comando) {
+                    case "Jogos Disponíveis":
+                        if (usuarioLogado instanceof Usuario) {
+                            new Jogos_Disponiveis((Usuario) usuarioLogado);
+                        } else {
+                            new Jogos_Disponiveis(null);
+                        }
+                        break;
+                    case "Biblioteca":
+                        new Biblioteca(usuarioLogado);
+                        break;
+                    case "Carrinho":
+                        if (usuarioLogado instanceof Usuario) {
+                            new TelaCarrinho(Opcoes_Usuario.this, (Usuario) usuarioLogado);
+                        }
+                        break;
+                    case "Configurações":
+                        new Configuracoes(Opcoes_Usuario.this, usuarioLogado);
+                        break;
+                    case "Gerenciar Jogos":
+                        JOptionPane.showMessageDialog(Opcoes_Usuario.this,
+                                "Funcionalidade em desenvolvimento: Gerenciar Jogos",
+                                "Info", JOptionPane.INFORMATION_MESSAGE);
+                        break;
+                    case "Gerenciar Usuários":
+                        JOptionPane.showMessageDialog(Opcoes_Usuario.this,
+                                "Funcionalidade em desenvolvimento: Gerenciar Usuários",
+                                "Info", JOptionPane.INFORMATION_MESSAGE);
+                        break;
+                    case "Gerenciar Jogos (Admin)":
+                        JOptionPane.showMessageDialog(Opcoes_Usuario.this,
+                                "Funcionalidade em desenvolvimento: Gerenciar Jogos (Admin)",
+                                "Info", JOptionPane.INFORMATION_MESSAGE);
+                        break;
+                    case "Sair":
+                        sair();
+                        break;
+                }
+            }
+        });
+        return botao;
     }
-}
 
-    public static void main(String[] args) {
-        // Cria uma conta fictícia para teste
-        Conta dummy = new Usuario(999, "Teste", 1234, "teste@teste.com", 0.0, false);
-        SwingUtilities.invokeLater(() -> new Opcoes_Usuario(dummy));
+    private void sair() {
+        Object[] opcoes = {"Sim", "Voltar"};
+        int resposta = JOptionPane.showOptionDialog(
+                this,
+                "     Tem certeza que deseja sair?",
+                "Confirmação",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                opcoes,
+                opcoes[0]
+        );
+        if (resposta == 0) {
+            dispose();
+            SwingUtilities.invokeLater(() -> new TelaLogin());
+        }
     }
 }

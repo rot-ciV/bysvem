@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import bysvem.modelo.Gerenciador;
+import bysvem.modelo.Jogo;
+import bysvem.modelo.Usuario;
+
 public class Loja{
 
     // A loja que centraliza todas as informações: Todos os jogos disponíveis, todas as contas existentes e todos os registros já feitos 
@@ -38,7 +42,7 @@ public class Loja{
                 String opString = "";
                 int op;
                 opString = scn.nextLine();
-                if(entradaInt(opString)){
+                if(Util.entradaInt(opString)){
                     op = Integer.parseInt(opString);
                 }else{
                     op = -1;
@@ -67,7 +71,7 @@ public class Loja{
                             String sairLojaString = "";
                             int sairLoja;
                             sairLojaString = scn.nextLine();
-                            if(entradaInt(sairLojaString)){
+                            if(Util.entradaInt(sairLojaString)){
                                 sairLoja = Integer.parseInt(sairLojaString);
                             }else{
                                 sairLoja = -1;
@@ -93,7 +97,7 @@ public class Loja{
                 String opString = "";
                 int op;
                 opString = scn.nextLine();
-                if(entradaInt(opString)){
+                if(Util.entradaInt(opString)){
                     op = Integer.parseInt(opString);    
                 }else{
                     op = -1;
@@ -116,7 +120,7 @@ public class Loja{
                             String sair_lojaString = "";
                             int sair_loja;
                             sair_lojaString = scn.nextLine();
-                            if(entradaInt(sair_lojaString)){
+                            if(Util.entradaInt(sair_lojaString)){
                                 sair_loja = Integer.parseInt(sair_lojaString);
                             }else{
                                 sair_loja = -1;
@@ -136,7 +140,7 @@ public class Loja{
                         int escolha;
                         while(true){
                             escolhaString = scn.nextLine();
-                            if(entradaInt(escolhaString)){
+                            if(Util.entradaInt(escolhaString)){
                                 escolha = Integer.parseInt(escolhaString);
                                 if(escolha == 0 || escolha == 1 || escolha == 2 || escolha == 3){
                                     break;
@@ -156,7 +160,7 @@ public class Loja{
                             System.out.println("\nQual usuário você deseja banir?");
                             opString = "";
                             opString = scn.nextLine();
-                            if(entradaInt(opString)){
+                            if(Util.entradaInt(opString)){
                                 opcao = Integer.parseInt(opString);
                             }
 
@@ -180,7 +184,7 @@ public class Loja{
                                         String banirString = "";
                                         int banir = -1;
                                         banirString = scn.nextLine();
-                                        if(entradaInt(banirString)){
+                                        if(Util.entradaInt(banirString)){
                                             banir = Integer.parseInt(banirString);
                                         }
 
@@ -225,7 +229,7 @@ public class Loja{
                             int opcao = -1;
                             opString = "";
                             opString = scn.nextLine();
-                            if(entradaInt(opString)){
+                            if(Util.entradaInt(opString)){
                                 opcao = Integer.parseInt(opString);
                             }
                             if(opcao == 0){
@@ -248,7 +252,7 @@ public class Loja{
                                         int banir = -1;
                                         String banirString;
                                         banirString = scn.nextLine();
-                                        if(entradaInt(banirString)){
+                                        if(Util.entradaInt(banirString)){
                                             banir = Integer.parseInt(banirString);
                                         }
 
@@ -291,7 +295,7 @@ public class Loja{
                             String opcaoString;
                             while(true){
                                 opcaoString = scn.nextLine();
-                                if(entradaInt(opcaoString)){
+                                if(Util.entradaInt(opcaoString)){
                                     opcao = Integer.parseInt(opcaoString);
                                     break;
                                 }else{
@@ -330,7 +334,7 @@ public class Loja{
                 System.out.println("Escolha a opção que deseja.");
                 int op = -1;
                 String opcaoString = scn.nextLine();
-                if(entradaInt(opcaoString)){
+                if(Util.entradaInt(opcaoString)){
                     op = Integer.parseInt(opcaoString);
                 }
 
@@ -357,7 +361,7 @@ public class Loja{
                             int sair_loja = -1;
                             String sair_lojaString;
                             sair_lojaString = scn.nextLine();
-                            if(entradaInt(sair_lojaString)){
+                            if(Util.entradaInt(sair_lojaString)){
                                 sair_loja = Integer.parseInt(sair_lojaString);
                             }
                             if(sair_loja == 1){return;}
@@ -390,7 +394,7 @@ public class Loja{
             int escolha = -1;
             String escolhaString;
             escolhaString = scn.nextLine();
-            if(entradaInt(escolhaString)){
+            if(Util.entradaInt(escolhaString)){
                 escolha = Integer.parseInt(escolhaString);
             }
             boolean salvar = false;
@@ -439,7 +443,7 @@ public class Loja{
                         String opcaoString = "";
                         while(true){
                             opcaoString = scn.nextLine();
-                            if(entradaInt(opcaoString)){
+                            if(Util.entradaInt(opcaoString)){
                                 opcao = Integer.parseInt(opcaoString);
                                 if(opcao == 1 || opcao == 2){
                                     break;
@@ -476,7 +480,7 @@ public class Loja{
                         String chooseString;
                         while(true){
                             chooseString = scn.nextLine();
-                            if(entradaInt(chooseString)){
+                            if(Util.entradaInt(chooseString)){
                                 choose = Integer.parseInt(chooseString);
                                 break;
                             }else{
@@ -527,7 +531,7 @@ public class Loja{
             int escolha = -1;
             String escolhaString;
             escolhaString = scn.nextLine();
-            if(entradaInt(escolhaString)){
+            if(Util.entradaInt(escolhaString)){
                 escolha = Integer.parseInt(escolhaString);
             }
             if(escolha >= 1 && escolha <= jogos.size()){
@@ -546,7 +550,7 @@ public class Loja{
                             int resposta = -1;
                             String respostaString;
                             respostaString = scn.nextLine();
-                            if(entradaInt(respostaString)){
+                            if(Util.entradaInt(respostaString)){
                                 resposta = Integer.parseInt(respostaString);
                             }
                             if(resposta == 1){
@@ -561,12 +565,12 @@ public class Loja{
                     }
                         
                     
-                    if(jogoNaBiblioteca(escolhido, (((Usuario) conta)).biblioteca(this.registros))){
+                    if(jogoNaBiblioteca(escolhido, (((Usuario) conta)).biblioteca())){
                         System.out.println("[Jogo Adquirido]\nPara voltar, digite 1");
                         int resposta = - 1;
                         String respostaString;
                         respostaString = scn.nextLine();
-                        if(entradaInt(respostaString)){
+                        if(Util.entradaInt(respostaString)){
                             resposta = Integer.parseInt(respostaString);
                         }
                         if(resposta == 1){
@@ -702,11 +706,11 @@ public class Loja{
         System.out.println("Gostaria de adquirir o jogo?\n1 - Comprar\n2 - Cancelar");
         int resposta_compra = -1;
         String resposta_compraString = scn.nextLine();
-        if(entradaInt(resposta_compraString)){
+        if(Util.entradaInt(resposta_compraString)){
             resposta_compra = Integer.parseInt(resposta_compraString);
         }
         if(resposta_compra == 1){
-            if(((Usuario)conta).compraJogo(escolhido, contas, registros, this)){                               
+            if(((Usuario)conta).comprarJogo(escolhido, contas, registros, this)){                               
                 System.out.println("Jogo adquirido com sucesso!");
                 return false;
             }else{
@@ -715,7 +719,7 @@ public class Loja{
                 String resposta_saldoString;
                 while(true){
                     resposta_saldoString = scn.nextLine();
-                    if(entradaInt(resposta_saldoString)){
+                    if(Util.entradaInt(resposta_saldoString)){
                         resposta_saldo = Integer.parseInt(resposta_saldoString);
                         break;
                     }else{
@@ -728,7 +732,7 @@ public class Loja{
                     String valor = "";
                     while(true){
                         valor = scn.nextLine();
-                        if(entradaDouble(valor)){
+                        if(Util.entradaDouble(valor)){
                             valorSaldo = Double.parseDouble(valor);
                             break;
                         }else{
@@ -797,7 +801,7 @@ public class Loja{
 
         System.out.println("\n============ Sua Biblioteca ============\n");
         Usuario usuario = (Usuario) conta;
-        for(Jogo jogo : (usuario).biblioteca(this.registros)){
+        for(Jogo jogo : (usuario).biblioteca()){
             System.out.println(contador + "-" + jogo.getNome());
             System.out.println(jogo.getDesc());
             System.out.println("-------------------------------------------------");
@@ -850,22 +854,6 @@ public class Loja{
         novoDesenvolvedor.salvar(contas);
 
         return novoDesenvolvedor;
-    }
-
-    public boolean entradaDouble(String valor){
-        if(valor != null && valor.matches("-?\\d+(\\.\\d+)?")){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    public boolean entradaInt(String valor){
-        if(valor != null && valor.matches("-?\\d+")){
-            return true;
-        }else{
-            return false;
-        }
     }
 
 }

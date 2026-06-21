@@ -127,7 +127,7 @@ public abstract class Conta extends Entidade<Conta>{
             int opcao = -1;
             String opcaoString;
             opcaoString = scn.nextLine();
-            if(loja.entradaInt(opcaoString)){
+            if(Util.entradaInt(opcaoString)){
                 opcao = Integer.parseInt(opcaoString);
             }
             if(opcao == 1){
@@ -175,7 +175,7 @@ public abstract class Conta extends Entidade<Conta>{
             }*/
             String senhaString;                       
             senhaString = scn.nextLine();
-            if(loja.entradaInt(senhaString)){
+            if(Util.entradaInt(senhaString)){
                 senha = Integer.parseInt(senhaString);
             }else{
                 System.out.println("A senha deve ser apenas digitos.");
@@ -203,7 +203,7 @@ public abstract class Conta extends Entidade<Conta>{
         int opcao = -1;
         String opcaoString;
             opcaoString = scn.nextLine();
-        if(loja.entradaInt(opcaoString)){
+        if(Util.entradaInt(opcaoString)){
             opcao = Integer.parseInt(opcaoString);
         }
         if(opcao == 1){

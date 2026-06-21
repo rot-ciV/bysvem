@@ -39,7 +39,7 @@ public class Desenvolvedor extends Conta{
         String precoString;
         while(true){
             precoString = scn.nextLine();
-            if(loja.entradaDouble(precoString)){
+            if(Util.entradaDouble(precoString)){
                 preco = Double.parseDouble(precoString);
                 break;
             }else{
@@ -86,7 +86,7 @@ public class Desenvolvedor extends Conta{
             int escolha = -1;
             String escolhaString;
             escolhaString = scn.nextLine();
-            if(loja.entradaInt(escolhaString)){
+            if(Util.entradaInt(escolhaString)){
                 escolha = Integer.parseInt(escolhaString);
             }
 
@@ -135,7 +135,7 @@ public class Desenvolvedor extends Conta{
                 int res = -1;
                 String resString;
                 resString = scn.nextLine();
-                if(loja.entradaInt(resString)){
+                if(Util.entradaInt(resString)){
                     res = Integer.parseInt(resString);
                 }
                 if(res == 0){
@@ -183,11 +183,11 @@ public class Desenvolvedor extends Conta{
         int res = -1;
         String resString;
         resString = scn.nextLine();
-        if(loja.entradaInt(resString)){
+        if(Util.entradaInt(resString)){
             res = Integer.parseInt(resString);
         }
 
-        if(loja.entradaInt(resString)){
+        if(Util.entradaInt(resString)){
             res = Integer.parseInt(resString);
         }
 
@@ -213,7 +213,7 @@ public class Desenvolvedor extends Conta{
             int op = -1;
             String opString = scn.nextLine();
 
-            if(loja.entradaInt(opString)){
+            if(Util.entradaInt(opString)){
                 op = Integer.parseInt(opString);
             }
             
@@ -232,7 +232,7 @@ public class Desenvolvedor extends Conta{
                 case 3:
                     System.out.print("Novo preço: ");
                     String precoStr = scn.nextLine();
-                    if(loja.entradaDouble(precoStr)){
+                    if(Util.entradaDouble(precoStr)){
                         new_price = Double.parseDouble(precoStr);
                     }else{
                         System.out.println("Preço inválido.");
@@ -268,7 +268,7 @@ public class Desenvolvedor extends Conta{
             System.out.print("\nSelecione uma opção: ");
             int opc = -1;
             String opcaoString = scn.nextLine();
-            if(loja.entradaInt(opcaoString)){
+            if(Util.entradaInt(opcaoString)){
                 opc = Integer.parseInt(opcaoString);
             }
             if(opc == 1){

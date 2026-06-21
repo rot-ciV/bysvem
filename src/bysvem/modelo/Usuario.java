@@ -1,135 +1,163 @@
 package bysvem.modelo;
 
-import bysvem.visao.*;
+import bysvem.visao.Loja;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-public class Usuario extends Conta{
-    
+public class Usuario extends Conta {
     private double saldo;
+    private List<Compra> compras;
+    private List<ItemCompra> carrinho; 
 
-    public Usuario(int id, String nome, int senha, String email, double saldo, boolean ban){
-        
-        super(id,nome,senha, email, ban);
+    public Usuario(int id, String nome, int senha, String email, double saldo, boolean ban) {
+        super(id, nome, senha, email, ban);
         this.saldo = saldo;
+        this.compras = new ArrayList<>();
+        this.carrinho = new ArrayList<>(); 
     }
 
+    // Getters e Setters
+    public double getSaldo() { return saldo; }
+    public List<Compra> getCompras() { return compras; }
+    public List<ItemCompra> getCarrinho() { return carrinho; } 
+
     public void setSaldo(double saldo) { this.saldo = saldo; }
-    public double getSaldo() { return this.saldo; }
+    public void setCompras(List<Compra> compras) { this.compras = compras; }
 
-    /*ESSE MÉTODO ERA DE LOJA, PASSEI PARA CÁ E EM LOJA ESTÁ COMENTADO */
-    public boolean compraJogo(Jogo jogoComprado, ArrayList<Conta> contas, ArrayList<Registro> registros, Loja loja){
+    // Métodos do carrinho
+    public void adicionarAoCarrinho(ItemCompra item) {
+        if (item != null) carrinho.add(item);
+    }
 
-        if (getSaldo() >= jogoComprado.getPreco()){
+    public void removerDoCarrinho(ItemCompra item) {
+        carrinho.remove(item);
+    }
 
-            
-            double novoSaldo = getSaldo() - jogoComprado.getPreco();
-            for(int i = 0; i < contas.size(); i++){
-                if(contas.get(i).getId() == getId()){
-                    setSaldo(novoSaldo); 
-                    ((Usuario)contas.get(i)).setSaldo(novoSaldo);
-                }
-            }
-            //MUDEI
-            if(atualizar(contas)){
-                int id = loja.criaId(1);
-                Registro novoRegistro = new Registro(id, jogoComprado, this, 0.0);
+    public void limparCarrinho() {
+        carrinho.clear();
+    }
 
-                return novoRegistro.salvar(registros);
-            }
+    public double getTotalCarrinho() {
+        double total = 0;
+        for (ItemCompra item : carrinho) {
+            total += item.getPrecoPago();
         }
+        return total;
+    }
 
+    public boolean jogoNoCarrinho(Jogo jogo) {
+        for (ItemCompra item : carrinho) {
+            if (item.getJogo().getId() == jogo.getId()) return true;
+        }
         return false;
     }
 
-    /*MÉTODO ORIGINALMENTE NA LOJA, FAZ MAIS SENTIDO AQUI*/
-    public ArrayList<Jogo> biblioteca(ArrayList<Registro> registros){
+    // Método de compra já existente (pode ser mantido para console)
+    public boolean comprarJogo(Jogo jogoComprado, ArrayList<Conta> contas, ArrayList<Registro> registros, Loja loja) {
+        if (getSaldo() < jogoComprado.getPreco()) return false;
 
-        ArrayList<Jogo> biblioteca = new ArrayList<>();
-
-        for(int i = 0; i < registros.size(); i++){
-
-            if (getId() == registros.get(i).getConta().getId()){
-
-                biblioteca.add(registros.get(i).getJogo());
+        double novoSaldo = getSaldo() - jogoComprado.getPreco();
+        setSaldo(novoSaldo);
+        for (Conta c : contas) {
+            if (c.getId() == getId()) {
+                ((Usuario) c).setSaldo(novoSaldo);
+                break;
             }
         }
 
+        int idItem = loja.criaId(3);
+        ItemCompra item = new ItemCompra(idItem, jogoComprado, TipoAquisicao.COMPRA_DEFINITIVA, jogoComprado.getPreco());
+
+        int idCompra = loja.criaId(4);
+        List<ItemCompra> itens = new ArrayList<>();
+        itens.add(item);
+        Compra compra = new Compra(idCompra, this, LocalDate.now(), itens);
+
+        adicionarCompra(compra);
+
+        int idReg = loja.criaId(1);
+        Registro registro = new Registro(idReg, jogoComprado, this, 0.0);
+        registro.salvar(registros);
+
+        if (atualizar(contas)) {
+            Gerenciador.salvarTodasCompras(contas);
+            return true;
+        }
+        return false;
+    }
+
+    public void adicionarCompra(Compra compra) {
+        if (compra != null) compras.add(compra);
+    }
+
+    public ArrayList<Jogo> biblioteca() {
+        ArrayList<Jogo> biblioteca = new ArrayList<>();
+        for (Compra compra : compras) {
+            for (ItemCompra item : compra.getItens()) {
+                if (item.getTipoAquisicao() == TipoAquisicao.COMPRA_DEFINITIVA) {
+                    biblioteca.add(item.getJogo());
+                }
+            }
+        }
         return biblioteca;
     }
 
     @Override
-    public boolean carregar(int id, ArrayList<Conta> listaContas){
-
-        for(int i = 0; i < listaContas.size(); i++){
-
-            if(id == listaContas.get(i).getId()){
-
+    public boolean carregar(int id, ArrayList<Conta> listaContas) {
+        for (Conta c : listaContas) {
+            if (c.getId() == id) {
                 super.carregar(id, listaContas);
-                Usuario carregado = (Usuario) listaContas.get(i);
+                Usuario carregado = (Usuario) c;
                 this.saldo = carregado.getSaldo();
-
+                this.compras = new ArrayList<>(carregado.getCompras());
+                // carrinho não é carregado (é temporário)
                 return true;
             }
         }
-
         return false;
     }
 
     public void compraSaldo(ArrayList<Conta> contas, Usuario usuario, double valor, Scanner scn) {
-        double saldo = usuario.getSaldo();
-        System.out.printf("\nSaldo anterior: R$%.2f\nNovo saldo: R$%.2f\n\n", saldo, saldo + valor);
+        double saldoAtual = usuario.getSaldo();
+        System.out.printf("\nSaldo anterior: R$%.2f\nNovo saldo: R$%.2f\n\n", saldoAtual, saldoAtual + valor);
         System.out.println("Deseja confirmar:\n1 - Confirmar\n2 - Voltar");
 
         while (true) {
-           String opcaoString = "";
-           int opcao;
-           while(true){
-                opcaoString = scn.nextLine();
-                if(entradaInt(opcaoString)){
-                    opcao = Integer.parseInt(opcaoString);
-                    break;
-                }else{
-                    System.out.println("Opção inválida, digite 1 ou 2");
-                }
-           }
-
-            if (opcao == 1) {
-                double saldoAntigo = this.saldo;
-                for (int i = 0; i <contas.size(); i++) {
-                    if (contas.get(i).getId() == usuario.getId()) {
-                        ((Usuario) contas.get(i)).setSaldo(saldo + valor);
-                        usuario.setSaldo(saldo + valor);
-                        if(usuario.atualizar(contas)){
-                            System.out.println("Saldo atualizado com sucesso!");
-                        }else{
-                            System.out.println("Não foi possível atualizar o saldo.");
-                            ((Usuario) contas.get(i)).setSaldo(saldoAntigo);
-                            usuario.setSaldo(saldoAntigo);
+            String opcaoString = scn.nextLine();
+            if (Util.entradaInt(opcaoString)) {
+                int opcao = Integer.parseInt(opcaoString);
+                if (opcao == 1) {
+                    double saldoAntigo = this.saldo;
+                    for (int i = 0; i < contas.size(); i++) {
+                        if (contas.get(i).getId() == usuario.getId()) {
+                            ((Usuario) contas.get(i)).setSaldo(saldoAtual + valor);
+                            this.setSaldo(saldoAtual + valor);
+                            if (this.atualizar(contas)) {
+                                System.out.println("Saldo atualizado com sucesso!");
+                            } else {
+                                System.out.println("Erro ao atualizar saldo.");
+                                ((Usuario) contas.get(i)).setSaldo(saldoAntigo);
+                                this.setSaldo(saldoAntigo);
+                            }
+                            return;
                         }
-                        return;
                     }
+                } else if (opcao == 2) {
+                    System.out.println("Operação cancelada.");
+                    return;
+                } else {
+                    System.out.println("Opção inválida. Tente novamente.");
                 }
-            } else if (opcao == 2) {
-                System.out.println("Operação cancelada.");
-                return;
             } else {
-                System.out.println("Opção inválida. Tente novamente.");
+                System.out.println("Digite um número válido.");
             }
         }
     }
 
-    public boolean entradaInt(String valor){
-        if(valor != null && valor.matches("-?\\d+")){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("\n%s\nSaldo: %.2f", super.toString(), saldo);
     }
-
 }

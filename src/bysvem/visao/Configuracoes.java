@@ -13,13 +13,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import bysvem.modelo.Conta;
 import bysvem.modelo.Desenvolvedor;
 import bysvem.modelo.Gerenciador;
 import bysvem.modelo.Operador;
+import bysvem.modelo.Usuario;
 
 public class Configuracoes extends JDialog {
 
@@ -29,7 +28,7 @@ public class Configuracoes extends JDialog {
         super(parent, "Configurações", true);
         this.usuarioLogado = conta;
 
-        setSize(1000, 800); // Aumentei para caber mais um botão
+        setSize(1000, 800);
         setLocationRelativeTo(parent);
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -41,11 +40,12 @@ public class Configuracoes extends JDialog {
         JButton btnAlterarNome = new JButton("Alterar Nome");
         JButton btnAlterarSenha = new JButton("Alterar Senha");
         JButton btnAlterarEmail = new JButton("Alterar E-mail");
+        JButton btnAdicionarSaldo = new JButton("Adicionar Saldo"); // NOVO
         JButton btnTornarDev = new JButton("Tornar-se Desenvolvedor");
         JButton btnVoltar = new JButton("Voltar");
 
         Font fonte = new Font("Arial", Font.PLAIN, 35);
-        for (JButton b : new JButton[]{btnVerPerfil, btnAlterarNome, btnAlterarSenha, btnAlterarEmail, btnTornarDev, btnVoltar}) {
+        for (JButton b : new JButton[]{btnVerPerfil, btnAlterarNome, btnAlterarSenha, btnAlterarEmail, btnAdicionarSaldo, btnTornarDev, btnVoltar}) {
             b.setFont(fonte);
         }
 
@@ -54,6 +54,7 @@ public class Configuracoes extends JDialog {
         btnAlterarNome.addActionListener(e -> alterarNome());
         btnAlterarSenha.addActionListener(e -> alterarSenha());
         btnAlterarEmail.addActionListener(e -> alterarEmail());
+        btnAdicionarSaldo.addActionListener(e -> adicionarSaldo()); 
         btnTornarDev.addActionListener(e -> tornarDesenvolvedor());
         btnVoltar.addActionListener(e -> dispose());
 
@@ -62,10 +63,15 @@ public class Configuracoes extends JDialog {
             btnTornarDev.setText("Já é Desenvolvedor/Operador");
         }
 
+        if (!(conta instanceof Usuario)) {
+            btnAdicionarSaldo.setVisible(false);
+        }
+
         panel.add(btnVerPerfil);
         panel.add(btnAlterarNome);
         panel.add(btnAlterarSenha);
         panel.add(btnAlterarEmail);
+        panel.add(btnAdicionarSaldo);
         panel.add(btnTornarDev);
         panel.add(btnVoltar);
 
@@ -73,52 +79,49 @@ public class Configuracoes extends JDialog {
         setVisible(true);
     }
 
-    // Ver Perfil
+
     private void verPerfil() {
-    String tipo;
-    if (usuarioLogado instanceof Desenvolvedor) {
-        Desenvolvedor dev = (Desenvolvedor) usuarioLogado;
-        tipo = "Desenvolvedor<br>Empresa: " + dev.getEmpresa();
-    } else if (usuarioLogado instanceof Operador) {
-        tipo = "Operador";
-    } else {
-        tipo = "Usuário";
+        String tipo;
+        if (usuarioLogado instanceof Desenvolvedor) {
+            Desenvolvedor dev = (Desenvolvedor) usuarioLogado;
+            tipo = "Desenvolvedor<br>Empresa: " + dev.getEmpresa();
+        } else if (usuarioLogado instanceof Operador) {
+            tipo = "Operador";
+        } else {
+            tipo = "Usuário";
+        }
+
+        String mensagem = String.format(
+            "<html>" +
+            "<div style='text-align: center; font-family: monospace; font-size: 35px; font-weight: bold;'>" +
+            " PERFIL </div>" +
+            "<div style='text-align: left; font-family: monospace; font-size: 28px; padding-left: 15px;'>" +
+            "<b>ID:</b> %d<br>" +
+            "<b>Nome:</b> %s<br>" +
+            "<b>E-mail:</b> %s<br>" +
+            "<b>Senha:</b> %d<br>" +
+            "<b>Tipo:</b> %s<br>" +
+            "<b>Banido:</b> %s" +
+            "</div></html>",
+            usuarioLogado.getId(),
+            usuarioLogado.getNome(),
+            usuarioLogado.getEmail(),
+            usuarioLogado.getSenha(),
+            tipo,
+            usuarioLogado.getBan() ? "Sim" : "Não"
+        );
+
+        JLabel label = new JLabel(mensagem);
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(label, BorderLayout.NORTH);
+        panel.setPreferredSize(new Dimension(700, 400));
+
+        JOptionPane.showMessageDialog(this,
+                panel,
+                "Meu Perfil",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
-    // Monta o HTML com título centralizado e rótulos em negrito
-    String mensagem = String.format(
-        "<html>" +
-        "<div style='text-align: center; font-family: monospace; font-size: 35px; font-weight: bold;'>" +
-        " PERFIL </div>" +
-        "<div style='text-align: left; font-family: monospace; font-size: 28px; padding-left: 15px;'>" +
-        "<b>ID:</b> %d<br>" +
-        "<b>Nome:</b> %s<br>" +
-        "<b>E-mail:</b> %s<br>" +
-        "<b>Senha:</b> %d<br>" +
-        "<b>Tipo:</b> %s<br>" +
-        "<b>Banido:</b> %s" +
-        "</div></html>",
-        usuarioLogado.getId(),
-        usuarioLogado.getNome(),
-        usuarioLogado.getEmail(),
-        usuarioLogado.getSenha(),
-        tipo,
-        usuarioLogado.getBan() ? "Sim" : "Não"
-    );
-
-    JLabel label = new JLabel(mensagem);
-    JPanel panel = new JPanel(new BorderLayout());
-    panel.add(label, BorderLayout.NORTH);
-    // Opcional: defina um tamanho preferido
-    panel.setPreferredSize(new Dimension(700, 400));
-
-    JOptionPane.showMessageDialog(this,
-            panel,
-            "Meu Perfil",
-            JOptionPane.INFORMATION_MESSAGE);
-}
-
-    // Alterar Nome
     private void alterarNome() {
         String novoNome = JOptionPane.showInputDialog(this,
                 "Digite o novo nome (ou deixe em branco para cancelar):",
@@ -145,7 +148,6 @@ public class Configuracoes extends JDialog {
         }
     }
 
-    // Alterar Senha
     private void alterarSenha() {
         String senhaAtualStr = JOptionPane.showInputDialog(this,
                 "Digite a senha atual (ou cancelar para abortar):",
@@ -203,7 +205,6 @@ public class Configuracoes extends JDialog {
         }
     }
 
-    // Alterar email    
     private void alterarEmail() {
         String novoEmail = JOptionPane.showInputDialog(this,
                 "Digite o novo e-mail:",
@@ -212,7 +213,6 @@ public class Configuracoes extends JDialog {
 
         String emailLimpo = novoEmail.trim();
 
-        // VALIDAÇÃO: deve conter o caractere '@'
         if (!emailLimpo.contains("@")) {
             JOptionPane.showMessageDialog(this,
                     "E-mail inválido!",
@@ -220,7 +220,6 @@ public class Configuracoes extends JDialog {
             return;
         }
 
-        // Verifica se o email já está em uso por outra conta
         ArrayList<Conta> contas = Gerenciador.carregaContas();
         if (contas == null) {
             JOptionPane.showMessageDialog(this,
@@ -251,7 +250,67 @@ public class Configuracoes extends JDialog {
         }
     }
 
-    // Tornar-se dev
+    private void adicionarSaldo() {
+        if (!(usuarioLogado instanceof Usuario)) {
+            JOptionPane.showMessageDialog(this,
+                    "Esta opção está disponível apenas para usuários comuns.",
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Usuario usuario = (Usuario) usuarioLogado;
+
+        String valorStr = JOptionPane.showInputDialog(this,
+                "Digite o valor a ser adicionado ao saldo (R$):\nSaldo atual: R$" + String.format("%.2f", usuario.getSaldo()),
+                "Adicionar Saldo", JOptionPane.QUESTION_MESSAGE);
+
+        if (valorStr == null || valorStr.trim().isEmpty()) {
+            return; 
+        }
+
+        double valor;
+        try {
+            valor = Double.parseDouble(valorStr.trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Valor inválido. Digite um número (use ponto para decimais).",
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (valor <= 0) {
+            JOptionPane.showMessageDialog(this,
+                    "O valor deve ser maior que zero.",
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Confirmação antes de adicionar
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Confirma a adição de R$" + String.format("%.2f", valor) + " ao saldo?",
+                "Confirmar", JOptionPane.YES_NO_OPTION);
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        // Atualiza o saldo
+        double novoSaldo = usuario.getSaldo() + valor;
+        usuario.setSaldo(novoSaldo);
+
+        if (salvarAlteracoes()) {
+            JOptionPane.showMessageDialog(this,
+                    "Saldo atualizado com sucesso!\nNovo saldo: R$" + String.format("%.2f", novoSaldo),
+                    "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Falha ao salvar as alterações. Verifique o arquivo.",
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+            // Reverte o saldo em caso de falha (opcional)
+            usuario.setSaldo(novoSaldo - valor);
+        }
+    }
+
     private void tornarDesenvolvedor() {
         if (usuarioLogado instanceof Desenvolvedor) {
             JOptionPane.showMessageDialog(this,
@@ -307,7 +366,6 @@ public class Configuracoes extends JDialog {
         dispose();
     }
 
-    // Salvar alterações
     private boolean salvarAlteracoes() {
         try {
             ArrayList<Conta> contas = Gerenciador.carregaContas();

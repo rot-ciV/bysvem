@@ -21,14 +21,18 @@ import javax.swing.SwingConstants;
 
 import bysvem.modelo.Gerenciador;
 import bysvem.modelo.Jogo;
+import bysvem.modelo.Conta;
+import bysvem.modelo.Usuario;
 
 public class Jogos_Disponiveis extends JFrame {
 
     private ArrayList<Jogo> jogos;
     private JList<String> listaNomes;
     private DefaultListModel<String> modeloLista;
+    private Usuario usuarioLogado; // novo
 
-    public Jogos_Disponiveis() {
+    public Jogos_Disponiveis(Usuario usuario) {
+        this.usuarioLogado = usuario;
         setTitle("Jogos Disponíveis");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(1000, 800);
@@ -68,7 +72,6 @@ public class Jogos_Disponiveis extends JFrame {
 
         add(panel);
 
-        // Ação do botão Detalhes: obtém o índice selecionado e chama a tela de detalhes
         btnDetalhes.addActionListener(e -> {
             int idx = listaNomes.getSelectedIndex();
             if (idx == -1) {
@@ -78,10 +81,9 @@ public class Jogos_Disponiveis extends JFrame {
                 return;
             }
             Jogo jogoSelecionado = jogos.get(idx);
-            Detalhes_Usuario.exibirDetalhes(this, jogoSelecionado, true);
+            Detalhes_Usuario.exibirDetalhes(this, jogoSelecionado, true, usuarioLogado);
         });
 
-        // Duplo clique na lista
         listaNomes.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -89,12 +91,13 @@ public class Jogos_Disponiveis extends JFrame {
                     int idx = listaNomes.getSelectedIndex();
                     if (idx != -1) {
                         Jogo jogoSelecionado = jogos.get(idx);
-                        Detalhes_Usuario.exibirDetalhes(Jogos_Disponiveis.this, jogoSelecionado, true);
+                        // Correção: usar NomeDaClasse.this
+                        Detalhes_Usuario.exibirDetalhes(Jogos_Disponiveis.this, jogoSelecionado, true, usuarioLogado);
                     }
                 }
-            }
+            }   
         });
-
+        
         btnVoltar.addActionListener(e -> dispose());
 
         setVisible(true);
