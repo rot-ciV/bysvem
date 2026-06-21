@@ -1,6 +1,5 @@
 package bysvem.modelo;
 
-import bysvem.visao.Loja;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,39 +53,38 @@ public class Usuario extends Conta {
         return false;
     }
 
-    // Método de compra já existente (pode ser mantido para console)
-    public boolean comprarJogo(Jogo jogoComprado, ArrayList<Conta> contas, ArrayList<Registro> registros, Loja loja) {
-        if (getSaldo() < jogoComprado.getPreco()) return false;
+    // public boolean comprarJogo(Jogo jogoComprado, ArrayList<Conta> contas, ArrayList<Registro> registros, Loja loja) {
+    //     if (getSaldo() < jogoComprado.getPreco()) return false;
 
-        double novoSaldo = getSaldo() - jogoComprado.getPreco();
-        setSaldo(novoSaldo);
-        for (Conta c : contas) {
-            if (c.getId() == getId()) {
-                ((Usuario) c).setSaldo(novoSaldo);
-                break;
-            }
-        }
+    //     double novoSaldo = getSaldo() - jogoComprado.getPreco();
+    //     setSaldo(novoSaldo);
+    //     for (Conta c : contas) {
+    //         if (c.getId() == getId()) {
+    //             ((Usuario) c).setSaldo(novoSaldo);
+    //             break;
+    //         }
+    //     }
 
-        int idItem = loja.criaId(3);
-        ItemCompra item = new ItemCompra(idItem, jogoComprado, TipoAquisicao.COMPRA_DEFINITIVA, jogoComprado.getPreco());
+    //     int idItem = loja.criaId(3);
+    //     ItemCompra item = new ItemCompra(idItem, jogoComprado, TipoAquisicao.COMPRA_DEFINITIVA, jogoComprado.getPreco());
 
-        int idCompra = loja.criaId(4);
-        List<ItemCompra> itens = new ArrayList<>();
-        itens.add(item);
-        Compra compra = new Compra(idCompra, this, LocalDate.now(), itens);
+    //     int idCompra = loja.criaId(4);
+    //     List<ItemCompra> itens = new ArrayList<>();
+    //     itens.add(item);
+    //     Compra compra = new Compra(idCompra, this, LocalDate.now(), itens);
 
-        adicionarCompra(compra);
+    //     adicionarCompra(compra);
 
-        int idReg = loja.criaId(1);
-        Registro registro = new Registro(idReg, jogoComprado, this, 0.0);
-        registro.salvar(registros);
+    //     int idReg = loja.criaId(1);
+    //     Registro registro = new Registro(idReg, jogoComprado, this, 0.0);
+    //     registro.salvar(registros);
 
-        if (atualizar(contas)) {
-            Gerenciador.salvarTodasCompras(contas);
-            return true;
-        }
-        return false;
-    }
+    //     if (atualizar(contas)) {
+    //         Gerenciador.salvarTodasCompras(contas);
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     public void adicionarCompra(Compra compra) {
         if (compra != null) compras.add(compra);
@@ -96,9 +94,7 @@ public class Usuario extends Conta {
         ArrayList<Jogo> biblioteca = new ArrayList<>();
         for (Compra compra : compras) {
             for (ItemCompra item : compra.getItens()) {
-                if (item.getTipoAquisicao() == TipoAquisicao.COMPRA_DEFINITIVA) {
-                    biblioteca.add(item.getJogo());
-                }
+                biblioteca.add(item.getJogo());
             }
         }
         return biblioteca;

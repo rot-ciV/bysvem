@@ -284,9 +284,14 @@ public abstract class Gerenciador{
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMINHO_COMPRAS))) {
             for (Compra compra : compras) {
                 for (ItemCompra item : compra.getItens()) {
-                    // Formato: idCompra;idUsuario;data;idItem;idJogo;tipo;preco;idAssinatura - (se houver)
-                    String linha = compra.getId() + ";" + compra.getUsuario().getId() + ";" + compra.getDataCompra().toString() + ";" +item.getId() + ";" + item.getJogo().getId() + ";" + item.getTipoAquisicao().name() + ";" + item.getPrecoPago();
-                    //ainda não adicionei assinatura aqui não, não sei como vou fazer ainda
+                    // Formato: idCompra;idUsuario;dataCompra;idItem;idJogo;precoPago;dataValidade
+                    String linha = compra.getId() + ";" 
+                            + compra.getUsuario().getId() + ";" 
+                            + compra.getDataCompra().toString() + ";" 
+                            + item.getId() + ";" 
+                            + item.getJogo().getId() + ";" 
+                            + item.getPrecoPago() + ";" 
+                            + item.getDataAtivacao().toString();
                     writer.write(linha);
                     writer.newLine();
                 }
@@ -297,7 +302,7 @@ public abstract class Gerenciador{
     }
 
     public static void carregarCompras(ArrayList<Conta> contas, ArrayList<Jogo> jogos) {
-        System.out.println(">>> carregarCompras iniciado");
+        // Limpa compras existentes
         for (Conta c : contas) {
             if (c instanceof Usuario) {
                 ((Usuario) c).setCompras(new ArrayList<>());
@@ -306,19 +311,25 @@ public abstract class Gerenciador{
 
         try (BufferedReader reader = new BufferedReader(new FileReader(CAMINHO_COMPRAS))) {
             String linha;
-            int count = 0;
             while ((linha = reader.readLine()) != null) {
-                count++;
-                System.out.println(">>> Lendo linha " + count + ": " + linha);
                 String[] dados = linha.split(";");
+                // Pular linhas com menos de 7 campos
+                if (dados.length < 7) {
+                    System.err.println("Linha ignorada (campos insuficientes): " + linha);
+                    continue;
+                }
+
+                // Para compatibilidade com arquivos antigos que podem ter campos extras,
+                // usamos os 7 primeiros campos
                 int idCompra = Integer.parseInt(dados[0]);
                 int idUsuario = Integer.parseInt(dados[1]);
-                LocalDate data = LocalDate.parse(dados[2]);
+                LocalDate dataCompra = LocalDate.parse(dados[2]);
                 int idItem = Integer.parseInt(dados[3]);
                 int idJogo = Integer.parseInt(dados[4]);
-                TipoAquisicao tipo = TipoAquisicao.valueOf(dados[5]);
-                double preco = Double.parseDouble(dados[6]);
+                double preco = Double.parseDouble(dados[5]);
+                LocalDate dataAtivacao = LocalDate.parse(dados[6]);
 
+                // Localiza usuário
                 Usuario usuario = null;
                 for (Conta c : contas) {
                     if (c.getId() == idUsuario && c instanceof Usuario) {
@@ -327,10 +338,11 @@ public abstract class Gerenciador{
                     }
                 }
                 if (usuario == null) {
-                    System.out.println(">>> Usuário ID " + idUsuario + " não encontrado!");
+                    System.err.println("Usuário ID " + idUsuario + " não encontrado.");
                     continue;
                 }
 
+                // Localiza jogo
                 Jogo jogo = null;
                 for (Jogo j : jogos) {
                     if (j.getId() == idJogo) {
@@ -339,12 +351,14 @@ public abstract class Gerenciador{
                     }
                 }
                 if (jogo == null) {
-                    System.out.println(">>> Jogo ID " + idJogo + " não encontrado!");
+                    System.err.println("Jogo ID " + idJogo + " não encontrado.");
                     continue;
                 }
 
-                ItemCompra item = new ItemCompra(idItem, jogo, tipo, preco);
+                // Cria ItemCompra
+                ItemCompra item = new ItemCompra(idItem, jogo, preco, dataAtivacao);
 
+                // Verifica se a compra já existe para este usuário
                 Compra compraExistente = null;
                 for (Compra c : usuario.getCompras()) {
                     if (c.getId() == idCompra) {
@@ -354,22 +368,21 @@ public abstract class Gerenciador{
                 }
 
                 if (compraExistente == null) {
+                    // Nova compra
                     List<ItemCompra> itens = new ArrayList<>();
                     itens.add(item);
-                    compraExistente = new Compra(idCompra, usuario, data, itens);
+                    compraExistente = new Compra(idCompra, usuario, dataCompra, itens);
                     usuario.adicionarCompra(compraExistente);
-                    System.out.println(">>> Nova compra adicionada ao usuário " + usuario.getNome());
                 } else {
+                    // Adiciona item à compra existente
                     compraExistente.adicionarItem(item);
-                    System.out.println(">>> Item adicionado à compra existente " + idCompra);
                 }
             }
-                System.out.println(">>> Total de compras carregadas: " + count);
-            } catch (IOException e) {
-                System.out.println(">>> Arquivo compras.txt não encontrado (primeira execução)");
-            } catch (Exception e) {
-                System.err.println(">>> Erro ao carregar compras: " + e.getMessage());
-                e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Arquivo compras.txt não encontrado (primeira execução)");
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar compras: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -388,6 +401,73 @@ public abstract class Gerenciador{
         salvarJogos(listaDeJogos);
         salvarContas(listaContas);
         salvarRegistro(listaRegistros);
+        salvarTodasCompras(contas);
+    }
+    
+    public static void removerJogoComReembolso(Jogo jogo) {
+        // Carrega contas e jogos
+        ArrayList<Conta> contas = carregaContas();
+        ArrayList<Jogo> jogos = carregaJogos();
+        carregarCompras(contas, jogos); // garante que as compras estão carregadas
+
+        // Percorre todos os usuários
+        for (Conta c : contas) {
+            if (c instanceof Usuario) {
+                Usuario usuario = (Usuario) c;
+                List<Compra> compras = usuario.getCompras();
+                List<Compra> comprasRemover = new ArrayList<>();
+                double valorReembolso = 0.0;
+
+                // Verifica cada compra
+                for (Compra compra : compras) {
+                    List<ItemCompra> itens = compra.getItens();
+                    List<ItemCompra> itensRemover = new ArrayList<>();
+                    for (ItemCompra item : itens) {
+                        if (item.getJogo().getId() == jogo.getId()) {
+                            valorReembolso += item.getPrecoPago();
+                            itensRemover.add(item);
+                        }
+                    }
+                    // Remove os itens da compra
+                    itens.removeAll(itensRemover);
+                    // Se a compra ficou vazia, marca para remover a compra
+                    if (itens.isEmpty()) {
+                        comprasRemover.add(compra);
+                    }
+                }
+
+                // Remove compras vazias
+                compras.removeAll(comprasRemover);
+
+                // Se houve reembolso, adiciona ao saldo
+                if (valorReembolso > 0) {
+                    usuario.setSaldo(usuario.getSaldo() + valorReembolso);
+                }
+            }
+        }
+
+        // Agora remove o jogo da lista de jogos
+        for (int i = 0; i < jogos.size(); i++) {
+            if (jogos.get(i).getId() == jogo.getId()) {
+                jogos.remove(i);
+                break;
+            }
+        }
+
+        // Remove os registros associados ao jogo
+        ArrayList<Registro> registros = CarregaRegistros(jogos, contas);
+        List<Registro> registrosRemover = new ArrayList<>();
+        for (Registro r : registros) {
+            if (r.getJogo().getId() == jogo.getId()) {
+                registrosRemover.add(r);
+            }
+        }
+        registros.removeAll(registrosRemover);
+
+        // Salva tudo
+        salvarContas(contas);
+        salvarJogos(jogos);
+        salvarRegistro(registros);
         salvarTodasCompras(contas);
     }
 

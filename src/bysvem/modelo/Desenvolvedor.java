@@ -26,8 +26,7 @@ public class Desenvolvedor extends Conta{
     }
 
     /*MÉTODO ESTAVA NA LOJA, MAS ACHO QUE FICA MELHOR AQUI */
-    public void devCriaJogo(ArrayList<Jogo> jogos, Loja loja, Scanner scn){
-        int id = loja.criaId(2);
+    public void devCriaJogo(ArrayList<Jogo> jogos, Scanner scn){
         System.out.print("\nInforme o nome do jogo: ");
         String nomeJogo = scn.nextLine();
         System.out.print("Informe o gênero do jogo: ");
@@ -59,7 +58,7 @@ public class Desenvolvedor extends Conta{
     }
 
     /*MÉTODO ESTAVA EM LOJA, MAS AQUI FAZ MAIS SENTIDO */
-    public void jogosDev(ArrayList<Jogo> jogos, Loja loja, Scanner scn){
+    public void jogosDev(ArrayList<Jogo> jogos, Scanner scn){
         System.out.println("\n================ Jogos Disponíveis ================");
 
         ArrayList<Jogo> jogosDoDev = new ArrayList<>();
@@ -92,8 +91,8 @@ public class Desenvolvedor extends Conta{
 
             if(escolha >= 1 && escolha <= jogosDoDev.size()){
                 Jogo escolhido = jogosDoDev.get(escolha - 1);
-                loja.imprimirJogo(escolhido);
-                loja.imprimirDadosJogo(escolhido);
+                //loja.imprimirJogo(escolhido);
+                //loja.imprimirDadosJogo(escolhido);
 
                 System.out.println("\nAperte enter para voltar");
                 //scn.nextLine();
@@ -110,7 +109,7 @@ public class Desenvolvedor extends Conta{
     }
 
     /*MÉTODO ERA DE LOJA, MAS AQUI FAZ MAIS SENTIDO */
-        public boolean removerJogoDev(ArrayList<Jogo> jogos, Loja loja, Scanner scn){
+        public boolean removerJogoDev(ArrayList<Jogo> jogos, Scanner scn){
 
             ArrayList<Jogo> jogosDoDev = new ArrayList<>();
 
@@ -159,7 +158,7 @@ public class Desenvolvedor extends Conta{
             }
         }
 
-    public boolean alterarJogosDev(ArrayList<Jogo> jogos, Loja loja, Scanner scn){
+    public boolean alterarJogosDev(ArrayList<Jogo> jogos, Scanner scn){
     
         ArrayList<Jogo> jogosDoDev = new ArrayList<>();
 
@@ -261,7 +260,7 @@ public class Desenvolvedor extends Conta{
         }
     }
 
-    public void gerenciarJogosDev(ArrayList<Jogo> jogos, Loja loja, Scanner scn){
+    public void gerenciarJogosDev(ArrayList<Jogo> jogos, Scanner scn){
         while(true){
             System.out.println("\n================ Configuração ================");
             System.out.println("1 - Adicionar jogo\n2 - Remover jogo\n3 - Alterar Jogo\n4 - Voltar");
@@ -272,10 +271,10 @@ public class Desenvolvedor extends Conta{
                 opc = Integer.parseInt(opcaoString);
             }
             if(opc == 1){
-                devCriaJogo(jogos, loja, scn);
+                devCriaJogo(jogos, scn);
                 continue;
             }else if(opc == 2){
-                boolean removeu = removerJogoDev(jogos, loja, scn);
+                boolean removeu = removerJogoDev(jogos, scn);
                 if(removeu){
                     System.out.println("Jogo removido com sucesso!");
                     break;
@@ -284,7 +283,7 @@ public class Desenvolvedor extends Conta{
                 }
                 continue;
             }else if(opc == 3){
-                alterarJogosDev(jogos, loja, scn);
+                alterarJogosDev(jogos, scn);
                 continue;
             }else if(opc == 4){
                 return;

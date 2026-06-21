@@ -101,7 +101,7 @@ public abstract class Conta extends Entidade<Conta>{
         return contas;
     }
 
-    public void alteraNome(Loja loja, Scanner scn, ArrayList<Conta> contas){
+    public void alteraNome(Scanner scn, ArrayList<Conta> contas){
         boolean salvar = false;
         int flag = 1; 
         String nome = null;
@@ -158,7 +158,7 @@ public abstract class Conta extends Entidade<Conta>{
         }
     }
 
-    public void alteraSenha(ArrayList<Conta> contas, Loja loja, Scanner scn){
+    public void alteraSenha(ArrayList<Conta> contas, Scanner scn){
         boolean salvar = false;
         int flag = 1;
         int senha = -1;

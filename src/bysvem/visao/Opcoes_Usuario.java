@@ -33,7 +33,7 @@ public class Opcoes_Usuario extends JFrame {
         this.usuarioLogado = conta;
         setTitle("Loja Bysvem");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 800);
+        setSize(1200, 900);
         setLocationRelativeTo(null);
         setResizable(false);
 
@@ -60,12 +60,12 @@ public class Opcoes_Usuario extends JFrame {
         opcoesPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // ---- ORDEM DOS BOTÕES ----
-        List<String> ordemBotoes = new ArrayList<>();
+        java.util.List<String> ordemBotoes = new java.util.ArrayList<>();
 
         // 1. Jogos Disponíveis (sempre)
         ordemBotoes.add(" Jogos Disponíveis ");
 
-        // 2. Biblioteca e Carrinho (apenas para Usuário)
+        // 2. Biblioteca e Carrinho (apenas Usuário)
         if (usuarioLogado instanceof Usuario) {
             ordemBotoes.add(" Biblioteca ");
             ordemBotoes.add(" Carrinho ");
@@ -83,6 +83,7 @@ public class Opcoes_Usuario extends JFrame {
         if (usuarioLogado instanceof Operador) {
             ordemBotoes.add(" Gerenciar Usuários ");
             ordemBotoes.add(" Gerenciar Jogos (Admin) ");
+            ordemBotoes.add(" Visualizar Compras "); // NOVO
         }
 
         // 6. Sair (sempre no final)
@@ -106,7 +107,7 @@ public class Opcoes_Usuario extends JFrame {
 
     private JButton criarBotao(String texto) {
         JButton botao = new JButton(texto);
-        botao.setFont(new Font("Arial", Font.PLAIN, 24));
+        botao.setFont(new Font("Arial", Font.PLAIN, 24)); // TAMANHO PADRÃO
         botao.setAlignmentX(Component.CENTER_ALIGNMENT);
         botao.setMaximumSize(new Dimension(420, 60));
         botao.setPreferredSize(new Dimension(420, 60));
@@ -134,19 +135,24 @@ public class Opcoes_Usuario extends JFrame {
                         new Configuracoes(Opcoes_Usuario.this, usuarioLogado);
                         break;
                     case "Gerenciar Jogos":
-                        JOptionPane.showMessageDialog(Opcoes_Usuario.this,
-                                "Funcionalidade em desenvolvimento: Gerenciar Jogos",
-                                "Info", JOptionPane.INFORMATION_MESSAGE);
+                        if (usuarioLogado instanceof Desenvolvedor) {
+                            new TelaGerenciarJogos(Opcoes_Usuario.this, (Desenvolvedor) usuarioLogado);
+                        }
                         break;
                     case "Gerenciar Usuários":
-                        JOptionPane.showMessageDialog(Opcoes_Usuario.this,
-                                "Funcionalidade em desenvolvimento: Gerenciar Usuários",
-                                "Info", JOptionPane.INFORMATION_MESSAGE);
+                        if (usuarioLogado instanceof Operador) {
+                            new TelaGerenciarUsuarios(Opcoes_Usuario.this);
+                        }
                         break;
                     case "Gerenciar Jogos (Admin)":
-                        JOptionPane.showMessageDialog(Opcoes_Usuario.this,
-                                "Funcionalidade em desenvolvimento: Gerenciar Jogos (Admin)",
-                                "Info", JOptionPane.INFORMATION_MESSAGE);
+                        if (usuarioLogado instanceof Operador) {
+                            new TelaGerenciarJogosAdmin(Opcoes_Usuario.this);
+                        }
+                        break;
+                    case "Visualizar Compras": // NOVO
+                        if (usuarioLogado instanceof Operador) {
+                            new TelaVisualizarCompras(Opcoes_Usuario.this);
+                        }
                         break;
                     case "Sair":
                         sair();

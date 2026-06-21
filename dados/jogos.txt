@@ -2,7 +2,6 @@
 52;Marvel Rivals;Ação;Net Ease;0.0;Marvel Rivals é um jogo de tiro JxJ em equipe com Super Heróis! Reúna um grupo de estrelas da Marvel, crie estratégias e combine seus poderes para executar poderosas habilidades de equipe.
 33;Valorant;FPS;Riot Games;0.0;um FPS tático 5v5 baseado em personagens, onde o tiroteio preciso encontra habilidades únicas de agentes.
 10;Counter Strike 2;FPS;Valve;0.0;um FPS tático 5v5 baseado em dois times, terroristas e contra-terroristas, onde o tiroteio encontra a estratégia e destreza.
-54;Portal;Puzzle e Plataforma;Valve;32.99;Estabelecido nos misteriosos Laboratórios Aperture Science, Portal é aclamado como um dos novos jogos mais inovadores no horizonte e oferecerá aos jogadores horas de jogabilidade única.
 79;Left 4 Dead 2;Ação e Terror;Valve;32.99;Ambientado no apocalipse zumbi, Left 4 Dead 2 leva você e seus amigos pelas cidades, brejos e cemitérios de Deep South, Savannah e Nova Orleans, ao longo de cinco campnhas expansivas.
 50;Resident Evil Requiem;Terror;Capcom;299.0; Requiem para os mortos. Pesadelo para os vivos. Prepara-te para fugir à morte nesta experiência de gelar o sangue.
 63;Street Fighter 6;Luta;Capcom;179.0;Descubra quem é o lutador mais forte do universo de personagens da Capcom!

@@ -27,7 +27,6 @@ import bysvem.modelo.Conta;
 import bysvem.modelo.Gerenciador;
 import bysvem.modelo.ItemCompra;
 import bysvem.modelo.Jogo;
-import bysvem.modelo.TipoAquisicao;
 import bysvem.modelo.Usuario;
 import bysvem.modelo.Registro;
 
@@ -103,7 +102,7 @@ public class Detalhes_Usuario {
 
                 // Cria um ItemCompra para o carrinho
                 int idItem = gerarId();
-                ItemCompra item = new ItemCompra(idItem, jogo, TipoAquisicao.COMPRA_DEFINITIVA, jogo.getPreco());
+                ItemCompra item = new ItemCompra(idItem, jogo, jogo.getPreco(), LocalDate.now().plusYears(1));
                 usuarioLogado.adicionarAoCarrinho(item);
 
                 JOptionPane.showMessageDialog(dialog,
@@ -149,7 +148,7 @@ public class Detalhes_Usuario {
 
         // Cria ItemCompra
         int idItem = gerarId();
-        ItemCompra item = new ItemCompra(idItem, jogo, TipoAquisicao.COMPRA_DEFINITIVA, jogo.getPreco());
+        ItemCompra item = new ItemCompra(idItem, jogo, jogo.getPreco());
         List<ItemCompra> itens = new ArrayList<>();
         itens.add(item);
         int idCompra = gerarId();

@@ -139,16 +139,19 @@ public class TelaCarrinho extends JDialog {
                 "Finalizar Compra", JOptionPane.YES_NO_OPTION);
         if (confirm != JOptionPane.YES_OPTION) return;
 
-        // Processa a compra
         try {
+            // ---------- NOVO: Definir status e dataAtivacao ----------
+            for (ItemCompra item : carrinho) {
+                item.setDataAtivacao(LocalDate.now());
+            }
+            // ----------------------------------------------------------
+
             // Debita o saldo
             usuario.setSaldo(usuario.getSaldo() - total);
 
-            // Cria uma única compra com todos os itens
+            // Cria a compra com os itens do carrinho
             int idCompra = gerarId();
             Compra compra = new Compra(idCompra, usuario, LocalDate.now(), new ArrayList<>(carrinho));
-
-            // Adiciona ao histórico
             usuario.adicionarCompra(compra);
 
             // Cria registros para cada jogo
@@ -160,10 +163,9 @@ public class TelaCarrinho extends JDialog {
 
             // Persiste contas e compras
             ArrayList<Conta> contas = Gerenciador.carregaContas();
-            ArrayList<Jogo> jogos = Gerenciador.carregaJogos(); // não precisa carregar, mas para salvar
-            Gerenciador.carregarCompras(contas, jogos); // atualiza as listas de compras
+            ArrayList<Jogo> jogos = Gerenciador.carregaJogos();
+            Gerenciador.carregarCompras(contas, jogos);
 
-            // Atualiza o usuário na lista
             for (int i = 0; i < contas.size(); i++) {
                 if (contas.get(i).getId() == usuario.getId()) {
                     contas.set(i, usuario);
@@ -174,16 +176,12 @@ public class TelaCarrinho extends JDialog {
             Gerenciador.salvarContas(contas);
             Gerenciador.salvarTodasCompras(contas);
 
-            // Limpa o carrinho
             usuario.limparCarrinho();
 
             JOptionPane.showMessageDialog(this,
-                    "Compra finalizada com sucesso!\n" +
-                            "Total pago: R$ " + String.format("%.2f", total),
+                    "Compra finalizada com sucesso!\nTotal pago: R$ " + String.format("%.2f", total),
                     "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-
-            dispose(); // fecha a tela do carrinho
-
+            dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Erro ao finalizar compra: " + e.getMessage(),
