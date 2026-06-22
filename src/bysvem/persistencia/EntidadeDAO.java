@@ -19,7 +19,14 @@ public class EntidadeDAO <E extends Entidade>{
 
     public void salvar(E entidade) throws PersistenceException{
         
-        if(!entidadesSalvas.add(entidade)) throw new PersistenceException("salvar", "Já foi salvo", entidade);
+        for(E entidadeAtual : this.entidadesSalvas){
+
+            if(entidadeAtual.getId() == entidade.getId()){
+                throw new PersistenceException("salvar", "Já foi salvo", entidade);
+            }
+        }
+       
+        this.entidadesSalvas.add(entidade);
     }
 
     public void atualizar(E entidade) throws PersistenceException{
