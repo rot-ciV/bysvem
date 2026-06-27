@@ -22,9 +22,11 @@ import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import bysvem.modelo.Gerenciador;
 import bysvem.modelo.Jogo;
 import bysvem.modelo.Usuario;
+import bysvem.persistencia.EntidadeDAO;
+import bysvem.persistencia.GerenciadorPersistencia;
+import bysvem.persistencia.PersistenceException;
 
 public class Jogos_Disponiveis extends JFrame {
 
@@ -44,7 +46,19 @@ public class Jogos_Disponiveis extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        jogos = Gerenciador.carregaJogos();
+        jogos = new ArrayList<>();
+
+        try{
+            EntidadeDAO<Jogo> dao = GerenciadorPersistencia.getInstancia().getDAO(Jogo.class);
+            Jogo[] vetorJogos = dao.carregarTodos();
+
+            for(Jogo j : vetorJogos){
+                jogos.add(j);
+            }
+
+        }catch(PersistenceException e){
+        }
+        
         jogosFiltrados = new ArrayList<>(jogos);
 
         JPanel panel = new JPanel(new BorderLayout(10, 10));

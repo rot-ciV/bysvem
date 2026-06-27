@@ -2,10 +2,36 @@
 
 package bysvem.visao;
 
-import bysvem.modelo.*;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+import bysvem.modelo.Compra;
+import bysvem.modelo.Conta;
+import bysvem.modelo.Desenvolvedor;
+import bysvem.modelo.Entidade;
+import bysvem.modelo.ItemCompra;
+import bysvem.modelo.Jogo;
+import bysvem.modelo.Usuario;
+import bysvem.persistencia.EntidadeDAO;
+import bysvem.persistencia.GerenciadorPersistencia;
+import bysvem.persistencia.PersistenceException;
 
 public class TelaGerenciarJogos extends JDialog {
     private Desenvolvedor desenvolvedor;
@@ -22,7 +48,7 @@ public class TelaGerenciarJogos extends JDialog {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         // Carrega jogos da desenvolvedora
-        ArrayList<Jogo> todosJogos = Gerenciador.carregaJogos();
+        ArrayList<Jogo> todosJogos = carregarTodosJogos();
         jogosDoDev = new ArrayList<>();
         for (Jogo j : todosJogos) {
             if (j.getDesenvolvedora().equalsIgnoreCase(dev.getEmpresa())) {
@@ -116,25 +142,21 @@ public class TelaGerenciarJogos extends JDialog {
                 }
 
                 // Gera um ID para o jogo
-                ArrayList<Jogo> todosJogos = Gerenciador.carregaJogos();
-                int novoId = 1;
-                for (Jogo j : todosJogos) {
-                    if (j.getId() >= novoId) {
-                        novoId = j.getId() + 1;
-                    }
-                }
-                int id = novoId;
+                EntidadeDAO<Jogo> dao = GerenciadorPersistencia.getInstancia().getDAO(Jogo.class);
+                int novoId = proximoId(dao);
+                Jogo novoJogo = desenvolvedor.criaJogo(novoId, nome, genero, preco, desc);
 
-                Jogo novoJogo = new Jogo(id, nome, genero, desenvolvedor.getEmpresa(), preco, desc);
-                if (novoJogo.salvar(todosJogos)) {
-                    jogosDoDev.add(novoJogo);
-                    atualizarLista();
-                    JOptionPane.showMessageDialog(this, "Jogo adicionado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Erro ao salvar jogo.", "Erro", JOptionPane.ERROR_MESSAGE);
-                }
+                dao.salvar(novoJogo);
+                dao.persistir("dados/jogos.dat");
+
+                jogosDoDev.add(novoJogo);
+                atualizarLista();
+                JOptionPane.showMessageDialog(this, "Jogo adicionado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Preço inválido. Digite um número.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }catch(PersistenceException e){
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -168,7 +190,8 @@ public class TelaGerenciarJogos extends JDialog {
         int result = JOptionPane.showConfirmDialog(this, panel, "Editar Jogo",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-        if (result == JOptionPane.OK_OPTION) {
+        if (result != JOptionPane.OK_OPTION) return;
+
             try {
                 String nome = campoNome.getText().trim();
                 String genero = campoGenero.getText().trim();
@@ -185,20 +208,23 @@ public class TelaGerenciarJogos extends JDialog {
                 jogo.setPreco(preco);
                 jogo.setDesc(desc);
 
-                ArrayList<Jogo> todosJogos = Gerenciador.carregaJogos();
-                if (jogo.atualizar(todosJogos)) {
-                    atualizarLista();
-                    JOptionPane.showMessageDialog(this, "Jogo atualizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Erro ao atualizar jogo.", "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (NumberFormatException ex) {
+                EntidadeDAO<Jogo> dao = GerenciadorPersistencia.getInstancia().getDAO(Jogo.class);
+                dao.atualizar(jogo);
+                dao.persistir("dados/jogos.dat");
+
+                atualizarLista();
+                JOptionPane.showMessageDialog(this, "Jogo atualizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+            }catch (NumberFormatException ex){
                 JOptionPane.showMessageDialog(this, "Preço inválido. Digite um número.", "Erro", JOptionPane.ERROR_MESSAGE);
+
+            }catch(PersistenceException e){
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
-        }
     }
 
     private void removerJogo() {
+
         int idx = listaJogos.getSelectedIndex();
         if (idx == -1) {
             JOptionPane.showMessageDialog(this, "Selecione um jogo para remover.", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -211,18 +237,81 @@ public class TelaGerenciarJogos extends JDialog {
                 "Todos os usuários que compraram este jogo serão reembolsados.",
                 "Confirmar Remoção", JOptionPane.YES_NO_OPTION);
 
-        if (confirm == JOptionPane.YES_OPTION) {
-            Gerenciador.removerJogoComReembolso(jogo);
-            // Recarrega os jogos do desenvolvedor
-            ArrayList<Jogo> todosJogos = Gerenciador.carregaJogos();
-            jogosDoDev.clear();
-            for (Jogo j : todosJogos) {
-                if (j.getDesenvolvedora().equalsIgnoreCase(desenvolvedor.getEmpresa())) {
-                    jogosDoDev.add(j);
+        if (confirm != JOptionPane.YES_OPTION)  return;
+
+        try {
+            GerenciadorPersistencia gp = GerenciadorPersistencia.getInstancia();
+            EntidadeDAO<Jogo> jogoDAO = gp.getDAO(Jogo.class);
+            EntidadeDAO<Conta> contaDAO = gp.getDAO(Conta.class);
+            EntidadeDAO<Compra> compraDAO = gp.getDAO(Compra.class);
+
+                try {
+                    Compra[] compras = compraDAO.carregarTodos();
+                    for (Compra compra : compras) {
+                        boolean alterou = false;
+                        for (ItemCompra item : new ArrayList<>(compra.getItens())){
+                            if (item.getJogo().getId() == jogo.getId()) {
+                                // Reembolsa o usuário
+                                Usuario u = compra.getUsuario();
+                                u.setSaldo(u.getSaldo() + item.getPrecoPago());
+                                compra.getItens().remove(item);
+                                alterou = true;
+                            }
+                        }
+                        if (alterou) {
+                            compraDAO.atualizar(compra);
+                            contaDAO.atualizar(compra.getUsuario());
+                        }
+                    }
+                    compraDAO.persistir("dados/compras.dat");
+                    contaDAO.persistir("dados/contas.dat");
+
+                } catch (PersistenceException e) {
+                //Nao comprou nada
                 }
+
+                jogoDAO.apagar(jogo.getId());
+                jogoDAO.persistir("dados/jogos.dat");
+
+                jogosDoDev.remove(jogo);
+                atualizarLista();
+                JOptionPane.showMessageDialog(this, "Jogo removido com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+        }catch(PersistenceException e){
+            JOptionPane.showMessageDialog(this, "Erro ao remover: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private ArrayList<Jogo> carregarTodosJogos(){
+
+        ArrayList<Jogo> lista = new ArrayList<>();
+
+        try{
+            Jogo[] array = GerenciadorPersistencia.getInstancia().getDAO(Jogo.class).carregarTodos();
+            for (Jogo j : array){
+                lista.add(j);
             }
-            atualizarLista();
-            JOptionPane.showMessageDialog(this, "Jogo removido com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+        }catch(PersistenceException e){
+        }
+
+        return lista;
+    }
+
+    private int proximoId(EntidadeDAO<?> dao){
+
+        try {
+            Object[] entidades = dao.carregarTodos();
+            int maior = 0;
+
+            for (Object obj : entidades) {
+                int id = ((Entidade) obj).getId();
+                if (id > maior) maior = id;
+            }
+            return maior + 1;
+
+        }catch(PersistenceException e){
+            return 1;
         }
     }
 }

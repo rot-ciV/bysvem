@@ -4,7 +4,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,10 +16,12 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import bysvem.modelo.Compra;
 import bysvem.modelo.Conta;
-import bysvem.modelo.Gerenciador;
 import bysvem.modelo.Usuario;
-import bysvem.modelo.Jogo;
+import bysvem.persistencia.EntidadeDAO;
+import bysvem.persistencia.GerenciadorPersistencia;
+import bysvem.persistencia.PersistenceException;
 
 public class TelaLogin extends JFrame {
 
@@ -123,64 +126,76 @@ public class TelaLogin extends JFrame {
     }
 
     private void autenticar() {
-    String email = campoEmail.getText().trim();
-    String senhaDigitada = new String(campoSenha.getPassword()).trim();
+        String email = campoEmail.getText().trim();
+        String senhaDigitada = new String(campoSenha.getPassword()).trim();
 
-    if (email.isEmpty() || senhaDigitada.isEmpty()) {
-        JOptionPane.showMessageDialog(this,
-                "Preencha ambos os campos!", "Aviso",
-                JOptionPane.WARNING_MESSAGE);
-        return;
-    }
+        if (email.isEmpty() || senhaDigitada.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Preencha ambos os campos!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-    Integer senhaInt = converterSenha(senhaDigitada);
-    if (senhaInt == null) {
-        JOptionPane.showMessageDialog(this,
-                "A senha deve conter apenas números.",
-                "Erro", JOptionPane.ERROR_MESSAGE);
-        campoSenha.setText("");
-        campoSenha.requestFocus();
-        return;
-    }
+        Integer senhaInt = converterSenha(senhaDigitada);
+        if (senhaInt == null) {
+            JOptionPane.showMessageDialog(this, "A senha deve conter apenas números.", "Erro", JOptionPane.ERROR_MESSAGE);
+            campoSenha.setText("");
+            campoSenha.requestFocus();
+            return;
+        }
 
-    // ===== CARREGAR TODOS OS DADOS =====
-    ArrayList<Jogo> jogos = Gerenciador.carregaJogos();
-    ArrayList<Conta> contas = Gerenciador.carregaContas();
-    if (contas.isEmpty()) {
-        JOptionPane.showMessageDialog(this,
-                "Erro ao carregar contas. Verifique o arquivo.",
-                "Erro", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+        try {
+            GerenciadorPersistencia gp = GerenciadorPersistencia.getInstancia();
+            EntidadeDAO<Conta> contaDAO = gp.getDAO(Conta.class);
+            EntidadeDAO<Compra> compraDAO = gp.getDAO(Compra.class);
 
-    Gerenciador.carregarCompras(contas, jogos);
-    Gerenciador.carregarRegistros(jogos, contas);
+            Conta[] contas = contaDAO.carregarTodos();
 
-    for (Conta c : contas) {
-        if (c.getEmail().equals(email) && c.getSenha() == senhaInt) {
-            if (c.getBan()) {
-                JOptionPane.showMessageDialog(this,
-                        "Usuário banido! Contate o administrador.",
-                        "Acesso negado", JOptionPane.ERROR_MESSAGE);
-                campoSenha.setText("");
-                campoSenha.requestFocus();
-                return;
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        "Login realizado com sucesso!", "Sucesso",
-                        JOptionPane.INFORMATION_MESSAGE);
-                dispose();
-                // Passa o objeto que já está na lista (com compras)
-                SwingUtilities.invokeLater(() -> new Opcoes_Usuario(c));
-                return;
+            // Monta mapa id → Conta para associar compras
+            Map<Integer, Usuario> mapaUsuarios = new HashMap<>();
+            for (Conta c : contas) {
+                if (c instanceof Usuario) {
+                    mapaUsuarios.put(c.getId(), (Usuario) c);
+                }
             }
+
+            // Associa compras aos usuários pelo id, ignorando a referência serializada
+            try {
+                Compra[] compras = compraDAO.carregarTodos();
+                for (Compra compra : compras) {
+                    Usuario u = mapaUsuarios.get(compra.getUsuario().getId());
+                    if (u != null) {
+                        compra.setUsuario(u); // corrige a referência também
+                        u.adicionarCompra(compra);
+                    }
+                }
+            } catch (PersistenceException e) {
+                // Sem compras ainda, normal
+            }
+
+            // Autentica
+            for (Conta c : contas) {
+                if (c.getEmail().equals(email) && c.getSenha() == senhaInt) {
+                    if (c.getBan()) {
+                        JOptionPane.showMessageDialog(this, "Usuário banido! Contate o administrador.",
+                                "Acesso negado", JOptionPane.ERROR_MESSAGE);
+                        campoSenha.setText("");
+                        campoSenha.requestFocus();
+                        return;
+                    }
+                    JOptionPane.showMessageDialog(this, "Login realizado com sucesso!", "Sucesso",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                    SwingUtilities.invokeLater(() -> new Opcoes_Usuario(c));
+                    return;
+                }
+            }
+
+            JOptionPane.showMessageDialog(this, "E-mail ou senha inválidos!", "Erro", JOptionPane.ERROR_MESSAGE);
+            campoSenha.setText("");
+            campoSenha.requestFocus();
+
+        } catch (PersistenceException e) {
+            // carregarTodos lança exceção se o conjunto estiver vazio (primeira execução)
+            JOptionPane.showMessageDialog(this, "Nenhuma conta cadastrada ainda.", "Aviso", JOptionPane.WARNING_MESSAGE);
         }
     }
-
-    JOptionPane.showMessageDialog(this,
-            "E-mail ou senha inválidos!", "Erro",
-            JOptionPane.ERROR_MESSAGE);
-    campoSenha.setText("");
-    campoSenha.requestFocus();
-}
 }

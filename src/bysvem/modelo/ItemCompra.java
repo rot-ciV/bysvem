@@ -1,8 +1,9 @@
 package bysvem.modelo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class ItemCompra {
+public class ItemCompra implements Serializable{
     private int id;
     private Jogo jogo;
     private double precoPago;

@@ -15,7 +15,7 @@ DEV;1262;FromSoftware;123;from@gmail.com;FromSoftware;false
 DEV;9441;CD PROJECT;123;cd@gmail.com;CD PROJEKT RED;false
 BAN_USR;7981;Pedro;123;pedro@gmail.com;521.1;true
 DEV;4916;luqueta;123;lucas@gmail.com;alura;false
-USR;9439;Ronaldo;123;ronaldo@gmail.com;120.38000000000022;false
+USR;9439;Ronaldo;123;ronaldo@gmail.com;620.69;false
 USR;9465;Luisa;123;luisa@gmail.com;150.0;false
 USR;5925;João;123;joao@gmail.com;449.11;false
 USR;7363;Olisko;242424;olisogames@gmail.com;25.5;false

@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -16,9 +15,11 @@ import javax.swing.JPanel;
 
 import bysvem.modelo.Conta;
 import bysvem.modelo.Desenvolvedor;
-import bysvem.modelo.Gerenciador;
 import bysvem.modelo.Operador;
 import bysvem.modelo.Usuario;
+import bysvem.persistencia.EntidadeDAO;
+import bysvem.persistencia.GerenciadorPersistencia;
+import bysvem.persistencia.PersistenceException;
 
 public class Configuracoes extends JDialog {
 
@@ -205,48 +206,40 @@ public class Configuracoes extends JDialog {
         }
     }
 
-    private void alterarEmail() {
+    private void alterarEmail(){
+
         String novoEmail = JOptionPane.showInputDialog(this,
-                "Digite o novo e-mail:",
-                "Alterar E-mail", JOptionPane.QUESTION_MESSAGE);
-        if (novoEmail == null || novoEmail.trim().isEmpty()) return;
+                "Digite o novo e-mail:", "Alterar E-mail", JOptionPane.QUESTION_MESSAGE);
+
+        if(novoEmail == null || novoEmail.trim().isEmpty()) return;
 
         String emailLimpo = novoEmail.trim();
 
-        if (!emailLimpo.contains("@")) {
-            JOptionPane.showMessageDialog(this,
-                    "E-mail inválido!",
-                    "Erro", JOptionPane.ERROR_MESSAGE);
+        if(!emailLimpo.contains("@")){
+            JOptionPane.showMessageDialog(this, "E-mail inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        ArrayList<Conta> contas = Gerenciador.carregaContas();
-        if (contas == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Erro ao carregar contas. Verifique o arquivo.",
-                    "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        for (Conta c : contas) {
-            if (c.getId() != usuarioLogado.getId() &&
-                    c.getEmail().equalsIgnoreCase(emailLimpo)) {
-                JOptionPane.showMessageDialog(this,
-                        "Este e-mail já está em uso por outra conta.",
-                        "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
+        try{
+            EntidadeDAO<Conta> dao = GerenciadorPersistencia.getInstancia().getDAO(Conta.class);
+            Conta[] contas = dao.carregarTodos();
+            for(Conta c : contas){
+                if(c.getId() != usuarioLogado.getId() && c.getEmail().equalsIgnoreCase(emailLimpo)){
+                    JOptionPane.showMessageDialog(this, "Este e-mail já está em uso.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
             }
+
+        }catch(PersistenceException e){
+            JOptionPane.showMessageDialog(this, "Erro ao verificar e-mails.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
         usuarioLogado.setEmail(emailLimpo);
-        if (salvarAlteracoes()) {
-            JOptionPane.showMessageDialog(this,
-                    "E-mail alterado com sucesso!", "Sucesso",
-                    JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "Falha ao salvar as alterações. Verifique o arquivo.",
-                    "Erro", JOptionPane.ERROR_MESSAGE);
+        if(salvarAlteracoes()){
+            JOptionPane.showMessageDialog(this, "E-mail alterado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            JOptionPane.showMessageDialog(this, "Falha ao salvar.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -312,6 +305,7 @@ public class Configuracoes extends JDialog {
     }
 
     private void tornarDesenvolvedor() {
+
         if (usuarioLogado instanceof Desenvolvedor) {
             JOptionPane.showMessageDialog(this,
                     "Você já é um desenvolvedor.", "Info",
@@ -333,62 +327,31 @@ public class Configuracoes extends JDialog {
                 usuarioLogado.getBan()
         );
 
-        ArrayList<Conta> contas = Gerenciador.carregaContas();
-        if (contas == null) {
+        try{
+            EntidadeDAO<Conta> dao = GerenciadorPersistencia.getInstancia().getDAO(Conta.class);
+            dao.apagar(usuarioLogado.getId());
+            dao.salvar(dev);
+            dao.persistir("dados/contas.dat");
+            usuarioLogado = dev;
             JOptionPane.showMessageDialog(this,
-                    "Erro ao carregar contas.", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
+                    "Conta promovida a Desenvolvedor! Reinicie o menu para ver as novas opções.",
+                    "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            dispose();
+
+        }catch(PersistenceException e){
+        JOptionPane.showMessageDialog(this, "Erro ao promover conta: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-
-        boolean encontrado = false;
-        for (int i = 0; i < contas.size(); i++) {
-            if (contas.get(i).getId() == dev.getId()) {
-                contas.set(i, dev);
-                encontrado = true;
-                break;
-            }
-        }
-
-        if (!encontrado) {
-            JOptionPane.showMessageDialog(this,
-                    "Conta original não encontrada na lista.", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        Gerenciador.salvarContas(contas);
-        usuarioLogado = dev;
-
-        JOptionPane.showMessageDialog(this,
-                "Conta promovida a Desenvolvedor! Reinicie o menu para ver as novas opções.",
-                "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        dispose();
     }
 
-    private boolean salvarAlteracoes() {
-        try {
-            ArrayList<Conta> contas = Gerenciador.carregaContas();
-            if (contas == null) {
-                return false;
-            }
+    private boolean salvarAlteracoes(){
 
-            boolean encontrado = false;
-            for (int i = 0; i < contas.size(); i++) {
-                if (contas.get(i).getId() == usuarioLogado.getId()) {
-                    contas.set(i, usuarioLogado);
-                    encontrado = true;
-                    break;
-                }
-            }
-
-            if (!encontrado) {
-                return false;
-            }
-
-            Gerenciador.salvarContas(contas);
+        try{
+            EntidadeDAO<Conta> dao = GerenciadorPersistencia.getInstancia().getDAO(Conta.class);
+            dao.atualizar(usuarioLogado);
+            dao.persistir("dados/contas.dat");
             return true;
-        } catch (Exception e) {
+
+        }catch(PersistenceException e){
             e.printStackTrace();
             return false;
         }

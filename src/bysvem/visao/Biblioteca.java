@@ -1,15 +1,26 @@
 package bysvem.visao;
 
-import bysvem.modelo.Conta;
-import bysvem.modelo.Jogo;
-import bysvem.modelo.Usuario;
-import bysvem.modelo.Gerenciador;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+
+import bysvem.modelo.Conta;
+import bysvem.modelo.Jogo;
+import bysvem.modelo.Usuario;
 
 public class Biblioteca extends JFrame {
     private Conta usuarioLogado;

@@ -3,34 +3,27 @@ package bysvem.persistencia;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GerenciadorPersistencia{
+import bysvem.modelo.Entidade;
+
+public class GerenciadorPersistencia {
 
     private static GerenciadorPersistencia instancia;
-    private Map<String, EntidadeDAO> listaEntidade;
+    private Map<Class<?>, EntidadeDAO<?>> listaEntidade = new HashMap<>();
 
-    private GerenciadorPersistencia(){
-        listaEntidade = new HashMap<>();
-    }
+    private GerenciadorPersistencia() {}
 
-    public static GerenciadorPersistencia getInstancia() { 
-        
-        if(instancia == null){
-
+    public static GerenciadorPersistencia getInstancia() {
+        if (instancia == null) {
             instancia = new GerenciadorPersistencia();
-            return instancia;
         }
-
-        return instancia; 
+        return instancia;
     }
 
-    public EntidadeDAO getDAO(String entidade){
-
-        if(!listaEntidade.containsKey(entidade)){
-            
-            EntidadeDAO novoDAO =  new EntidadeDAO();
-            listaEntidade.put(entidade, novoDAO);
+    public <E extends Entidade> EntidadeDAO<E> getDAO(Class<E> classe) {
+        if (!listaEntidade.containsKey(classe)) {
+            // Passa a classe para o construtor
+            listaEntidade.put(classe, new EntidadeDAO<>(classe));
         }
-
-        return listaEntidade.get(entidade); 
+        return (EntidadeDAO<E>) listaEntidade.get(classe);
     }
 }

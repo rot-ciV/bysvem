@@ -2,16 +2,14 @@ package bysvem.visao;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Dialog;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -22,13 +20,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
-import bysvem.modelo.Compra;
-import bysvem.modelo.Conta;
-import bysvem.modelo.Gerenciador;
 import bysvem.modelo.ItemCompra;
 import bysvem.modelo.Jogo;
 import bysvem.modelo.Usuario;
-import bysvem.modelo.Registro;
 
 public class Detalhes_Usuario {
 
@@ -127,66 +121,6 @@ public class Detalhes_Usuario {
 
         dialog.add(panel);
         dialog.setVisible(true);
-    }
-    
-    private static boolean realizarCompra(Usuario usuario, Jogo jogo, Component parent) {
-        // Verifica se já possui
-        if (usuario.biblioteca().stream().anyMatch(j -> j.getId() == jogo.getId())) {
-            JOptionPane.showMessageDialog(parent,
-                    "Você já possui este jogo!",
-                    "Aviso", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-
-        // Verifica saldo
-        if (usuario.getSaldo() < jogo.getPreco()) {
-            JOptionPane.showMessageDialog(parent,
-                    "Saldo insuficiente!\nSaldo atual: R$" + String.format("%.2f", usuario.getSaldo()),
-                    "Erro", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        // Cria ItemCompra
-        int idItem = gerarId();
-        ItemCompra item = new ItemCompra(idItem, jogo, jogo.getPreco());
-        List<ItemCompra> itens = new ArrayList<>();
-        itens.add(item);
-        int idCompra = gerarId();
-        Compra compra = new Compra(idCompra, usuario, LocalDate.now(), itens);
-
-        int idReg = gerarId();
-        Registro registro = new Registro(idReg, jogo, usuario, 0.0);
-
-        // --- Atualiza o objeto USUARIO original (a interface usa este) ---
-        usuario.setSaldo(usuario.getSaldo() - jogo.getPreco());
-        usuario.adicionarCompra(compra);
-
-        // --- Carrega dados para persistência ---
-        ArrayList<Conta> contas = Gerenciador.carregaContas();
-        ArrayList<Jogo> jogos = Gerenciador.carregaJogos();
-        Gerenciador.carregarCompras(contas, jogos); // preenche as compras nas contas carregadas
-        Gerenciador.carregarRegistros(jogos, contas); // carrega registros na lista estática
-
-        // --- Substitui o usuário na lista de contas pelo objeto atualizado (usuario) ---
-        boolean encontrado = false;
-        for (int i = 0; i < contas.size(); i++) {
-            if (contas.get(i).getId() == usuario.getId()) {
-                contas.set(i, usuario); // agora a lista tem o usuário com a nova compra
-                encontrado = true;
-                break;
-            }
-        }
-        if (!encontrado) {
-            JOptionPane.showMessageDialog(parent, "Erro: usuário não encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        // --- Persiste tudo ---
-        Gerenciador.salvarContas(contas);
-        Gerenciador.salvarTodasCompras(contas);
-        Gerenciador.salvarRegistro(registro); // a lista estática já tem os registros antigos
-
-        return true;
     }
 
     // Gerador de ID (substitua pelo seu método)

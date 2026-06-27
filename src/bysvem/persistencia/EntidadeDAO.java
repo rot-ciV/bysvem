@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,8 +14,10 @@ import bysvem.modelo.Entidade;
 public class EntidadeDAO <E extends Entidade>{
     
     protected Set<E> entidadesSalvas;
+    private Class<E> classeEntidade;
 
-    public EntidadeDAO() {
+    public EntidadeDAO(Class<E> classe) {
+        this.classeEntidade = classe;
         this.entidadesSalvas = new HashSet<>();
     }
 
@@ -73,32 +77,12 @@ public class EntidadeDAO <E extends Entidade>{
 
         if(entidadesSalvas.isEmpty()) throw new PersistenceException("carregarTodos", "Não há nenhum objeto salvo no banco de dados", null);
 
-        E[] entidadesCarregadas = (E[]) new Entidade[this.entidadesSalvas.size()];
-        Set<E> copia = new HashSet<>(this.entidadesSalvas);
-        int controle = 0;
-
-        while(!copia.isEmpty()){
-
-            E menorId = null;
-
-            for(E entidadeAtual : copia){
-
-                if (menorId == null){
-                    menorId = entidadeAtual;
-                    continue;
-                }
-
-                if(menorId.getId() > entidadeAtual.getId()){
-                    menorId = entidadeAtual;
-                }
-            }
-
-            entidadesCarregadas[controle] = menorId;
-            copia.remove(menorId);
-            controle++;
-        }
+        @SuppressWarnings("unchecked")
+        E[] vetorEntidade = (E[]) Array.newInstance(classeEntidade, entidadesSalvas.size());
+        entidadesSalvas.toArray(vetorEntidade);
+        Arrays.sort(vetorEntidade);
         
-        return entidadesCarregadas;
+        return vetorEntidade;
     }
 
     public void persistir(String caminho) throws PersistenceException{

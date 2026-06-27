@@ -16,8 +16,10 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import bysvem.modelo.Conta;
-import bysvem.modelo.Gerenciador;
 import bysvem.modelo.Usuario;
+import bysvem.persistencia.EntidadeDAO;
+import bysvem.persistencia.GerenciadorPersistencia;
+import bysvem.persistencia.PersistenceException;
 
 public class TelaCriarConta extends JDialog {
 
@@ -162,27 +164,40 @@ public class TelaCriarConta extends JDialog {
             int senhaInt = converterSenha(senha);
 
             // 2. Carrega contas existentes
-            ArrayList<Conta> contas = Gerenciador.carregaContas();
-            if (contas == null || contas.isEmpty()) {
-                throw new IllegalStateException("Erro ao carregar contas. Verifique o arquivo.");
+            ArrayList<Conta> contas = new ArrayList<>();
+            GerenciadorPersistencia gerenciador = GerenciadorPersistencia.getInstancia();
+            EntidadeDAO<Conta> contaDAO = gerenciador.getDAO(Conta.class);
+            
+            try {
+                contaDAO.recuperar("dados/contas.dat");
+            } catch (PersistenceException e) {
+                // Se o arquivo nao existir
             }
 
             // 3. Verifica duplicidade de nome e calcula maior ID
             int maiorId = 0;
-            for (Conta c : contas) {
-                if (c.getNome().equalsIgnoreCase(nome)) {
+            
+            try{
+                Conta[] contasVetor = contaDAO.carregarTodos();
+                
+                for(Conta c : contasVetor){
+                    if (c.getNome().equalsIgnoreCase(nome)) {
                     throw new IllegalArgumentException("Usuário já cadastrado!");
-                }
-                if (c.getId() > maiorId) {
+                    }
+                if(c.getId() > maiorId){
                     maiorId = c.getId();
                 }
             }
 
+            } catch (PersistenceException e) {
+                // Se nao tiver nada no conjunto (Primeira conta sendo criada)
+            }
+            
             // 4. Cria e salva a nova conta
             int novoId = maiorId + 1;
             Usuario novaConta = new Usuario(novoId, nome, senhaInt, email, 0.0, false);
-            contas.add(novaConta);
-            Gerenciador.salvarContas(contas);
+            contaDAO.salvar(novaConta);
+            contaDAO.persistir("dados/contas.dat");
 
             // Sucesso
             JOptionPane.showMessageDialog(this,
@@ -205,7 +220,7 @@ public class TelaCriarConta extends JDialog {
                 campoNome.requestFocus();
             }
             // Para outros erros, mantém os campos
-        } catch (Exception e) {
+        }catch(PersistenceException e) {
             // Captura qualquer outra exceção inesperada
             JOptionPane.showMessageDialog(this,
                     "Ocorreu um erro inesperado: " + e.getMessage(),

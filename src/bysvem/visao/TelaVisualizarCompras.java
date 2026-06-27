@@ -1,13 +1,29 @@
 package bysvem.visao;
 
-import bysvem.modelo.*;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
+
+import bysvem.modelo.Compra;
+import bysvem.modelo.ItemCompra;
+import bysvem.persistencia.EntidadeDAO;
+import bysvem.persistencia.GerenciadorPersistencia;
+import bysvem.persistencia.PersistenceException;
 
 public class TelaVisualizarCompras extends JDialog {
     private DefaultTableModel modeloTabela;
@@ -84,23 +100,23 @@ public class TelaVisualizarCompras extends JDialog {
         modeloTabela.setRowCount(0);
         listaCompras = new ArrayList<>();
 
-        ArrayList<Conta> contas = Gerenciador.carregaContas();
-        ArrayList<Jogo> jogos = Gerenciador.carregaJogos();
-        Gerenciador.carregarCompras(contas, jogos);
+        try {
+            EntidadeDAO<Compra> dao = GerenciadorPersistencia.getInstancia().getDAO(Compra.class);
+            Compra[] compras = dao.carregarTodos();
 
-        for (Conta c : contas) {
-            if (c instanceof Usuario) {
-                Usuario u = (Usuario) c;
-                for (Compra compra : u.getCompras()) {
-                    listaCompras.add(compra);
-                    modeloTabela.addRow(new Object[]{
-                        compra.getId(),
-                        u.getNome(),
-                        compra.getDataCompra().toString(),
-                        String.format("%.2f", compra.getValorTotal())
-                    });
-                }
+            for (Compra compra : compras) {
+                listaCompras.add(compra);
+                String nomeUsuario = compra.getUsuario() != null ? compra.getUsuario().getNome() : "Desconhecido";
+                modeloTabela.addRow(new Object[]{
+                    compra.getId(),
+                    nomeUsuario,
+                    compra.getDataCompra().toString(),
+                    String.format("%.2f", compra.getValorTotal())
+                });
             }
+
+        }catch(PersistenceException e){
+            //Nenhuma compra ainda
         }
 
         if (modeloTabela.getRowCount() == 0) {

@@ -1,54 +1,45 @@
 package bysvem.modelo;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
-public abstract class Entidade<T>{
+public abstract class Entidade implements Comparable<Entidade>, Serializable{
 
     protected int id;
-    protected boolean foiSalvo;
 
     public Entidade() {
         this.id = 0;
-        this.foiSalvo = false;
     }
 
     public Entidade(int id) {
         this.id = id;
-        this.foiSalvo = false;
     }
 
     public void setId(int id){ this.id = id; }
-    public void setFoiSalvo(boolean foiSalvo) { this.foiSalvo = foiSalvo; }
 
     public int getId() { return this.id; }
-    public boolean getFoiSalvo() { return  this.foiSalvo; } 
 
     public String toString(){
-        return String.format("\nId: %d, Foi Salvo: %b", id, foiSalvo);
+        return String.format("\nId: %d", id);
     }
 
-    public boolean salvar(ArrayList<T> lista) {
-        if (foiSalvo) return false;
-        foiSalvo = true;
-        return true;
+    @Override
+    public boolean equals(Object obj){
+
+        if(this == obj) return true;
+        if(obj == null || getClass() != obj.getClass()) return false; 
+        Entidade entidade = (Entidade) obj;
+
+        return this.id == entidade.id;
     }
 
-    public boolean atualizar(ArrayList<T> lista) {
-        if (!foiSalvo) return false;
-        return true;
+    @Override
+    public int hashCode(){
+        return Integer.hashCode(id);
     }
 
-    public boolean apagar(int id, ArrayList<T> lista) {
-        if (!foiSalvo) return false;
-        foiSalvo = false;
-        return true;    
-    }
+    @Override
+    public int compareTo(Entidade entidade){
 
-    public boolean carregar(int id, ArrayList<T> lista) {
-        this.id = id;
-        foiSalvo = true;
-        return true;
+        return Integer.compare(id, entidade.id);
     }
-
-    public abstract ArrayList<T> carregarTodos();  
 }

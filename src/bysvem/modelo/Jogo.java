@@ -1,8 +1,6 @@
 package bysvem.modelo;
 
-import java.util.ArrayList;
-
-public class Jogo extends Entidade<Jogo>{
+public class Jogo extends Entidade{
 
     private String nome;
     private String genero;
@@ -41,79 +39,6 @@ public class Jogo extends Entidade<Jogo>{
     public String getDesenvolvedora() { return this.desenvolvedora; }
     public double getPreco() { return this.preco; }
     public String getDesc() { return this.desc; }
-
-    public boolean salvar(ArrayList<Jogo> listaJogos){
-
-        if(this.foiSalvo){
-            return false;
-        }
-
-        listaJogos.add(this);
-        this.setFoiSalvo(true);
-        Gerenciador.salvarJogos(listaJogos);
-        return true;
-    }
-    
-    public boolean atualizar(ArrayList<Jogo> listaJogos){
-
-        if(!this.foiSalvo){
-            return false;
-        }
-
-        Gerenciador.salvarJogos(listaJogos);
-        return true;
-    }
-
-    public boolean apagar(int id, ArrayList<Jogo> listaJogos){
-
-        for(int i = 0; i < listaJogos.size(); i++){
-
-            if(id == listaJogos.get(i).getId()){
-
-                Jogo apagado = listaJogos.get(i);
-                apagado.setFoiSalvo(false);
-                listaJogos.remove(i);
-                Gerenciador.salvarJogos(listaJogos);
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public boolean carregar(int id, ArrayList<Jogo> listaJogos){
-
-        for(int i = 0; i < listaJogos.size(); i++){
-
-            if(id == listaJogos.get(i).getId()){
-
-                this.id = listaJogos.get(i).getId();
-                this.nome = listaJogos.get(i).getNome();
-                this.genero = listaJogos.get(i).getGenero();
-                this.desenvolvedora = listaJogos.get(i).getDesenvolvedora();
-                this.preco = listaJogos.get(i).getPreco();
-                this.desc = listaJogos.get(i).getDesc();
-                this.setFoiSalvo(true);
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    public ArrayList<Jogo> carregarTodos() {
-
-        ArrayList<Jogo> jogos = Gerenciador.carregaJogos();
-
-        for(Jogo j : jogos){
-
-            j.setFoiSalvo(true);
-        }
-
-        return jogos;
-    }
 
     @Override
     public String toString(){

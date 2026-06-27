@@ -2,12 +2,33 @@
 
 package bysvem.visao;
 
-import bysvem.modelo.*;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
+
+import bysvem.modelo.Compra;
+import bysvem.modelo.Conta;
+import bysvem.modelo.ItemCompra;
+import bysvem.modelo.Registro;
+import bysvem.modelo.Usuario;
+import bysvem.persistencia.EntidadeDAO;
+import bysvem.persistencia.GerenciadorPersistencia;
+import bysvem.persistencia.PersistenceException;
 
 public class TelaCarrinho extends JDialog {
     private Usuario usuario;
@@ -15,6 +36,11 @@ public class TelaCarrinho extends JDialog {
     private JList<String> listaItens;
     private JLabel labelTotal;
     private JButton btnFinalizar, btnRemover, btnLimpar, btnContinuar;
+
+    // Caminhos para persistência em arquivo
+    private static final String CAMINHO_CONTAS    = "dados/contas.dat";
+    private static final String CAMINHO_REGISTROS = "dados/registros.dat";
+    private static final String CAMINHO_COMPRAS   = "dados/compras.dat";
 
     public TelaCarrinho(JFrame parent, Usuario usuario) {
         super(parent, "Carrinho de Compras", true);
@@ -31,19 +57,17 @@ public class TelaCarrinho extends JDialog {
         titulo.setFont(new Font("Arial", Font.BOLD, 24));
         panel.add(titulo, BorderLayout.NORTH);
 
-        // Lista de itens
         modelo = new DefaultListModel<>();
         listaItens = new JList<>(modelo);
         listaItens.setFont(new Font("Arial", Font.PLAIN, 18));
         JScrollPane scroll = new JScrollPane(listaItens);
         panel.add(scroll, BorderLayout.CENTER);
 
-        // --- Painel inferior (deve ser criado antes de atualizar a lista) ---
         JPanel painelInferior = new JPanel(new BorderLayout());
-        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        JPanel painelBotoes   = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
-        btnRemover = new JButton("Remover Selecionado");
-        btnLimpar = new JButton("Limpar Carrinho");
+        btnRemover   = new JButton("Remover Selecionado");
+        btnLimpar    = new JButton("Limpar Carrinho");
         btnFinalizar = new JButton("Finalizar Compra");
         btnContinuar = new JButton("Continuar Comprando");
 
@@ -57,7 +81,6 @@ public class TelaCarrinho extends JDialog {
         painelBotoes.add(btnFinalizar);
         painelBotoes.add(btnContinuar);
 
-        // Inicializa labelTotal ANTES de chamar atualizarLista
         labelTotal = new JLabel("Total: R$ 0,00");
         labelTotal.setFont(new Font("Arial", Font.BOLD, 20));
         labelTotal.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -67,49 +90,44 @@ public class TelaCarrinho extends JDialog {
         panel.add(painelInferior, BorderLayout.SOUTH);
         add(panel);
 
-        // Listeners
         btnRemover.addActionListener(e -> removerSelecionado());
         btnLimpar.addActionListener(e -> limparCarrinho());
         btnFinalizar.addActionListener(e -> finalizarCompra());
         btnContinuar.addActionListener(e -> dispose());
 
-        // AGORA, com labelTotal já criado, podemos atualizar a lista
         atualizarLista();
-
         setVisible(true);
     }
 
     private void atualizarLista() {
         modelo.clear();
         for (ItemCompra item : usuario.getCarrinho()) {
-            modelo.addElement(item.getJogo().getNome() + " - R$ " + String.format("%.2f", item.getPrecoPago()));
+            modelo.addElement(item.getJogo().getNome()
+                + " - R$ " + String.format("%.2f", item.getPrecoPago()));
         }
-        atualizarTotal(); // labelTotal já existe
+        atualizarTotal();
     }
 
     private void atualizarTotal() {
-        double total = usuario.getTotalCarrinho();
-        labelTotal.setText(String.format("Total: R$ %.2f", total));
+        labelTotal.setText(String.format("Total: R$ %.2f", usuario.getTotalCarrinho()));
     }
 
     private void removerSelecionado() {
         int idx = listaItens.getSelectedIndex();
         if (idx == -1) {
             JOptionPane.showMessageDialog(this,
-                    "Selecione um item para remover.",
-                    "Aviso", JOptionPane.WARNING_MESSAGE);
+                "Selecione um item para remover.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        ItemCompra item = usuario.getCarrinho().get(idx);
-        usuario.removerDoCarrinho(item);
+        usuario.removerDoCarrinho(usuario.getCarrinho().get(idx));
         atualizarLista();
     }
 
     private void limparCarrinho() {
         if (usuario.getCarrinho().isEmpty()) return;
         int confirm = JOptionPane.showConfirmDialog(this,
-                "Remover todos os itens do carrinho?",
-                "Limpar Carrinho", JOptionPane.YES_NO_OPTION);
+            "Remover todos os itens do carrinho?",
+            "Limpar Carrinho", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             usuario.limparCarrinho();
             atualizarLista();
@@ -118,74 +136,76 @@ public class TelaCarrinho extends JDialog {
 
     private void finalizarCompra() {
         List<ItemCompra> carrinho = usuario.getCarrinho();
+
         if (carrinho.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Carrinho vazio!",
-                    "Aviso", JOptionPane.WARNING_MESSAGE);
+                "Carrinho vazio!", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         double total = usuario.getTotalCarrinho();
+
         if (usuario.getSaldo() < total) {
             JOptionPane.showMessageDialog(this,
-                    String.format("Saldo insuficiente!\nSaldo atual: R$ %.2f\nTotal: R$ %.2f",
-                            usuario.getSaldo(), total),
-                    "Erro", JOptionPane.ERROR_MESSAGE);
+                String.format("Saldo insuficiente!\nSaldo atual: R$ %.2f\nTotal: R$ %.2f",
+                    usuario.getSaldo(), total),
+                "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         int confirm = JOptionPane.showConfirmDialog(this,
-                String.format("Total da compra: R$ %.2f\nConfirmar compra?", total),
-                "Finalizar Compra", JOptionPane.YES_NO_OPTION);
+            String.format("Total da compra: R$ %.2f\nConfirmar compra?", total),
+            "Finalizar Compra", JOptionPane.YES_NO_OPTION);
         if (confirm != JOptionPane.YES_OPTION) return;
 
         try {
-            // ---------- NOVO: Definir status e dataAtivacao ----------
-            for (ItemCompra item : carrinho) {
-                item.setDataAtivacao(LocalDate.now());
-            }
-            // ----------------------------------------------------------
 
-            // Debita o saldo
+            GerenciadorPersistencia gerenciador = GerenciadorPersistencia.getInstancia();
+
+            EntidadeDAO<Conta> contaDAO = gerenciador.getDAO(Conta.class);
+            EntidadeDAO<Compra> compraDAO = gerenciador.getDAO(Compra.class);
+            EntidadeDAO<Registro> registroDAO = gerenciador.getDAO(Registro.class);
+
+            // 2. Debita o saldo do usuário
             usuario.setSaldo(usuario.getSaldo() - total);
 
-            // Cria a compra com os itens do carrinho
+            // 3. Cria a Compra e a salva
             int idCompra = gerarId();
             Compra compra = new Compra(idCompra, usuario, LocalDate.now(), new ArrayList<>(carrinho));
             usuario.adicionarCompra(compra);
+            compraDAO.salvar(compra);
 
-            // Cria registros para cada jogo
+            // 4. Cria um Registro por jogo comprado e salva
             for (ItemCompra item : carrinho) {
-                int idReg = gerarId();
-                Registro registro = new Registro(idReg, item.getJogo(), usuario, 0.0);
-                Gerenciador.salvarRegistro(registro);
+                Registro registro = new Registro(gerarId(), item.getJogo(), usuario, 0.0);
+                registroDAO.salvar(registro);
             }
 
-            // Persiste contas e compras
-            ArrayList<Conta> contas = Gerenciador.carregaContas();
-            ArrayList<Jogo> jogos = Gerenciador.carregaJogos();
-            Gerenciador.carregarCompras(contas, jogos);
-
-            for (int i = 0; i < contas.size(); i++) {
-                if (contas.get(i).getId() == usuario.getId()) {
-                    contas.set(i, usuario);
-                    break;
-                }
+            try {
+                contaDAO.atualizar(usuario);
+            } catch (PersistenceException e) {
+                // Se o usuario n estava no dao, entao é a primeira compra na sessão
+                contaDAO.salvar(usuario);
             }
 
-            Gerenciador.salvarContas(contas);
-            Gerenciador.salvarTodasCompras(contas);
+            contaDAO.persistir(CAMINHO_CONTAS);
+            compraDAO.persistir(CAMINHO_COMPRAS);
+            registroDAO.persistir(CAMINHO_REGISTROS);
 
             usuario.limparCarrinho();
 
             JOptionPane.showMessageDialog(this,
-                    "Compra finalizada com sucesso!\nTotal pago: R$ " + String.format("%.2f", total),
-                    "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                "Compra finalizada com sucesso!\nTotal pago: R$ " + String.format("%.2f", total),
+                "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             dispose();
+
+        } catch (PersistenceException e) {
+            JOptionPane.showMessageDialog(this,
+                "Erro de persistência: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                    "Erro ao finalizar compra: " + e.getMessage(),
-                    "Erro", JOptionPane.ERROR_MESSAGE);
+                "Erro ao finalizar compra: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }

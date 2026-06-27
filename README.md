@@ -22,33 +22,19 @@ Sendo assim, juntando nossos gostos e especialidades, decidimos fazer um program
 
 ---
 
-## 🛠️ Dependências
-
-- [Java JDK 17+](https://www.oracle.com/java/technologies/downloads/)
-- [Apache Maven 3.6+](https://maven.apache.org/download.cgi)
-
-Para verificar se já estão instalados:
-
-```bash
-java -version
-mvn -version
-```
-
----
-
 ## 🚀 Como compilar e rodar
 
 
 Compile o projeto:
 
 ```bash
-mvn compile
+javac -d target/classes $(find src -name "*.java")
 ```
 
 Rode o programa:
 
 ```bash
-mvn exec:java -Dexec.mainClass=bysvem.Programa
+java -cp target/classes bysvem.Programa
 ```
 
 ---

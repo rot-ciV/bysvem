@@ -29,8 +29,10 @@ import javax.swing.table.DefaultTableModel;
 
 import bysvem.modelo.Conta;
 import bysvem.modelo.Desenvolvedor;
-import bysvem.modelo.Gerenciador;
 import bysvem.modelo.Usuario;
+import bysvem.persistencia.EntidadeDAO;
+import bysvem.persistencia.GerenciadorPersistencia;
+import bysvem.persistencia.PersistenceException;
 
 public class TelaGerenciarUsuarios extends JDialog {
 
@@ -49,7 +51,16 @@ public class TelaGerenciarUsuarios extends JDialog {
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-        contas = Gerenciador.carregaContas();
+        contas = new ArrayList<>();
+        try {
+            Conta[] vetorContas = GerenciadorPersistencia.getInstancia().getDAO(Conta.class).carregarTodos();
+
+            for (Conta contaAtual : vetorContas){
+                contas.add(contaAtual);
+            }
+        } catch (PersistenceException e) {
+            //Nao tem nenhuma conta 
+        }
 
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -232,13 +243,23 @@ public class TelaGerenciarUsuarios extends JDialog {
                 "Deseja " + acao + " o usuário " + selecionada.getNome() + "?",
                 "Confirmar", JOptionPane.YES_NO_OPTION);
 
-        if (confirm == JOptionPane.YES_OPTION) {
+        if (confirm == JOptionPane.YES_OPTION){
             selecionada.setBan(!selecionada.getBan());
-            Gerenciador.salvarContas(contas);
-            aplicarFiltroEOrdenacao(); // recarrega a tabela
+            try{
+                EntidadeDAO<Conta> dao = GerenciadorPersistencia.getInstancia().getDAO(Conta.class);
+                dao.atualizar(selecionada);
+                dao.persistir("dados/contas.dat");
+
+            }catch(PersistenceException e){
+                JOptionPane.showMessageDialog(this, "Erro ao salvar: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                selecionada.setBan(!selecionada.getBan()); // reverte em caso de falha
+                return;
+            }
+
+            aplicarFiltroEOrdenacao();
             JOptionPane.showMessageDialog(this,
-                    "Usuário " + (selecionada.getBan() ? "banido" : "desbanido") + " com sucesso!",
-                    "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            "Usuário " + (selecionada.getBan() ? "banido" : "desbanido") + " com sucesso!",
+            "Sucesso", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }

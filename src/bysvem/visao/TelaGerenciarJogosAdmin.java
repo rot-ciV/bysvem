@@ -28,8 +28,16 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
-import bysvem.modelo.Gerenciador;
+import bysvem.modelo.Compra;
+import bysvem.modelo.Conta;
+import bysvem.modelo.Entidade;
+import bysvem.modelo.ItemCompra;
 import bysvem.modelo.Jogo;
+import bysvem.modelo.Usuario;
+import bysvem.persistencia.EntidadeDAO;
+import bysvem.persistencia.GerenciadorPersistencia;
+import bysvem.persistencia.PersistenceException;
+
 
 public class TelaGerenciarJogosAdmin extends JDialog {
 
@@ -47,7 +55,7 @@ public class TelaGerenciarJogosAdmin extends JDialog {
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-        jogos = Gerenciador.carregaJogos();
+        jogos = carregarTodosJogos();
 
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -253,13 +261,18 @@ public class TelaGerenciarJogosAdmin extends JDialog {
                 jogo.setDesenvolvedora(desenvolvedora);
                 jogo.setDesc(desc);
 
-                if (jogo.atualizar(jogos)) {
-                    jogos = Gerenciador.carregaJogos(); // recarrega
+                try{
+                    EntidadeDAO<Jogo> dao = GerenciadorPersistencia.getInstancia().getDAO(Jogo.class);
+                    dao.atualizar(jogo);
+                    dao.persistir("dados/jogos.dat");
+                    jogos = carregarTodosJogos();
                     aplicarFiltroEOrdenacao();
                     JOptionPane.showMessageDialog(this, "Jogo atualizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Erro ao atualizar jogo.", "Erro", JOptionPane.ERROR_MESSAGE);
+
+                }catch(PersistenceException ex){
+                    JOptionPane.showMessageDialog(this, "Erro ao atualizar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                 }
+
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Preço inválido. Digite um número.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
@@ -292,15 +305,80 @@ public class TelaGerenciarJogosAdmin extends JDialog {
                 "Todos os compradores serão reembolsados automaticamente.",
                 "Confirmar Remoção", JOptionPane.YES_NO_OPTION);
 
-        if (confirm == JOptionPane.YES_OPTION) {
-            Gerenciador.removerJogoComReembolso(jogo);
-            if (jogo.apagar(jogo.getId(), jogos)) {
-                jogos = Gerenciador.carregaJogos();
+        if(confirm == JOptionPane.YES_OPTION){
+
+            try {
+                GerenciadorPersistencia gp = GerenciadorPersistencia.getInstancia();
+                EntidadeDAO<Jogo> jogoDAO = gp.getDAO(Jogo.class);
+                EntidadeDAO<Conta> contaDAO = gp.getDAO(Conta.class);
+                EntidadeDAO<Compra> compraDAO = gp.getDAO(Compra.class);
+
+                try {
+                    Compra[] compras = compraDAO.carregarTodos();
+
+                    for (Compra compra : compras) {
+                        boolean alterou = false;
+
+                        for (ItemCompra item : new ArrayList<>(compra.getItens())) {
+                            if (item.getJogo().getId() == jogo.getId()) {
+                                Usuario u = compra.getUsuario();
+                                u.setSaldo(u.getSaldo() + item.getPrecoPago());
+                                compra.getItens().remove(item);
+                                alterou = true;
+                            }
+                        }
+
+                        if(alterou){
+                            compraDAO.atualizar(compra);
+                            contaDAO.atualizar(compra.getUsuario());
+                        }
+                    }
+
+                    compraDAO.persistir("dados/compras.dat");
+                    contaDAO.persistir("dados/contas.dat");
+
+                } catch (PersistenceException e) {
+                    // Sem compras
+                }
+
+                jogoDAO.apagar(jogo.getId());
+                jogoDAO.persistir("dados/jogos.dat");
+
+                jogos = carregarTodosJogos();
                 aplicarFiltroEOrdenacao();
                 JOptionPane.showMessageDialog(this, "Jogo removido com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "Erro ao remover jogo.", "Erro", JOptionPane.ERROR_MESSAGE);
+
+            }catch (PersistenceException ex){
+                JOptionPane.showMessageDialog(this, "Erro ao remover: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
+        }
+    }
+
+    private ArrayList<Jogo> carregarTodosJogos() {
+        ArrayList<Jogo> lista = new ArrayList<>();
+        try {
+            Jogo[] array = GerenciadorPersistencia.getInstancia().getDAO(Jogo.class).carregarTodos();
+            for (Jogo j : array) lista.add(j);
+        } catch (PersistenceException e) {
+            // vazio
+        }
+        return lista;
+    }
+
+    private int proximoId(EntidadeDAO<?> dao){
+
+        try {
+            Object[] entidades = dao.carregarTodos();
+            int maior = 0;
+            for (Object obj : entidades) {
+                int id = ((Entidade) obj).getId();
+                if (id > maior) maior = id;
+            }
+
+            return maior + 1;
+
+        }catch(PersistenceException e){
+            return 1;
         }
     }
 }

@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Compra {
-    private int id;
+public class Compra extends Entidade {
+    
     private Usuario usuario;
     private LocalDate dataCompra;
     private List<ItemCompra> itens;
@@ -13,7 +13,7 @@ public class Compra {
 
     // Construtor com cálculo automático do total
     public Compra(int id, Usuario usuario, LocalDate dataCompra, List<ItemCompra> itens) {
-        this.id = id;
+        super(id);
         this.usuario = usuario;
         this.dataCompra = dataCompra;
         this.itens = itens != null ? itens : new ArrayList<>();
@@ -29,13 +29,11 @@ public class Compra {
     }
 
     // Getters e Setters
-    public int getId() { return id; }
     public Usuario getUsuario() { return usuario; }
     public LocalDate getDataCompra() { return dataCompra; }
     public List<ItemCompra> getItens() { return itens; }
     public double getValorTotal() { return valorTotal; }
 
-    public void setId(int id) { this.id = id; }
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }
     public void setDataCompra(LocalDate dataCompra) { this.dataCompra = dataCompra; }
     public void setItens(List<ItemCompra> itens) {
