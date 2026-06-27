@@ -9,17 +9,19 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class TesteContaDAO {
     
     private EntidadeDAO<Conta> dao;
 
     @BeforeEach
-    protected void inicializar(){
+    protected void inicializar() throws Exception{
         dao = new EntidadeDAO<>(Conta.class);
     }
 
     @AfterEach
-    protected void terminou(){
+    protected void terminou() throws Exception{
         dao = null;
     }
 
@@ -33,7 +35,7 @@ public class TesteContaDAO {
     }
 
     @Test
-    public void testarSalvarIdExistente(){
+    public void testarSalvarIdExistente() throws Exception{
         Conta primeira = new Usuario(67, "teste", 1234, "teste@gmail.com", 0.0, false);
         Conta segunda = new Usuario(67, "teste", 1234, "teste@gmail.com", 0.0, false);
         dao.salvar(primeira);
@@ -41,14 +43,14 @@ public class TesteContaDAO {
     }
 
     @Test
-    public void testarAtualizarIdInexistente(){
+    public void testarAtualizarIdInexistente() throws Exception{
         
         Conta conta = new Usuario(99, "x", 1234, "x", 0.0, false);
         assertThrows(PersistenceException.class, () -> dao.atualizar(conta));
     }
 
     @Test
-    public void testarAtualizarIdExistente(){
+    public void testarAtualizarIdExistente() throws Exception{
         Conta conta = new Usuario(67, "teste", 1234, "teste@gmail.com", 0.0, false);
         Conta atualizada = new Usuario(67, "Abacate", 1234, "teste@gmail.com", 0.0, false);
         dao.salvar(conta);
@@ -58,7 +60,7 @@ public class TesteContaDAO {
     }
 
     @Test
-    void apagarIdInexistente() {
+    void apagarIdInexistente() throws Exception{
         assertThrows(PersistenceException.class, () -> dao.apagar(999));
     }
 
@@ -76,7 +78,7 @@ public class TesteContaDAO {
     }
 
     @Test
-    void carregarIdInexistente() {
+    void carregarIdInexistente() throws Exception{
         assertThrows(PersistenceException.class, () -> dao.carregar(999));
     }
 

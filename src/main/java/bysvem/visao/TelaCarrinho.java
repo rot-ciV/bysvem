@@ -1,7 +1,6 @@
 // bysvem/visao/TelaCarrinho.java
 
 package bysvem.visao;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;

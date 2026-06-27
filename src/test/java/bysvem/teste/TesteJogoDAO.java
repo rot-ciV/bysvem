@@ -8,17 +8,19 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 class TesteJogoDAO {
 
     private EntidadeDAO<Jogo> dao;
 
     @BeforeEach
-    protected void Inicializar() {
+    protected void Inicializar() throws Exception{
         dao = new EntidadeDAO<>(Jogo.class);
     }
 
     @AfterEach
-    protected void terminou(){
+    protected void terminou() throws Exception{
         dao = null;
     }
 
@@ -46,7 +48,7 @@ class TesteJogoDAO {
     }
 
     @Test
-    public void testarAtualizarIdInexistente() {
+    public void testarAtualizarIdInexistente() throws Exception{
         Jogo jogo = new Jogo(676767, "teste", "RPG", "bysvem comporations", 10.0,
                 "jogo criado apenas para testar");
 
@@ -54,7 +56,7 @@ class TesteJogoDAO {
     }
 
     @Test
-    public void testarAtualizarIdExistente() throws Exception {
+    public void testarAtualizarIdExistente() throws Exception{
         Jogo original = new Jogo(676767, "teste", "RPG", "bysvem comporations", 10.0,
                 "jogo criado apenas para testar");
 
@@ -70,7 +72,7 @@ class TesteJogoDAO {
     }
 
     @Test
-    public void apagarIdInexistente() {
+    public void apagarIdInexistente() throws Exception{
         assertThrows(PersistenceException.class, () -> dao.apagar(999));
     }
 
@@ -90,7 +92,7 @@ class TesteJogoDAO {
 
 
     @Test
-    public void carregarIdInexistente() {
+    public void carregarIdInexistente() throws Exception{
         assertThrows(PersistenceException.class, () -> dao.carregar(676767));
     }
 

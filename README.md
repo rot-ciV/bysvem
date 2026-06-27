@@ -28,7 +28,7 @@ Sendo assim, juntando nossos gostos e especialidades, decidimos fazer um program
 Compile o projeto:
 
 ```bash
-javac -d target/classes $(find src -name "*.java")
+javac -d target/classes $(find src/main -name "*.java")
 ```
 
 Rode o programa:
