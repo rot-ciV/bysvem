@@ -167,12 +167,6 @@ public class TelaCriarConta extends JDialog {
             ArrayList<Conta> contas = new ArrayList<>();
             GerenciadorPersistencia gerenciador = GerenciadorPersistencia.getInstancia();
             EntidadeDAO<Conta> contaDAO = gerenciador.getDAO(Conta.class);
-            
-            try {
-                contaDAO.recuperar("dados/contas.dat");
-            } catch (PersistenceException e) {
-                // Se o arquivo nao existir
-            }
 
             // 3. Verifica duplicidade de nome e calcula maior ID
             int maiorId = 0;
