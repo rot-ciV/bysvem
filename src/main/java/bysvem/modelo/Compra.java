@@ -6,15 +6,15 @@ import java.util.List;
 
 public class Compra extends Entidade {
     
-    private Usuario usuario;
+    private transient Usuario usuario;   // não serializar
+    private int idUsuario;               // persistir apenas o ID
     private LocalDate dataCompra;
     private List<ItemCompra> itens;
     private double valorTotal;
 
-    // Construtor com cálculo automático do total
     public Compra(int id, Usuario usuario, LocalDate dataCompra, List<ItemCompra> itens) {
         super(id);
-        this.usuario = usuario;
+        setUsuario(usuario);
         this.dataCompra = dataCompra;
         this.itens = itens != null ? itens : new ArrayList<>();
         this.valorTotal = calcularTotal();
@@ -28,13 +28,17 @@ public class Compra extends Entidade {
         return total;
     }
 
-    // Getters e Setters
     public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+        this.idUsuario = (usuario != null) ? usuario.getId() : 0;
+    }
+    public int getIdUsuario() { return idUsuario; }
+
     public LocalDate getDataCompra() { return dataCompra; }
     public List<ItemCompra> getItens() { return itens; }
     public double getValorTotal() { return valorTotal; }
 
-    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
     public void setDataCompra(LocalDate dataCompra) { this.dataCompra = dataCompra; }
     public void setItens(List<ItemCompra> itens) {
         this.itens = itens;

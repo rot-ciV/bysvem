@@ -5,6 +5,7 @@
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/modelo/Entidade.java
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/visao/Configuracoes.java
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/visao/Opcoes_Usuario.java
+/mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/modelo/IdUtil.java
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/visao/Jogos_Disponiveis.java
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/persistencia/EntidadeDAO.java
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/visao/TelaGerenciarJogosAdmin.java
@@ -14,6 +15,7 @@
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/modelo/Compra.java
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/visao/TelaCarrinho.java
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/modelo/Conta.java
+/mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/SeedJogos.java
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/visao/TelaLogin.java
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/modelo/Registro.java
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/persistencia/PersistenceException.java
@@ -22,6 +24,7 @@
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/visao/Estilos.java
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/visao/TelaCriarConta.java
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/modelo/Util.java
+/mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/SeedDados.java
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/Programa.java
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/modelo/Desenvolvedor.java
 /mnt/c/Users/victo/prog/bysvem/src/main/java/bysvem/modelo/Usuario.java

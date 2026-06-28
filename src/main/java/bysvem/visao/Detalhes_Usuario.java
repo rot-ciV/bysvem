@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+import bysvem.modelo.IdUtil;
 import bysvem.modelo.ItemCompra;
 import bysvem.modelo.Jogo;
 import bysvem.modelo.Usuario;
@@ -95,7 +96,7 @@ public class Detalhes_Usuario {
                 }
 
                 // Cria um ItemCompra para o carrinho
-                int idItem = gerarId();
+                int idItem = IdUtil.gerarIdCompra();
                 ItemCompra item = new ItemCompra(idItem, jogo, jogo.getPreco(), LocalDate.now().plusYears(1));
                 usuarioLogado.adicionarAoCarrinho(item);
 

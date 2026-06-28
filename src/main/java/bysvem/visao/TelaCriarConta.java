@@ -16,6 +16,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import bysvem.modelo.Conta;
+import bysvem.modelo.IdUtil;
 import bysvem.modelo.Usuario;
 import bysvem.persistencia.EntidadeDAO;
 import bysvem.persistencia.GerenciadorPersistencia;
@@ -168,27 +169,23 @@ public class TelaCriarConta extends JDialog {
             GerenciadorPersistencia gerenciador = GerenciadorPersistencia.getInstancia();
             EntidadeDAO<Conta> contaDAO = gerenciador.getDAO(Conta.class);
 
-            // 3. Verifica duplicidade de nome e calcula maior ID
-            int maiorId = 0;
+            // 3. Verifica se tem nome igual
             
             try{
                 Conta[] contasVetor = contaDAO.carregarTodos();
-                
                 for(Conta c : contasVetor){
+
                     if (c.getNome().equalsIgnoreCase(nome)) {
                     throw new IllegalArgumentException("Usuário já cadastrado!");
                     }
-                if(c.getId() > maiorId){
-                    maiorId = c.getId();
                 }
-            }
 
             } catch (PersistenceException e) {
                 // Se nao tiver nada no conjunto (Primeira conta sendo criada)
             }
             
             // 4. Cria e salva a nova conta
-            int novoId = maiorId + 1;
+            int novoId = IdUtil.gerarIdConta(contaDAO);
             Usuario novaConta = new Usuario(novoId, nome, senhaInt, email, 0.0, false);
             contaDAO.salvar(novaConta);
             contaDAO.persistir("dados/contas.dat");

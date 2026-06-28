@@ -25,13 +25,13 @@ import bysvem.persistencia.PersistenceException;
 
 public class TelaLogin extends JFrame {
 
-    private JTextField campoEmail;      // mudança: campo para email
+    private JTextField campoEmail;
     private JPasswordField campoSenha;
 
     public TelaLogin() {
         super();
         setTitle("TelaLogin");
-        setSize(1000, 800); 
+        setSize(1000, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -43,35 +43,32 @@ public class TelaLogin extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
 
-            // Logo
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            gbc.gridwidth = 2;
-            gbc.anchor = GridBagConstraints.NORTH;  // alinha no topo da célula
-            gbc.weighty = 0;   // não ocupa espaço extra vertical (empurra para cima)
-            gbc.insets = new Insets(10, 0, 150, 0); // margem superior de 30px
-            JLabel Logo = new JLabel("Bysvem");
-            Logo.setFont(fonteLogo);
-            painel.add(Logo, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.weighty = 0;
+        gbc.insets = new Insets(10, 0, 150, 0);
+        JLabel Logo = new JLabel("Bysvem");
+        Logo.setFont(fonteLogo);
+        painel.add(Logo, gbc);
 
         gbc.gridwidth = 1;
-        // Email (em vez de Usuário)
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.weighty = 0;
         gbc.anchor = GridBagConstraints.LINE_END;
-        gbc.insets = new Insets(0, 0, 30, 0);    
+        gbc.insets = new Insets(0, 0, 30, 0);
         JLabel labelEmail = new JLabel("E-mail:");
         labelEmail.setFont(fonte);
         painel.add(labelEmail, gbc);
 
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
-        campoEmail = new JTextField(15);  // novo campo
+        campoEmail = new JTextField(15);
         campoEmail.setFont(fonte);
         painel.add(campoEmail, gbc);
 
-        // Senha (mantido)
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.LINE_END;
@@ -85,7 +82,6 @@ public class TelaLogin extends JFrame {
         campoSenha.setFont(fonte);
         painel.add(campoSenha, gbc);
 
-        // Botões (inalterado)
         gbc.gridx = 0;
         gbc.gridy = 5;
         gbc.gridwidth = 2;
@@ -107,7 +103,6 @@ public class TelaLogin extends JFrame {
 
         add(painel);
 
-        // Ações
         botaoEntrar.addActionListener(e -> autenticar());
         botaoSair.addActionListener(e -> System.exit(0));
         botaoCriarConta.addActionListener(e -> new TelaCriarConta(TelaLogin.this));
@@ -116,7 +111,6 @@ public class TelaLogin extends JFrame {
         setVisible(true);
     }
 
-    // Método auxiliar para converter senha String para int
     private Integer converterSenha(String senha) {
         try {
             return Integer.parseInt(senha);
@@ -149,34 +143,28 @@ public class TelaLogin extends JFrame {
 
             Conta[] contas = contaDAO.carregarTodos();
 
-            // Monta mapa id → Conta para associar compras
             Map<Integer, Usuario> mapaUsuarios = new HashMap<>();
             for (Conta c : contas) {
                 if (c instanceof Usuario) {
-                    mapaUsuarios.put(c.getId(), (Usuario) c);
+                    Usuario u = (Usuario) c;
+                    mapaUsuarios.put(u.getId(), u);
+                    u.setCompras(new java.util.ArrayList<>());
                 }
             }
-            System.out.println("Número de contas carregadas: " + contas.length);
-                for (Conta c : contas) {
-                    System.out.println("ID: " + c.getId() + 
-                                    ", Email: " + c.getEmail() + 
-                                    ", Senha: " + c.getSenha() + 
-                                    ", Tipo: " + c.getClass().getSimpleName());
-                }
+
             try {
                 Compra[] compras = compraDAO.carregarTodos();
                 for (Compra compra : compras) {
-                    Usuario u = mapaUsuarios.get(compra.getUsuario().getId());
+                    Usuario u = mapaUsuarios.get(compra.getIdUsuario());
                     if (u != null) {
-                        compra.setUsuario(u); // corrige a referência também
+                        compra.setUsuario(u);
                         u.adicionarCompra(compra);
                     }
                 }
             } catch (PersistenceException e) {
-                // Sem compras ainda, normal
+                // sem compras
             }
 
-            // Autentica
             for (Conta c : contas) {
                 if (c.getEmail().equals(email) && c.getSenha() == senhaInt) {
                     if (c.getBan()) {
@@ -199,7 +187,6 @@ public class TelaLogin extends JFrame {
             campoSenha.requestFocus();
 
         } catch (PersistenceException e) {
-            // carregarTodos lança exceção se o conjunto estiver vazio (primeira execução)
             JOptionPane.showMessageDialog(this, "Nenhuma conta cadastrada ainda.", "Aviso", JOptionPane.WARNING_MESSAGE);
         }
     }
