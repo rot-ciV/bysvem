@@ -135,7 +135,7 @@ public class TelaGerenciarJogos extends JDialog {
     }
 
     private void adicionarJogo() {
-        // (mesmo código que você já tem, apenas adapte para chamar atualizarTabela() no final)
+        
         JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
         JTextField campoNome = new JTextField();
         JTextField campoGenero = new JTextField();
@@ -208,7 +208,7 @@ public class TelaGerenciarJogos extends JDialog {
             return;
         }
 
-        // Painel de edição (igual ao original)
+        // Painel de edição 
         JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
         JTextField campoNome = new JTextField(jogo.getNome());
         JTextField campoGenero = new JTextField(jogo.getGenero());
