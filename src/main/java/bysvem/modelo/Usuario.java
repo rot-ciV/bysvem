@@ -21,8 +21,19 @@ public class Usuario extends Conta {
     }
 
     public double getSaldo() { return saldo; }
-    public List<Compra> getCompras() { return compras; }
-    public List<ItemCompra> getCarrinho() { return carrinho; }
+    public List<Compra> getCompras() {
+        if (compras == null) {
+            compras = new ArrayList<>();
+        }
+        return compras;
+    }
+
+    public List<ItemCompra> getCarrinho() {
+        if (carrinho == null) {
+            carrinho = new ArrayList<>();
+        }
+        return carrinho;
+    }
 
     public void setSaldo(double saldo) { this.saldo = saldo; }
     public void setCompras(List<Compra> compras) {
@@ -46,11 +57,11 @@ public class Usuario extends Conta {
         return total;
     }
     public boolean jogoNoCarrinho(Jogo jogo) {
-        for (ItemCompra item : carrinho) {
-            if (item.getJogo().getId() == jogo.getId()) return true;
-        }
-        return false;
+    for (ItemCompra item : getCarrinho()) {
+        if (item.getJogo().getId() == jogo.getId()) return true;
     }
+    return false;
+}
 
     public void adicionarCompra(Compra compra) {
         if (compra != null && !compras.contains(compra)) {

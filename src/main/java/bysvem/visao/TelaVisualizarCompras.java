@@ -230,7 +230,7 @@ public class TelaVisualizarCompras extends JDialog {
 
     private void atualizarTabela() {
         modeloTabela.setRowCount(0);
-        // Ordena a lista por ID (opcional)
+        // Ordena a lista por ID 
         listaCompras.sort(Comparator.comparingInt(Compra::getId));
         for (Compra compra : listaCompras) {
             String nomeUsuario = compra.getUsuario() != null ? compra.getUsuario().getNome() : "Desconhecido";
@@ -242,7 +242,6 @@ public class TelaVisualizarCompras extends JDialog {
             });
         }
         if (modeloTabela.getRowCount() == 0) {
-            // Mensagem informativa (mantida)
         }
     }
 

@@ -222,7 +222,6 @@ public class TelaGerenciarUsuarios extends JDialog {
 
     private void atualizarTabela() {
         modeloTabela.setRowCount(0);
-        // Ordenação inicial por ID (opcional, o sorter já fará a ordenação visual)
         contas.sort((c1, c2) -> Integer.compare(c1.getId(), c2.getId()));
         for (Conta c : contas) {
             // Filtra apenas Usuário ou Desenvolvedor

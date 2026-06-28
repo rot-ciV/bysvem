@@ -197,11 +197,11 @@ public class TelaCriarConta extends JDialog {
             dispose();
 
         } catch (IllegalArgumentException | IllegalStateException e) {
-            // Exibe a mensagem de erro para o usuário
+           
             JOptionPane.showMessageDialog(this,
                     e.getMessage(), "Erro",
                     JOptionPane.ERROR_MESSAGE);
-            // Limpa os campos adequados conforme o erro
+           
             if (e.getMessage().contains("senha") || e.getMessage().contains("coincidem")) {
                 campoSenha.setText("");
                 campoConfirmarSenha.setText("");
@@ -210,9 +210,9 @@ public class TelaCriarConta extends JDialog {
                 campoNome.setText("");
                 campoNome.requestFocus();
             }
-            // Para outros erros, mantém os campos
+            
         }catch(PersistenceException e) {
-            // Captura qualquer outra exceção inesperada
+            
             JOptionPane.showMessageDialog(this,
                     "Ocorreu um erro inesperado: " + e.getMessage(),
                     "Erro", JOptionPane.ERROR_MESSAGE);

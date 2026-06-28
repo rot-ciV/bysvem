@@ -6,8 +6,8 @@ import java.util.List;
 
 public class Compra extends Entidade {
     
-    private transient Usuario usuario;   // não serializar
-    private int idUsuario;               // persistir apenas o ID
+    private transient Usuario usuario;   // Isso é para nao salvar no arquivo
+    private int idUsuario;               // Ja que usuario n é mais salvo, usamos esse id para refazer a ligacao do usuario com a conta
     private LocalDate dataCompra;
     private List<ItemCompra> itens;
     private double valorTotal;

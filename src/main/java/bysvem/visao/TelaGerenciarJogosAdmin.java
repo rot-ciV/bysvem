@@ -245,7 +245,6 @@ public class TelaGerenciarJogosAdmin extends JDialog {
             return;
         }
 
-        // Painel de edição (mesmo código original)
         JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
         JTextField campoNome = new JTextField(jogo.getNome());
         JTextField campoGenero = new JTextField(jogo.getGenero());
