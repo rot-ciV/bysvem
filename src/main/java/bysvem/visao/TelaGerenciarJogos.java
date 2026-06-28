@@ -26,6 +26,7 @@ import bysvem.modelo.Compra;
 import bysvem.modelo.Conta;
 import bysvem.modelo.Desenvolvedor;
 import bysvem.modelo.Entidade;
+import bysvem.modelo.IdUtil;
 import bysvem.modelo.ItemCompra;
 import bysvem.modelo.Jogo;
 import bysvem.modelo.Usuario;
@@ -169,7 +170,7 @@ public class TelaGerenciarJogos extends JDialog {
                 }
 
                 EntidadeDAO<Jogo> dao = GerenciadorPersistencia.getInstancia().getDAO(Jogo.class);
-                int novoId = proximoId(dao);
+                int novoId = IdUtil.gerarIdJogo(dao);
                 Jogo novoJogo = desenvolvedor.criaJogo(novoId, nome, genero, preco, desc);
 
                 dao.salvar(novoJogo);
