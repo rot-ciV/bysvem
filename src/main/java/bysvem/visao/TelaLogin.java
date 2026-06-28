@@ -156,8 +156,13 @@ public class TelaLogin extends JFrame {
                     mapaUsuarios.put(c.getId(), (Usuario) c);
                 }
             }
-
-            // Associa compras aos usuários pelo id, ignorando a referência serializada
+            System.out.println("Número de contas carregadas: " + contas.length);
+                for (Conta c : contas) {
+                    System.out.println("ID: " + c.getId() + 
+                                    ", Email: " + c.getEmail() + 
+                                    ", Senha: " + c.getSenha() + 
+                                    ", Tipo: " + c.getClass().getSimpleName());
+                }
             try {
                 Compra[] compras = compraDAO.carregarTodos();
                 for (Compra compra : compras) {

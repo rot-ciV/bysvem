@@ -28,7 +28,7 @@ Sendo assim, juntando nossos gostos e especialidades, decidimos fazer um program
 Compile o projeto:
 
 ```bash
-javac -d target/classes $(find src/main -name "*.java")
+mvn compile
 ```
 
 Rode o programa:

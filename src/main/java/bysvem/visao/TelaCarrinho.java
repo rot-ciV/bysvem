@@ -4,9 +4,6 @@ package bysvem.visao;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -20,13 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
-import bysvem.modelo.Compra;
-import bysvem.modelo.Conta;
 import bysvem.modelo.ItemCompra;
-import bysvem.modelo.Registro;
 import bysvem.modelo.Usuario;
-import bysvem.persistencia.EntidadeDAO;
-import bysvem.persistencia.GerenciadorPersistencia;
 import bysvem.persistencia.PersistenceException;
 
 public class TelaCarrinho extends JDialog {
@@ -35,11 +27,6 @@ public class TelaCarrinho extends JDialog {
     private JList<String> listaItens;
     private JLabel labelTotal;
     private JButton btnFinalizar, btnRemover, btnLimpar, btnContinuar;
-
-    // Caminhos para persistência em arquivo
-    private static final String CAMINHO_CONTAS    = "dados/contas.dat";
-    private static final String CAMINHO_REGISTROS = "dados/registros.dat";
-    private static final String CAMINHO_COMPRAS   = "dados/compras.dat";
 
     public TelaCarrinho(JFrame parent, Usuario usuario) {
         super(parent, "Carrinho de Compras", true);
@@ -134,82 +121,25 @@ public class TelaCarrinho extends JDialog {
     }
 
     private void finalizarCompra() {
-        List<ItemCompra> carrinho = usuario.getCarrinho();
-
-        if (carrinho.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                "Carrinho vazio!", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
         double total = usuario.getTotalCarrinho();
 
-        if (usuario.getSaldo() < total) {
-            JOptionPane.showMessageDialog(this,
-                String.format("Saldo insuficiente!\nSaldo atual: R$ %.2f\nTotal: R$ %.2f",
-                    usuario.getSaldo(), total),
-                "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        int confirm = JOptionPane.showConfirmDialog(this,
-            String.format("Total da compra: R$ %.2f\nConfirmar compra?", total),
-            "Finalizar Compra", JOptionPane.YES_NO_OPTION);
-        if (confirm != JOptionPane.YES_OPTION) return;
-
         try {
-
-            GerenciadorPersistencia gerenciador = GerenciadorPersistencia.getInstancia();
-
-            EntidadeDAO<Conta> contaDAO = gerenciador.getDAO(Conta.class);
-            EntidadeDAO<Compra> compraDAO = gerenciador.getDAO(Compra.class);
-            EntidadeDAO<Registro> registroDAO = gerenciador.getDAO(Registro.class);
-
-            // 2. Debita o saldo do usuário
-            usuario.setSaldo(usuario.getSaldo() - total);
-
-            // 3. Cria a Compra e a salva
-            int idCompra = gerarId();
-            Compra compra = new Compra(idCompra, usuario, LocalDate.now(), new ArrayList<>(carrinho));
-            usuario.adicionarCompra(compra);
-            compraDAO.salvar(compra);
-
-            // 4. Cria um Registro por jogo comprado e salva
-            for (ItemCompra item : carrinho) {
-                Registro registro = new Registro(gerarId(), item.getJogo(), usuario, 0.0);
-                registroDAO.salvar(registro);
-            }
-
-            try {
-                contaDAO.atualizar(usuario);
-            } catch (PersistenceException e) {
-                // Se o usuario n estava no dao, entao é a primeira compra na sessão
-                contaDAO.salvar(usuario);
-            }
-
-            contaDAO.persistir(CAMINHO_CONTAS);
-            compraDAO.persistir(CAMINHO_COMPRAS);
-            registroDAO.persistir(CAMINHO_REGISTROS);
-
-            usuario.limparCarrinho();
-
+            usuario.finalizarCompra();
             JOptionPane.showMessageDialog(this,
-                "Compra finalizada com sucesso!\nTotal pago: R$ " + String.format("%.2f", total),
-                "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            dispose();
-
+                    "Compra finalizada com sucesso!\nTotal pago: R$ " + String.format("%.2f", total),
+                    "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            dispose(); // fecha a tela do carrinho
+        } catch (IllegalStateException e) {
+            JOptionPane.showMessageDialog(this,
+                    e.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
         } catch (PersistenceException e) {
             JOptionPane.showMessageDialog(this,
-                "Erro de persistência: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    "Erro de persistência: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                "Erro ao finalizar compra: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    "Erro ao finalizar compra: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
-    }
-
-    private int gerarId() {
-        return (int) (Math.random() * 100000);
     }
 }

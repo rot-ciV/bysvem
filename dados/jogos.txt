@@ -1,19 +1,21 @@
 6;Minecraft;Sandbox;Mojang Studios;199.69;Construa qualquer coisa que você possa imaginar, descubra mistérios assustadores e sobreviva à noite no jogo de aventura sandbox definitivo.
 52;Marvel Rivals;Ação;Net Ease;0.0;Marvel Rivals é um jogo de tiro JxJ em equipe com Super Heróis! Reúna um grupo de estrelas da Marvel, crie estratégias e combine seus poderes para executar poderosas habilidades de equipe.
+42;League of Legends;MOBA;Riot Games;0.0;League of Legends é um jogo online competitivo de estratégia em que duas equipes de cinco jogadores controlam personagens únicos e duelam para destruir a base inimiga.
 33;Valorant;FPS;Riot Games;0.0;um FPS tático 5v5 baseado em personagens, onde o tiroteio preciso encontra habilidades únicas de agentes.
 10;Counter Strike 2;FPS;Valve;0.0;um FPS tático 5v5 baseado em dois times, terroristas e contra-terroristas, onde o tiroteio encontra a estratégia e destreza.
-79;Left 4 Dead 2;Ação e Terror;Valve;32.99;Ambientado no apocalipse zumbi, Left 4 Dead 2 leva você e seus amigos pelas cidades, brejos e cemitérios de Deep South, Savannah e Nova Orleans, ao longo de cinco campnhas expansivas.
+79; ;Ação e Terror;Valve;32.99;Ambientado no apocalipse zumbi, Left 4 Dead 2 leva você e seus amigos pelas cidades, brejos e cemitérios de Deep South, Savannah e Nova Orleans, ao longo de cinco campnhas expansivas.
 50;Resident Evil Requiem;Terror;Capcom;299.0; Requiem para os mortos. Pesadelo para os vivos. Prepara-te para fugir à morte nesta experiência de gelar o sangue.
 63;Street Fighter 6;Luta;Capcom;179.0;Descubra quem é o lutador mais forte do universo de personagens da Capcom!
 47;Fortnite;Battle Royale;Epic Games;0.0;Embarque em uma ilha com 100 jogadores, que disputam para saber quem será o último sobrevivente.
 61;Grand Theft Auto V;Ação;Rockstar Games;224.9;Explore o mundo aberto de Los Santos e descubra a história de Michael, Frankling e Trevor.
+90;Red Dead Redemption 2;Ação e Aventura;Rockstar Games;299.9;Arthur Morgan e o bando Van der Linde estão em fuga. No seu encalço têm agentes federais e os melhores caçadores de prémios da nação. O bando terá de assaltar, roubar e abrir caminho para sobreviver no inóspito coração da América. 
 71;EA SPORTS FC™ 26;Simulador de Futebol;EA Sports;299.0;Jogue com os melhores elencos e os astros do futebol mundial no melhor simulador do esporte, EA SPORTS FC™ 26!
 69;NBA 2K26;Simulador de Basquete;EA Sports;429.9;Jogue com os melhores elencos e os astros do basquete mundial no melhor simulador do esporte, NBA 2K26!
-91;RV There Yet?;Ação e Indie;Nugget Entertainment;26.49;Uma aventura co-op sobre dirigir seu motorhome de volta para casa.
+91;RV There Yet?;Ação e Indie;Nugget;26.49;Uma aventura co-op sobre dirigir seu motorhome de volta para casa.
 40;PEAK;Ação e Aventura, Indie;Team PEAK;23.99;PEAK é um jogo cooperativo de escalada, no qual o mais pequeno erro pode ser desastroso.
 93;Forza Horizon 6;Simulação de Corrida;Playground Games;299.0;Descubra as paisagens deslumbrantes do Japão em mais de 550 carros do mundo real e torna-se uma Lenda das corridas na maior aventura automobilística de sempre do Forza Horizon em mundo aberto.
-42;League of Legends;MOBA;Riot Games;0.0;League of Legends é um jogo online competitivo de estratégia em que duas equipes de cinco jogadores controlam personagens únicos e duelam para destruir a base inimiga.
 87;ELDEN RING;Ação, RPG;FromSoftware;274.5;Ergue-se, Maculado, e deixa-se guiar pela graça para brandires o poder do Elden Ring e tornarás um Lorde Elden nas Terras Médias.
+
 55;Cyberpunk 2077;RPG;CD PROJEKT RED;199.9;Cyberpunk 2077 é um RPG de ação num mundo aberto que decorre em Night City, uma megalópole perigosa onde todos estão obcecados pelo poder, glamour e alterações ao corpo.
 88;The Witcher 3: Wild Hunt;RPG;CD PROJEKT RED;129.99;Controle Geralt, um mercenário caçador de monstros, perante um continente destruído e infestado por monstros, que pode explorar como quiser. O teu contrato: encontrar Ciri, a Criança da Profecia, uma arma viva capaz de alterar a forma do mundo.
-90;Red Dead Redemption 2;Ação e Aventura;Rockstar Games;299.9;Arthur Morgan e o bando Van der Linde estão em fuga. No seu encalço têm agentes federais e os melhores caçadores de prémios da nação. O bando terá de assaltar, roubar e abrir caminho para sobreviver no inóspito coração da América. 
+
