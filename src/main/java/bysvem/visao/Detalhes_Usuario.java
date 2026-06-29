@@ -9,7 +9,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.time.LocalDate;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -20,8 +19,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
-import bysvem.modelo.IdUtil;
-import bysvem.modelo.ItemCompra;
 import bysvem.modelo.Jogo;
 import bysvem.modelo.Usuario;
 
@@ -78,7 +75,6 @@ public class Detalhes_Usuario {
         gbc.anchor = GridBagConstraints.CENTER;
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
 
-        // Verifica se o usuário já possui o jogo
         boolean jaPossui = usuarioLogado != null &&
                 usuarioLogado.biblioteca().stream().anyMatch(j -> j.getId() == jogo.getId());
 
@@ -87,7 +83,6 @@ public class Detalhes_Usuario {
             JButton btnAdicionar = new JButton("Adicionar ao Carrinho");
             btnAdicionar.setFont(Estilos.FONTE_BOTAO_DETALHE);
             btnAdicionar.addActionListener(e -> {
-                // Verifica se já está no carrinho
                 if (usuarioLogado.jogoNoCarrinho(jogo)) {
                     JOptionPane.showMessageDialog(dialog,
                             "Este jogo já está no seu carrinho!",
@@ -95,10 +90,7 @@ public class Detalhes_Usuario {
                     return;
                 }
 
-                // Cria um ItemCompra para o carrinho
-                int idItem = IdUtil.gerarIdCompra();
-                ItemCompra item = new ItemCompra(idItem, jogo, jogo.getPreco(), LocalDate.now().plusYears(1));
-                usuarioLogado.adicionarAoCarrinho(item);
+                usuarioLogado.adicionarAoCarrinho(jogo);
 
                 JOptionPane.showMessageDialog(dialog,
                         "Jogo adicionado ao carrinho!",
@@ -112,7 +104,6 @@ public class Detalhes_Usuario {
             painelBotoes.add(lblPossui);
         }
 
-        // Botão Voltar (sempre presente)
         JButton btnVoltar = new JButton("Voltar");
         btnVoltar.setFont(Estilos.FONTE_BOTAO_DETALHE);
         btnVoltar.addActionListener(e -> dialog.dispose());
@@ -124,12 +115,6 @@ public class Detalhes_Usuario {
         dialog.setVisible(true);
     }
 
-    // Gerador de ID (substitua pelo seu método)
-    private static int gerarId() {
-        return (int) (Math.random() * 100000);
-    }
-
-    // Método auxiliar para adicionar linhas no painel
     private static void adicionarLinha(JPanel panel, GridBagConstraints gbc, int linha, String rotulo, String valor,
                                        Font fonteRotulo, Font fonteValor) {
         gbc.gridx = 0;

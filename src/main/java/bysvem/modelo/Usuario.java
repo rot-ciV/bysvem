@@ -39,10 +39,14 @@ public class Usuario extends Conta {
     public void setCompras(List<Compra> compras) {
         this.compras = new ArrayList<>(compras);
     }
-
-    public void adicionarAoCarrinho(ItemCompra item) {
-        if (item != null) carrinho.add(item);
+    
+    public void adicionarAoCarrinho(Jogo jogo) {
+        int idItem = IdUtil.gerarIdCompra();
+        ItemCompra item = new ItemCompra(idItem, jogo, jogo.getPreco(), LocalDate.now().plusYears(1));
+        this.carrinho.add(item);
     }
+
+
     public void removerDoCarrinho(ItemCompra item) {
         carrinho.remove(item);
     }
@@ -77,6 +81,23 @@ public class Usuario extends Conta {
             }
         }
         return biblioteca;
+    }
+
+    public void adicionarSaldo(double valor) throws PersistenceException {
+        if (valor <= 0) {
+            throw new IllegalArgumentException("O valor deve ser maior que zero.");
+        }
+        double saldoAntigo = this.saldo;
+        this.saldo += valor;
+        try {
+            GerenciadorPersistencia gp = GerenciadorPersistencia.getInstancia();
+            EntidadeDAO<Conta> dao = gp.getDAO(Conta.class);
+            dao.atualizar(this);
+            dao.persistir("dados/contas.dat");
+        } catch (PersistenceException e) {
+            this.saldo = saldoAntigo; 
+            throw e; 
+        }
     }
 
     public void finalizarCompra() throws PersistenceException {

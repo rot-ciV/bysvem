@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -16,10 +15,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import bysvem.modelo.Conta;
-import bysvem.modelo.IdUtil;
-import bysvem.modelo.Usuario;
-import bysvem.persistencia.EntidadeDAO;
-import bysvem.persistencia.GerenciadorPersistencia;
 import bysvem.persistencia.PersistenceException;
 
 public class TelaCriarConta extends JDialog {
@@ -127,7 +122,6 @@ public class TelaCriarConta extends JDialog {
 
         add(painel);
 
-        // Ações
         botaoCadastrar.addActionListener(e -> cadastrar());
         botaoCancelar.addActionListener(e -> dispose());
         campoConfirmarSenha.addActionListener(e -> cadastrar());
@@ -135,86 +129,51 @@ public class TelaCriarConta extends JDialog {
         setVisible(true);
     }
 
-    // Método auxiliar para converter senha String para int (lança exceção)
-    private int converterSenha(String senha) throws IllegalArgumentException {
-        try {
-            return Integer.parseInt(senha);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("A senha deve conter apenas números.");
-        }
-    }
-
     private void cadastrar() {
         try {
-            // 1. Captura e valida os dados
             String nome = campoNome.getText().trim();
             String email = campoEmail.getText().trim();
             String senha = new String(campoSenha.getPassword()).trim();
             String confirmar = new String(campoConfirmarSenha.getPassword()).trim();
 
-            // Validações obrigatórias
             if (nome.isEmpty() || senha.isEmpty() || confirmar.isEmpty()) {
                 throw new IllegalArgumentException("Nome de usuário e senha são obrigatórios!");
             }
-
             if (!senha.equals(confirmar)) {
                 throw new IllegalArgumentException("As senhas não coincidem!");
             }
-
-            // Converte a senha (lança exceção se não for número)
-            int senhaInt = converterSenha(senha);
-
-            // 2. Carrega contas existentes
-            ArrayList<Conta> contas = new ArrayList<>();
-            GerenciadorPersistencia gerenciador = GerenciadorPersistencia.getInstancia();
-            EntidadeDAO<Conta> contaDAO = gerenciador.getDAO(Conta.class);
-
-            // 3. Verifica se tem nome igual
-            
-            try{
-                Conta[] contasVetor = contaDAO.carregarTodos();
-                for(Conta c : contasVetor){
-
-                    if (c.getNome().equalsIgnoreCase(nome)) {
-                    throw new IllegalArgumentException("Usuário já cadastrado!");
-                    }
-                }
-
-            } catch (PersistenceException e) {
-                // Se nao tiver nada no conjunto (Primeira conta sendo criada)
+            int senhaInt;
+            try {
+                senhaInt = Integer.parseInt(senha);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("A senha deve conter apenas números.");
             }
-            
-            // 4. Cria e salva a nova conta
-            int novoId = IdUtil.gerarIdConta(contaDAO);
-            Usuario novaConta = new Usuario(novoId, nome, senhaInt, email, 0.0, false);
-            contaDAO.salvar(novaConta);
-            contaDAO.persistir("dados/contas.dat");
 
-            // Sucesso
+            Conta.criarConta(nome, email, senhaInt);
+
             JOptionPane.showMessageDialog(this,
                     "Conta criada com sucesso!", "Sucesso",
                     JOptionPane.INFORMATION_MESSAGE);
             dispose();
 
-        } catch (IllegalArgumentException | IllegalStateException e) {
-           
+        } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this,
                     e.getMessage(), "Erro",
                     JOptionPane.ERROR_MESSAGE);
-           
-            if (e.getMessage().contains("senha") || e.getMessage().contains("coincidem")) {
+
+            String msg = e.getMessage();
+            if (msg.contains("senha") || msg.contains("coincidem")) {
                 campoSenha.setText("");
                 campoConfirmarSenha.setText("");
                 campoSenha.requestFocus();
-            } else if (e.getMessage().contains("Usuário já cadastrado")) {
+            } else if (msg.contains("Usuário") || msg.contains("E-mail")) {
                 campoNome.setText("");
+                campoEmail.setText("");
                 campoNome.requestFocus();
             }
-            
-        }catch(PersistenceException e) {
-            
+        } catch (PersistenceException e) {
             JOptionPane.showMessageDialog(this,
-                    "Ocorreu um erro inesperado: " + e.getMessage(),
+                    "Erro ao salvar: " + e.getMessage(),
                     "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }

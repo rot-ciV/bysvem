@@ -20,22 +20,22 @@ public class Programa {
         try {
             gerenciador.getDAO(Conta.class).recuperar("dados/contas.dat");
         } catch (PersistenceException e) {
-            System.out.println("Nenhuma conta encontrada.");
+            //Nenhuma conta encontrada.
         }
         try {
             gerenciador.getDAO(Jogo.class).recuperar("dados/jogos.dat");
         } catch (PersistenceException e) {
-            System.out.println("Nenhum jogo encontrado.");
+            //Nenhum jogo encontrado.
         }
         try {
             gerenciador.getDAO(Compra.class).recuperar("dados/compras.dat");
         } catch (PersistenceException e) {
-            System.out.println("Nenhuma compra encontrada.");
+            //Nenhuma compra encontrada.
         }
         try {
             gerenciador.getDAO(Registro.class).recuperar("dados/registros.dat");
         } catch (PersistenceException e) {
-            System.out.println("Nenhum registro encontrado.");
+            //Nenhum registro encontrado.
         }
 
         // Reconstruir associações de Registro

@@ -38,3 +38,63 @@ java -cp target/classes bysvem.Programa
 ```
 
 ---
+
+## Algumas contas prontas para rodar o projeto
+
+
+- Operadores:
+
+email: resendebr21@bysvem.com
+senha: 2141
+
+email: victor@bysvem.com
+senha: 2580
+
+email: santanna@bysvem.com
+senha: 6767
+
+email: mateus@bysvem.com
+senha: 2424
+
+---
+
+- Desenvolvedores:
+
+email: notch@mojang.com
+senha: 418
+
+email: netease@gmail.com
+senha: 123
+
+email: riotgames@gmail.com
+senha: 123
+
+email: valve@gmail.com
+senha: 123
+
+email: capcom@gmail.com
+senha: 123
+
+email: rockstar@gmail.com
+senha: 123
+
+---
+
+- Usuários:
+
+email: futebol@hotmail.com
+senha: 60104
+
+email: dudinha@gmail.com
+senha: 120505
+
+email: edward2019@yahoo.com
+senha: 2019
+
+email: brenotadeu2014@gmail.com
+senha: 26032014
+
+email: neymar@gmail.com
+senha: 444	
+
+---

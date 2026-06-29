@@ -8,8 +8,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -59,37 +57,29 @@ public class Opcoes_Usuario extends JFrame {
         opcoesPanel.setLayout(new BoxLayout(opcoesPanel, BoxLayout.Y_AXIS));
         opcoesPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // ---- ORDEM DOS BOTÕES ----
         java.util.List<String> ordemBotoes = new java.util.ArrayList<>();
 
-        // 1. Jogos Disponíveis (sempre)
         ordemBotoes.add(" Jogos Disponíveis ");
 
-        // 2. Biblioteca e Carrinho (apenas Usuário)
         if (usuarioLogado instanceof Usuario) {
             ordemBotoes.add(" Biblioteca ");
             ordemBotoes.add(" Carrinho ");
         }
 
-        // 3. Configurações (sempre)
         ordemBotoes.add(" Configurações ");
 
-        // 4. Botões específicos de Desenvolvedor
         if (usuarioLogado instanceof Desenvolvedor) {
             ordemBotoes.add(" Gerenciar Jogos ");
         }
 
-        // 5. Botões específicos de Operador
         if (usuarioLogado instanceof Operador) {
             ordemBotoes.add(" Gerenciar Usuários ");
             ordemBotoes.add(" Gerenciar Jogos (Admin) ");
-            ordemBotoes.add(" Visualizar Compras "); // NOVO
+            ordemBotoes.add(" Visualizar Compras "); 
         }
 
-        // 6. Sair (sempre no final)
         ordemBotoes.add(" Sair ");
 
-        // Cria os botões na ordem definida
         for (String texto : ordemBotoes) {
             JButton botao = criarBotao(texto);
             opcoesPanel.add(botao);
@@ -107,7 +97,7 @@ public class Opcoes_Usuario extends JFrame {
 
     private JButton criarBotao(String texto) {
         JButton botao = new JButton(texto);
-        botao.setFont(new Font("Arial", Font.PLAIN, 24)); // TAMANHO PADRÃO
+        botao.setFont(new Font("Arial", Font.PLAIN, 24)); 
         botao.setAlignmentX(Component.CENTER_ALIGNMENT);
         botao.setMaximumSize(new Dimension(420, 60));
         botao.setPreferredSize(new Dimension(420, 60));
@@ -118,7 +108,7 @@ public class Opcoes_Usuario extends JFrame {
                 switch (comando) {
                     case "Jogos Disponíveis":
                         if (usuarioLogado instanceof Usuario) {
-                            new Jogos_Disponiveis((Usuario) usuarioLogado);
+                        new Jogos_Disponiveis((Usuario) usuarioLogado);
                         } else {
                             new Jogos_Disponiveis(null);
                         }
@@ -149,7 +139,7 @@ public class Opcoes_Usuario extends JFrame {
                             new TelaGerenciarJogosAdmin(Opcoes_Usuario.this);
                         }
                         break;
-                    case "Visualizar Compras": // NOVO
+                    case "Visualizar Compras": 
                         if (usuarioLogado instanceof Operador) {
                             new TelaVisualizarCompras(Opcoes_Usuario.this);
                         }

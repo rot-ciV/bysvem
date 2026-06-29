@@ -114,7 +114,6 @@ public class TelaVisualizarCompras extends JDialog {
         tabelaCompras.getColumnModel().getColumn(2).setPreferredWidth(150);
         tabelaCompras.getColumnModel().getColumn(3).setPreferredWidth(120);
 
-        // Renderizador para valor total (duas casas decimais)
         DefaultTableCellRenderer rendererValor = new DefaultTableCellRenderer() {
             private final DecimalFormat df = new DecimalFormat("0.00");
             @Override
@@ -129,7 +128,6 @@ public class TelaVisualizarCompras extends JDialog {
         rendererValor.setHorizontalAlignment(JLabel.RIGHT);
         tabelaCompras.getColumnModel().getColumn(3).setCellRenderer(rendererValor);
 
-        // Sorter
         sorter = new TableRowSorter<>(modeloTabela);
         sorter.setComparator(0, Comparator.comparingInt(o -> (Integer) o));
         sorter.setComparator(3, Comparator.comparingDouble(o -> (Double) o));
@@ -147,7 +145,6 @@ public class TelaVisualizarCompras extends JDialog {
 
         add(panel);
 
-        // Listeners para filtros
         campoPesquisa.getDocument().addDocumentListener(new DocumentListener() {
             @Override public void insertUpdate(DocumentEvent e) { aplicarFiltros(); }
             @Override public void removeUpdate(DocumentEvent e) { aplicarFiltros(); }
@@ -182,7 +179,6 @@ public class TelaVisualizarCompras extends JDialog {
             }
         });
 
-        // Preenche a tabela
         atualizarTabela();
         setVisible(true);
     }
@@ -194,7 +190,7 @@ public class TelaVisualizarCompras extends JDialog {
         List<RowFilter<DefaultTableModel, Integer>> filtros = new ArrayList<>();
 
         if (!nomeUsuario.isEmpty()) {
-            filtros.add(RowFilter.regexFilter("(?i)" + nomeUsuario, 1)); // coluna 1 = Usuário
+            filtros.add(RowFilter.regexFilter("(?i)" + nomeUsuario, 1)); 
         }
 
         if (!idStr.isEmpty()) {
@@ -230,7 +226,6 @@ public class TelaVisualizarCompras extends JDialog {
 
     private void atualizarTabela() {
         modeloTabela.setRowCount(0);
-        // Ordena a lista por ID 
         listaCompras.sort(Comparator.comparingInt(Compra::getId));
         for (Compra compra : listaCompras) {
             String nomeUsuario = compra.getUsuario() != null ? compra.getUsuario().getNome() : "Desconhecido";
@@ -276,7 +271,6 @@ public class TelaVisualizarCompras extends JDialog {
         tableItens.setRowHeight(25);
         tableItens.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
 
-        // Renderizador para preço
         DefaultTableCellRenderer rendererPreco = new DefaultTableCellRenderer() {
             private final DecimalFormat df = new DecimalFormat("0.00");
             @Override

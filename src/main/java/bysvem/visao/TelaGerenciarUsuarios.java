@@ -66,7 +66,6 @@ public class TelaGerenciarUsuarios extends JDialog {
         titulo.setFont(new Font("Arial", Font.BOLD, 24));
         panel.add(titulo, BorderLayout.NORTH);
 
-        // Painel de pesquisa e filtros
         JPanel painelPesquisa = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
         JLabel lblPesquisa = new JLabel("Pesquisar por nome:");
@@ -99,7 +98,6 @@ public class TelaGerenciarUsuarios extends JDialog {
 
         panel.add(painelPesquisa, BorderLayout.NORTH);
 
-        // Tabela com tipos bem definidos
         String[] colunas = {"ID", "Nome", "Tipo", "Banido?"};
         modeloTabela = new DefaultTableModel(colunas, 0) {
             @Override
@@ -122,15 +120,12 @@ public class TelaGerenciarUsuarios extends JDialog {
         tabelaContas.setRowHeight(25);
         tabelaContas.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
 
-        // Ajuste de largura
         tabelaContas.getColumnModel().getColumn(0).setPreferredWidth(50);
         tabelaContas.getColumnModel().getColumn(1).setPreferredWidth(250);
         tabelaContas.getColumnModel().getColumn(2).setPreferredWidth(150);
         tabelaContas.getColumnModel().getColumn(3).setPreferredWidth(80);
 
-        // Sorter para ordenação por clique no cabeçalho
         sorter = new TableRowSorter<>(modeloTabela);
-        // Garantir ordenação numérica para ID e Boolean para Banido
         sorter.setComparator(0, (o1, o2) -> ((Integer) o1).compareTo((Integer) o2));
         sorter.setComparator(3, (o1, o2) -> ((Boolean) o1).compareTo((Boolean) o2));
         tabelaContas.setRowSorter(sorter);
@@ -153,7 +148,6 @@ public class TelaGerenciarUsuarios extends JDialog {
 
         add(panel);
 
-        // Listeners
         campoPesquisa.getDocument().addDocumentListener(new DocumentListener() {
             @Override public void insertUpdate(DocumentEvent e) { aplicarFiltros(); }
             @Override public void removeUpdate(DocumentEvent e) { aplicarFiltros(); }
@@ -179,7 +173,6 @@ public class TelaGerenciarUsuarios extends JDialog {
         btnBanir.addActionListener(e -> banirDesbanir());
         btnVoltar.addActionListener(e -> dispose());
 
-        // Preencher a tabela inicialmente
         atualizarTabela();
         setVisible(true);
     }
@@ -191,12 +184,10 @@ public class TelaGerenciarUsuarios extends JDialog {
 
         List<RowFilter<DefaultTableModel, Integer>> filtros = new ArrayList<>();
 
-        // Filtro por nome (coluna 1)
         if (!nome.isEmpty()) {
             filtros.add(RowFilter.regexFilter("(?i)" + nome, 1));
         }
 
-        // Filtro por ID (coluna 0)
         if (!idStr.isEmpty()) {
             try {
                 int id = Integer.parseInt(idStr);
@@ -208,7 +199,6 @@ public class TelaGerenciarUsuarios extends JDialog {
             }
         }
 
-        // Filtro por banidos (coluna 3 – Boolean)
         if (apenasBanidos) {
             filtros.add(RowFilter.regexFilter("true", 3));
         }
@@ -224,7 +214,6 @@ public class TelaGerenciarUsuarios extends JDialog {
         modeloTabela.setRowCount(0);
         contas.sort((c1, c2) -> Integer.compare(c1.getId(), c2.getId()));
         for (Conta c : contas) {
-            // Filtra apenas Usuário ou Desenvolvedor
             if (!(c instanceof Usuario) && !(c instanceof Desenvolvedor)) {
                 continue;
             }
@@ -245,7 +234,6 @@ public class TelaGerenciarUsuarios extends JDialog {
             return;
         }
 
-        // Converte índice da view para o modelo (por causa do sorter)
         int modelRow = tabelaContas.convertRowIndexToModel(selectedRow);
         int id = (int) modeloTabela.getValueAt(modelRow, 0);
 
@@ -273,16 +261,15 @@ public class TelaGerenciarUsuarios extends JDialog {
                 dao.atualizar(selecionada);
                 dao.persistir("dados/contas.dat");
 
-                // Atualiza a tabela e os filtros
                 atualizarTabela();
-                aplicarFiltros(); // reaplica os filtros atuais
+                aplicarFiltros();
 
                 JOptionPane.showMessageDialog(this,
                         "Usuário " + (selecionada.getBan() ? "banido" : "desbanido") + " com sucesso!",
                         "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             } catch (PersistenceException e) {
                 JOptionPane.showMessageDialog(this, "Erro ao salvar: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                selecionada.setBan(!selecionada.getBan()); // reverte em caso de falha
+                selecionada.setBan(!selecionada.getBan()); 
             }
         }
     }

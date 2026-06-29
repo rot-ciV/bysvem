@@ -28,11 +28,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-import bysvem.modelo.Compra;
-import bysvem.modelo.Conta;
-import bysvem.modelo.ItemCompra;
 import bysvem.modelo.Jogo;
-import bysvem.modelo.Usuario;
+import bysvem.modelo.Operador;
 import bysvem.persistencia.EntidadeDAO;
 import bysvem.persistencia.GerenciadorPersistencia;
 import bysvem.persistencia.PersistenceException;
@@ -63,7 +60,7 @@ public class TelaGerenciarJogosAdmin extends JDialog {
         titulo.setFont(new Font("Arial", Font.BOLD, 24));
         panel.add(titulo, BorderLayout.NORTH);
 
-        // Painel de pesquisa (nome + busca por ID)
+        // Painel de pesquisa (nome e busca por ID)
         JPanel painelPesquisa = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
         JLabel lblPesquisa = new JLabel("Pesquisar por nome:");
         lblPesquisa.setFont(new Font("Arial", Font.BOLD, 14));
@@ -118,7 +115,6 @@ public class TelaGerenciarJogosAdmin extends JDialog {
         tabelaJogos.getColumnModel().getColumn(3).setPreferredWidth(200);
         tabelaJogos.getColumnModel().getColumn(4).setPreferredWidth(100);
 
-        // Renderizador para preço (duas casas decimais)
         DefaultTableCellRenderer rendererPreco = new DefaultTableCellRenderer() {
             private final DecimalFormat df = new DecimalFormat("0.00");
             @Override
@@ -133,7 +129,6 @@ public class TelaGerenciarJogosAdmin extends JDialog {
         rendererPreco.setHorizontalAlignment(JLabel.RIGHT);
         tabelaJogos.getColumnModel().getColumn(4).setCellRenderer(rendererPreco);
 
-        // Sorter
         sorter = new TableRowSorter<>(modeloTabela);
         sorter.setComparator(0, Comparator.comparingInt(o -> (Integer) o));
         sorter.setComparator(4, Comparator.comparingDouble(o -> (Double) o));
@@ -160,7 +155,6 @@ public class TelaGerenciarJogosAdmin extends JDialog {
 
         add(panel);
 
-        // Listeners
         campoPesquisa.getDocument().addDocumentListener(new DocumentListener() {
             @Override public void insertUpdate(DocumentEvent e) { aplicarFiltros(); }
             @Override public void removeUpdate(DocumentEvent e) { aplicarFiltros(); }
@@ -327,46 +321,16 @@ public class TelaGerenciarJogosAdmin extends JDialog {
                 "Todos os compradores serão reembolsados automaticamente.",
                 "Confirmar Remoção", JOptionPane.YES_NO_OPTION);
 
-        if (confirm == JOptionPane.YES_OPTION) {
-            try {
-                GerenciadorPersistencia gp = GerenciadorPersistencia.getInstancia();
-                EntidadeDAO<Jogo> jogoDAO = gp.getDAO(Jogo.class);
-                EntidadeDAO<Conta> contaDAO = gp.getDAO(Conta.class);
-                EntidadeDAO<Compra> compraDAO = gp.getDAO(Compra.class);
+        if (confirm != JOptionPane.YES_OPTION) return;
 
-                try {
-                    Compra[] compras = compraDAO.carregarTodos();
-                    for (Compra compra : compras) {
-                        boolean alterou = false;
-                        for (ItemCompra item : new ArrayList<>(compra.getItens())) {
-                            if (item.getJogo().getId() == jogo.getId()) {
-                                Usuario u = compra.getUsuario();
-                                u.setSaldo(u.getSaldo() + item.getPrecoPago());
-                                compra.getItens().remove(item);
-                                alterou = true;
-                            }
-                        }
-                        if (alterou) {
-                            compraDAO.atualizar(compra);
-                            contaDAO.atualizar(compra.getUsuario());
-                        }
-                    }
-                    compraDAO.persistir("dados/compras.dat");
-                    contaDAO.persistir("dados/contas.dat");
-                } catch (PersistenceException e) {
-                    // Sem compras
-                }
+        try {
+            Operador.removerJogo(jogo); 
 
-                jogoDAO.apagar(jogo.getId());
-                jogoDAO.persistir("dados/jogos.dat");
-
-                jogos = carregarTodosJogos();
-                atualizarTabela();
-                JOptionPane.showMessageDialog(this, "Jogo removido com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-
-            } catch (PersistenceException ex) {
-                JOptionPane.showMessageDialog(this, "Erro ao remover: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            }
+            jogos = carregarTodosJogos();
+            atualizarTabela();
+            JOptionPane.showMessageDialog(this, "Jogo removido com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        } catch (PersistenceException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao remover: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 

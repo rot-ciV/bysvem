@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import bysvem.modelo.Conta;
 import bysvem.modelo.Desenvolvedor;
@@ -41,7 +42,7 @@ public class Configuracoes extends JDialog {
         JButton btnAlterarNome = new JButton("Alterar Nome");
         JButton btnAlterarSenha = new JButton("Alterar Senha");
         JButton btnAlterarEmail = new JButton("Alterar E-mail");
-        JButton btnAdicionarSaldo = new JButton("Adicionar Saldo"); // NOVO
+        JButton btnAdicionarSaldo = new JButton("Adicionar Saldo");
         JButton btnTornarDev = new JButton("Tornar-se Desenvolvedor");
         JButton btnVoltar = new JButton("Voltar");
 
@@ -50,7 +51,6 @@ public class Configuracoes extends JDialog {
             b.setFont(fonte);
         }
 
-        // Listeners
         btnVerPerfil.addActionListener(e -> verPerfil());
         btnAlterarNome.addActionListener(e -> alterarNome());
         btnAlterarSenha.addActionListener(e -> alterarSenha());
@@ -129,23 +129,13 @@ public class Configuracoes extends JDialog {
                 "Alterar Nome", JOptionPane.QUESTION_MESSAGE);
         if (novoNome == null || novoNome.trim().isEmpty()) return;
 
-        String nomeLimpo = novoNome.trim();
-        if (nomeLimpo.equals(usuarioLogado.getNome())) {
-            JOptionPane.showMessageDialog(this,
-                    "O novo nome deve ser diferente do atual.", "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        usuarioLogado.setNome(nomeLimpo);
-        if (salvarAlteracoes()) {
-            JOptionPane.showMessageDialog(this,
-                    "Nome alterado com sucesso!", "Sucesso",
-                    JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "Falha ao salvar as alterações. Verifique o arquivo.",
-                    "Erro", JOptionPane.ERROR_MESSAGE);
+        try {
+            usuarioLogado.atualizarNome(novoNome.trim());
+            JOptionPane.showMessageDialog(this, "Nome alterado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (PersistenceException e) {
+            JOptionPane.showMessageDialog(this, "Falha ao salvar: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -159,16 +149,7 @@ public class Configuracoes extends JDialog {
         try {
             senhaAtual = Integer.parseInt(senhaAtualStr.trim());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this,
-                    "A senha deve ser numérica.", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        if (senhaAtual != usuarioLogado.getSenha()) {
-            JOptionPane.showMessageDialog(this,
-                    "Senha atual incorreta.", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "A senha deve ser numérica.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -181,65 +162,32 @@ public class Configuracoes extends JDialog {
         try {
             novaSenha = Integer.parseInt(novaSenhaStr.trim());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this,
-                    "A nova senha deve ser numérica.", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "A nova senha deve ser numérica.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (novaSenha == senhaAtual) {
-            JOptionPane.showMessageDialog(this,
-                    "A nova senha deve ser diferente da atual.", "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        usuarioLogado.setSenha(novaSenha);
-        if (salvarAlteracoes()) {
-            JOptionPane.showMessageDialog(this,
-                    "Senha alterada com sucesso!", "Sucesso",
-                    JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "Falha ao salvar as alterações. Verifique o arquivo.",
-                    "Erro", JOptionPane.ERROR_MESSAGE);
+        try {
+            usuarioLogado.atualizarSenha(senhaAtual, novaSenha);
+            JOptionPane.showMessageDialog(this, "Senha alterada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (PersistenceException e) {
+            JOptionPane.showMessageDialog(this, "Falha ao salvar: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void alterarEmail(){
-
+    private void alterarEmail() {
         String novoEmail = JOptionPane.showInputDialog(this,
                 "Digite o novo e-mail:", "Alterar E-mail", JOptionPane.QUESTION_MESSAGE);
+        if (novoEmail == null || novoEmail.trim().isEmpty()) return;
 
-        if(novoEmail == null || novoEmail.trim().isEmpty()) return;
-
-        String emailLimpo = novoEmail.trim();
-
-        if(!emailLimpo.contains("@")){
-            JOptionPane.showMessageDialog(this, "E-mail inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        try{
-            EntidadeDAO<Conta> dao = GerenciadorPersistencia.getInstancia().getDAO(Conta.class);
-            Conta[] contas = dao.carregarTodos();
-            for(Conta c : contas){
-                if(c.getId() != usuarioLogado.getId() && c.getEmail().equalsIgnoreCase(emailLimpo)){
-                    JOptionPane.showMessageDialog(this, "Este e-mail já está em uso.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-            }
-
-        }catch(PersistenceException e){
-            JOptionPane.showMessageDialog(this, "Erro ao verificar e-mails.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        usuarioLogado.setEmail(emailLimpo);
-        if(salvarAlteracoes()){
+        try {
+            usuarioLogado.atualizarEmail(novoEmail.trim());
             JOptionPane.showMessageDialog(this, "E-mail alterado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        }else{
-            JOptionPane.showMessageDialog(this, "Falha ao salvar.", "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (PersistenceException e) {
+            JOptionPane.showMessageDialog(this, "Falha ao salvar: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -258,7 +206,7 @@ public class Configuracoes extends JDialog {
                 "Adicionar Saldo", JOptionPane.QUESTION_MESSAGE);
 
         if (valorStr == null || valorStr.trim().isEmpty()) {
-            return; 
+            return;
         }
 
         double valor;
@@ -271,75 +219,63 @@ public class Configuracoes extends JDialog {
             return;
         }
 
-        if (valor <= 0) {
-            JOptionPane.showMessageDialog(this,
-                    "O valor deve ser maior que zero.",
-                    "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Confirmação antes de adicionar
         int confirm = JOptionPane.showConfirmDialog(this,
                 "Confirma a adição de R$" + String.format("%.2f", valor) + " ao saldo?",
                 "Confirmar", JOptionPane.YES_NO_OPTION);
-
         if (confirm != JOptionPane.YES_OPTION) {
             return;
         }
 
-        // Atualiza o saldo
-        double novoSaldo = usuario.getSaldo() + valor;
-        usuario.setSaldo(novoSaldo);
-
-        if (salvarAlteracoes()) {
+        try {
+            usuario.adicionarSaldo(valor);
             JOptionPane.showMessageDialog(this,
-                    "Saldo atualizado com sucesso!\nNovo saldo: R$" + String.format("%.2f", novoSaldo),
+                    "Saldo atualizado com sucesso!\nNovo saldo: R$" + String.format("%.2f", usuario.getSaldo()),
                     "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        } else {
+        } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this,
-                    "Falha ao salvar as alterações. Verifique o arquivo.",
+                    e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (PersistenceException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Falha ao salvar as alterações: " + e.getMessage(),
                     "Erro", JOptionPane.ERROR_MESSAGE);
-            // Reverte o saldo em caso de falha (opcional)
-            usuario.setSaldo(novoSaldo - valor);
         }
     }
 
     private void tornarDesenvolvedor() {
-
         if (usuarioLogado instanceof Desenvolvedor) {
-            JOptionPane.showMessageDialog(this,
-                    "Você já é um desenvolvedor.", "Info",
-                    JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Você já é um desenvolvedor.", "Info", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        if (usuarioLogado instanceof Operador) {
+            JOptionPane.showMessageDialog(this, "Operadores não podem se tornar desenvolvedores.", "Info", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
         String empresa = JOptionPane.showInputDialog(this,
                 "Digite o nome da sua empresa:",
                 "Tornar-se Desenvolvedor", JOptionPane.QUESTION_MESSAGE);
-        if (empresa == null || empresa.trim().isEmpty()) return;
+        if (empresa == null || empresa.trim().isEmpty()) {
+            return;
+        }
 
-        Desenvolvedor dev = new Desenvolvedor(
-                usuarioLogado.getId(),
-                usuarioLogado.getNome(),
-                usuarioLogado.getSenha(),
-                usuarioLogado.getEmail(),
-                empresa.trim(),
-                usuarioLogado.getBan()
-        );
-
-        try{
-            EntidadeDAO<Conta> dao = GerenciadorPersistencia.getInstancia().getDAO(Conta.class);
-            dao.apagar(usuarioLogado.getId());
-            dao.salvar(dev);
-            dao.persistir("dados/contas.dat");
+        try {
+            Desenvolvedor dev = usuarioLogado.promoverParaDesenvolvedor(empresa.trim());
             usuarioLogado = dev;
+
             JOptionPane.showMessageDialog(this,
-                    "Conta promovida a Desenvolvedor! Reinicie o menu para ver as novas opções.",
+                    "Conta promovida a Desenvolvedor! Você será redirecionado para a tela de login.",
                     "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             dispose();
+            java.awt.Window parent = getOwner();
+            if (parent != null) {
+                parent.dispose();
+            }
+            SwingUtilities.invokeLater(() -> new TelaLogin());
 
-        }catch(PersistenceException e){
-        JOptionPane.showMessageDialog(this, "Erro ao promover conta: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (PersistenceException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Erro ao promover conta: " + e.getMessage(),
+                    "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 

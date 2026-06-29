@@ -61,7 +61,7 @@ public class Jogos_Disponiveis extends JFrame {
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
         panel.add(titulo, BorderLayout.NORTH);
 
-        // Painel de pesquisa (por nome + busca por ID)
+        // Painel de pesquisa (por nome e busca por ID)
         JPanel painelPesquisa = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
         JLabel lblPesquisa = new JLabel("Pesquisar por nome:");
         lblPesquisa.setFont(new Font("Arial", Font.BOLD, 14));
@@ -88,7 +88,7 @@ public class Jogos_Disponiveis extends JFrame {
 
         panel.add(painelPesquisa, BorderLayout.NORTH);
 
-        // Tabela – definindo os tipos das colunas para ordenação correta
+        // Tabela
         String[] colunas = {"ID", "Nome", "Gênero", "Desenvolvedora", "Preço (R$)"};
         modeloTabela = new DefaultTableModel(colunas, 0) {
             @Override
@@ -117,7 +117,6 @@ public class Jogos_Disponiveis extends JFrame {
         tabelaJogos.getColumnModel().getColumn(3).setPreferredWidth(200);
         tabelaJogos.getColumnModel().getColumn(4).setPreferredWidth(100);
 
-        // Renderizador para exibir o preço com duas casas decimais
         DefaultTableCellRenderer rendererPreco = new DefaultTableCellRenderer() {
             private final DecimalFormat df = new DecimalFormat("0.00");
             @Override
@@ -132,9 +131,7 @@ public class Jogos_Disponiveis extends JFrame {
         rendererPreco.setHorizontalAlignment(JLabel.RIGHT);
         tabelaJogos.getColumnModel().getColumn(4).setCellRenderer(rendererPreco);
 
-        // TableRowSorter com comparadores explícitos (opcional, mas seguro)
         sorter = new TableRowSorter<>(modeloTabela);
-        // Definimos comparadores para garantir ordenação numérica (já que getColumnClass resolve, mas por segurança)
         sorter.setComparator(0, Comparator.comparingInt(o -> (Integer) o));
         sorter.setComparator(4, Comparator.comparingDouble(o -> (Double) o));
         tabelaJogos.setRowSorter(sorter);
@@ -156,7 +153,6 @@ public class Jogos_Disponiveis extends JFrame {
 
         add(panel);
 
-        // Listeners
         campoPesquisa.getDocument().addDocumentListener(new DocumentListener() {
             @Override public void insertUpdate(DocumentEvent e) { aplicarFiltros(); }
             @Override public void removeUpdate(DocumentEvent e) { aplicarFiltros(); }
@@ -218,7 +214,6 @@ public class Jogos_Disponiveis extends JFrame {
 
         btnVoltar.addActionListener(e -> dispose());
 
-        // Preenche a tabela
         atualizarTabela();
         setVisible(true);
     }
@@ -253,7 +248,6 @@ public class Jogos_Disponiveis extends JFrame {
 
     private void atualizarTabela() {
         modeloTabela.setRowCount(0);
-        // Ordena a lista por ID para exibição inicial (opcional)
         jogos.sort(Comparator.comparingInt(Jogo::getId));
         for (Jogo j : jogos) {
             modeloTabela.addRow(new Object[]{
@@ -261,7 +255,7 @@ public class Jogos_Disponiveis extends JFrame {
                 j.getNome(),
                 j.getGenero(),
                 j.getDesenvolvedora(),
-                j.getPreco()  // Double, será formatado pelo renderer
+                j.getPreco() 
             });
         }
     }
